@@ -1,0 +1,1 @@
+# gigya-web-sdk-types
