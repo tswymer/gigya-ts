@@ -147,12 +147,12 @@ const gigyaRequestFactory = async <GigyaAPI extends (...args: any[]) => any>(
     });
 
     if (!gigyaResponse.ok) {
-        let textResponse = 'Unanble to parse gigya response as text';
+        let textResponse = 'Unable to parse gigya response as text';
 
         try {
             textResponse = await gigyaResponse.text();
         } catch (error) {
-            // Do nothing
+            // Do nothing, we can't read the response
         }
 
         throw new Error(`Gigya request failed with status ${gigyaResponse.status}. Full response:\n${textResponse}`);
@@ -167,11 +167,11 @@ const gigyaRequestFactory = async <GigyaAPI extends (...args: any[]) => any>(
 const logGigyaRequest = (requestURL: string, requestHeaders: GigyaRequestHeaders, requestBody: URLSearchParams) => {
     console.log('Gigya Request:');
 
-    console.log({
+    console.log(JSON.stringify({
         requestURL,
         requestHeaders,
         requestBody,
-    });
+    }, null, 4));
 };
 
 const logGigyaResponse = (response: any) => {

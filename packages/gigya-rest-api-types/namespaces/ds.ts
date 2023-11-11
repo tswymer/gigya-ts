@@ -6,7 +6,7 @@ import { GigyaRequest, GigyaResponse } from '../types/gigya-helpers';
  */
 export type DSObject<DSObjectSchema> = {
     /**
-     * The ID of the object
+     * A unique identifier of the object
      */
     oid: string;
     /**
@@ -35,13 +35,119 @@ export type DSObject<DSObjectSchema> = {
     createdTime: string;
 };
 
-export type DSGetSchemaRequest = GigyaRequest<{
-    myParam: string;
+/**
+ * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41515b5770b21014bbc5a10ce4041860.html#parameters
+ */
+export type DSDeleteRequest = GigyaRequest<{
+    /**
+     * The ID of the object to delete.
+     */
+    oid: string;
+    /**
+     * A string indicating the type of the object.
+     */
+    type: string;
+    /**
+     * A comma separated list of fields to delete. Acceptable values for this parameter:
+     *  - Data field names, specifying the the complete path, i.e. album.photo.photoTitle_t
+     *  - Partial field names (fields that contain only a part of the path to sub-objects, i.e. album.photo) - indicate to retrieve everything below that path.
+     *  - "*" - indicates to retrieve the entire stored object.
+     */
+    fields?: string;
+    /**
+     * If the object is associate with a user, then the ID of the user should be specified and forms a compound key together with the oid.
+     */
+    UID?: string;
 }>;
 
-export type DSGetSchemaResponse = GigyaResponse<{
-    dsResponse: string;
+/**
+ * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41515b5770b21014bbc5a10ce4041860.html?locale=en-US#response-data
+ */
+export type DSDeleteResponse = GigyaResponse<{}>;
+
+/**
+ * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41516e7f70b21014bbc5a10ce4041860.html?locale=en-US#parameters
+ */
+export type DSDeleteSchemaFieldsRequest = GigyaRequest<{
+    /**
+     * The schema type defined in the Data Store from which to delete fields.
+     */
+    type: string;
+    /**
+     * The fields to delete from the specified Data Store type.
+     * 
+     * @example ["field1","field2"]
+     */
+    dataSchema: string[];
 }>;
+
+export type DSDeleteSchemaFieldsResponse = GigyaResponse<{}>;
+
+/**
+ * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4151948570b21014bbc5a10ce4041860.html#parameters
+ */
+export type DSGetRequest = GigyaRequest<{
+    /**
+     * The ID of the object to retrieve.
+     */
+    oid: string;
+    /**
+     * A string indicating the type of the object, equivalent to a name classifying objects as being of the same type; used in searches and when applying schemas.
+     */
+    type: string;
+    /**
+     * A comma-separated list of fields to retrieve. Acceptable values:
+     * - Data field names, specifying the complete path, e.g., 'album.photo.photoTitle_t'
+     * - Partial field names, to retrieve everything below that path, e.g., 'album.photo'
+     * - "*" to retrieve the entire stored object.
+     */
+    fields?: string;
+    /**
+     * If the object is associated with a user, then the ID of the user should be specified.
+     */
+    UID?: string;
+}>;
+
+/**
+ * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4151948570b21014bbc5a10ce4041860.html#response-data
+ */
+export type DSGetResponse<DSObjectSchema> = GigyaResponse<DSObject<DSObjectSchema>>;
+
+/**
+ * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4151baad70b21014bbc5a10ce4041860.html#parameters
+ */
+export type DSGetSchemaRequest = GigyaRequest<{
+    /**
+     * A string indicating the type of the object, equivalent to a schema name.
+     */
+    type: string;
+    /**
+     * Specifies what parts of the schema to return, can be one of the following options:
+     *  - full - (default) return the complete schema including implicit fields and dynamic fields.
+     *  - explicitOnly - return only the parts of the schema that were explicitly set by the partner using a setSchema call.
+     *  - clientOnly - return only the fields in the schema that allow client access. For those fields return only the type and format and required properties.
+     */
+    mode?: 'full' | 'explicitOnly' | 'clientOnly';
+}>;
+
+/**
+ * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4151baad70b21014bbc5a10ce4041860.html#response-data
+ * 
+ * @todo: Implement
+ */
+export type DSGetSchemaResponse = GigyaResponse<{
+    NOT_IMPLEMENTED: 'NOT_IMPLEMENTED';
+}>;
+
+/**
+ * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4151cda070b21014bbc5a10ce4041860.html#response-data
+ */
+export type DSGetTypesResponse = GigyaRequest<{
+    /**
+     * A list of the types which make up this DS schema.
+     */
+    types?: string[];
+}>
 
 /**
  * Searches and retrieves data from Gigya's Data Store (DS) using an SQL-like query. For security reasons this method is not available for client side SDKs, only for server side SDKs. SQL queries are converted into Gigya's proprietary query language. SQL injection attacks are not possible because queries are both created by the customer and then converted by Gigya.
