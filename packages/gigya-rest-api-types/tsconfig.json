@@ -1,0 +1,7 @@
+{
+    "extends": "tsconfig/config.json",
+    "compilerOptions": {
+        "outDir": "dist"
+    },
+    "ignore": ["dist", "node_modules"]
+}

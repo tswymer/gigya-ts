@@ -1,0 +1,16 @@
+{
+    "name": "gigya-rest-api-types",
+    "version": "1.0.0",
+    "description": "TypeScript definitions for the Gigya REST API",
+    "scripts": {
+        "build": "tsc",
+        "lint": "eslint \"**/*.ts*\""
+    },
+    "devDependencies": {
+        "tsconfig": "workspace:*",
+        "eslint-config-custom": "workspace:*"
+    },
+    "peerDependencies": {
+        "typescript": "^5.2.2"
+    }
+}

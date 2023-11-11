@@ -1,0 +1,17 @@
+{
+    "name": "node-gigya",
+    "version": "1.0.0",
+    "description": "Node.js interface for the Gigya REST API",
+    "main": "index.ts",
+    "scripts": {
+        "build": "tsc",
+        "lint": "eslint \"**/*.ts*\""
+    },
+    "dependencies": {
+        "gigya-rest-api-types": "workspace:*"
+    },
+    "devDependencies": {
+        "eslint-config-custom": "workspace:*",
+        "tsconfig": "workspace:*"
+    }
+}
