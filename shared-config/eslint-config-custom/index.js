@@ -11,9 +11,7 @@ const config = {
         ecmaVersion: 2020,
         sourceType: 'module',
     },
-    extends: [
-        'eslint:recommended',
-    ],
+    extends: ['eslint:recommended'],
     plugins: ['@typescript-eslint'],
     ignorePatterns: ['dist/*'],
     rules: {
