@@ -134,8 +134,16 @@ const gigyaRequestFactory = async <GigyaAPI extends (...args: any[]) => any>(
 
     for (const name in params.requestParams) {
         const param = params.requestParams[name];
-        const stringifiedParam = typeof param === 'object' ? JSON.stringify(param) : String(param);
-        body.append(name, stringifiedParam);
+
+        switch (true) {
+            case typeof param === 'undefined':
+                break;
+            case typeof param === 'object':
+                body.append(name, JSON.stringify(param));
+                break;
+            default:
+                body.append(name, String(param));
+        }
     }
 
     if (params.debug) logGigyaRequest(gigyaRequestURL, headers, body);
