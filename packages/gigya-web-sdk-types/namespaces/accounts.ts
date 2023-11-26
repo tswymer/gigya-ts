@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import {
     AccountsGetAccountInfoRequest,
     AccountsGetAccountInfoResponse,
@@ -6,6 +5,8 @@ import {
     AccountsGetSchemaResponse,
     AccountsLoginRequest,
     AccountsLoginResponse,
+    AccountsSetAccountInfoRequest,
+    AccountsSetAccountInfoResponse,
     GigyaData,
     GigyaPreferences,
     GigyaRequest,
@@ -64,6 +65,23 @@ export type AccountsGetAccountInfoResponseJS<
 export type AccountsGetSchemaRequestJS = AccountsGetSchemaRequest;
 
 /**
+ * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4139777d70b21014bbc5a10ce4041860.html#parameters
+ * 
+ * @TODO: We probably need to omit some params from AccountsSetAccountInfoRequest for the JS version.
+ */
+export type AccountsSetAccountInfoRequestJS<
+    DataSchema extends GigyaData,
+    PreferencesSchema extends GigyaPreferences,
+    SubscriptionsSchema extends GigyaSubscriptions,
+> = AccountsSetAccountInfoRequest<DataSchema, PreferencesSchema, SubscriptionsSchema>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4139777d70b21014bbc5a10ce4041860.html#response-object-data-members
+ */
+export type AccountsSetAccountInfoResponseJS
+    = AccountsSetAccountInfoResponse;
+
+/**
  * @TODO: This is not documented in the Gigya WebSDK docs.
  */
 export type AccountsGetSchemaResponseJS = AccountsGetSchemaResponse;
@@ -100,6 +118,15 @@ export type GigyaAccountsNamespaceJS<
     getAccountInfo: GigyaWebSDKFunction<
         AccountsGetAccountInfoRequestJS,
         AccountsGetAccountInfoResponseJS<DataSchema, PreferencesSchema, SubscriptionsSchema>
+    >;
+    /**
+     * This method sets account data into a user's account.
+     * 
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4139777d70b21014bbc5a10ce4041860.html
+     */
+    setAccountInfo: GigyaWebSDKFunction<
+        AccountsSetAccountInfoRequestJS<DataSchema, PreferencesSchema, SubscriptionsSchema>,
+        AccountsSetAccountInfoResponseJS
     >;
     /**
      * This method retrieves the schema of the Profile object and the Data object (the site specific custom data object) in Gigya's Accounts Storage.
