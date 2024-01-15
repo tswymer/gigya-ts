@@ -2,9 +2,9 @@
 
 SAP Customer Data Cloud, formally known as Gigya, does not provide official TypeScript definitions. This project adds those missing definitions to your SAP Customer Data Cloud implementation.
 
-**This is an unofficial project and is not supported by SAP nor any other party. Use at your own risk.**
+**This is an unofficial project and is not supported by SAP or any other party. Use at your own risk.**
 
-As the SAP Customer Data Cloud API still is still named `gigya`, this project also adopts that name. This project is however fully compatible with and built for SAP Customer Data Cloud.
+As the SAP Customer Data Cloud APIs still use the `gigya` namespace, this project also adopts that name. This project is, however, still fully compatible with and built for SAP Customer Data Cloud.
 
 # Features
 
