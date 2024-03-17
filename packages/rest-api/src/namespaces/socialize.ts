@@ -80,8 +80,6 @@ export type SocializeGetTokenResponse = GigyaResponse<{
     expires_in?: number;
 }>;
 
-/* eslint-disable no-unused-vars */
-
 export type GigyaSocializeNamespace = {
     getToken: (params: SocializeGetTokenRequest) => SocializeGetTokenResponse;
 };
