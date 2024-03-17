@@ -11,13 +11,13 @@
  */
 export type GigyaSubscriptions = {
     [subscriptionID: string]:
-        | {
-              /**
-               * Includes the email object, below.
-               */
-              email: GigyaSubscription;
-          }
-        | undefined;
+    | {
+        /**
+         * Includes the email object, below.
+         */
+        email: GigyaSubscription;
+    }
+    | undefined;
 };
 
 /**
