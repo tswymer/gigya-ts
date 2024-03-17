@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 /**
  * When implementing Subscription Management, the Subscription Object is used to pass information regarding a user's email subscription status to a specific newsletter or service.
  *

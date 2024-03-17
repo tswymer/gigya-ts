@@ -9,9 +9,6 @@ export type AuditSearchRequest = GigyaRequest<{
      * The SQL-like query used to search the audit log. Please refer to the Query language specification above. Note that Gigya field names are case-sensitive, i.e., uid is NOT the same as UID.
      */
     query: string;
-    /**
-     *
-     */
 }>;
 
 export type AuditSearchResponse = GigyaResponse<{

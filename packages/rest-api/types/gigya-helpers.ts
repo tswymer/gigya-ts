@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-unused-vars */
 export type GigyaDataCenter =
     | 'us1.gigya.com'
     | 'eu1.gigya.com'
@@ -8,16 +6,9 @@ export type GigyaDataCenter =
     | 'cn1.sapcdm.cn'
     | 'global.gigya.com';
 
-export type IsGigyaRequest<T> = T extends GigyaRequest<infer _> ? T : never;
-export type IsGigyaResponse<T> = T extends GigyaResponse<infer _> ? T : never;
-
 export type GigyaRequest<T> = T & CommonRequestParams;
 
 export type GigyaResponse<T> = T & CommonResponseParams;
-
-export type GigyaNamespace = {
-    [key: string]: <T extends unknown, R extends unknown>(params: GigyaRequest<T>) => GigyaResponse<R>;
-};
 
 /**
  * This is a generic interface which is used to extend pretty much every request to Gigya.

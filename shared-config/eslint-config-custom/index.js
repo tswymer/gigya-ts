@@ -17,7 +17,7 @@ const config = {
     rules: {
         'eol-last': ['error', 'always'],
         semi: ['error', 'always'],
-        'no-unused-vars': ['warn', { args: 'all' }],
+        'no-unused-vars': ['off', { args: 'all' }],
         '@typescript-eslint/no-unused-vars': 'warn',
     },
     root: true,

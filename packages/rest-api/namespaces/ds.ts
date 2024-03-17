@@ -75,7 +75,7 @@ export type DSDeleteSchemaFieldsRequest = GigyaRequest<{
     type: string;
     /**
      * The fields to delete from the specified Data Store type.
-     * 
+     *
      * @example ["field1","field2"]
      */
     dataSchema: string[];
@@ -132,7 +132,7 @@ export type DSGetSchemaRequest = GigyaRequest<{
 
 /**
  * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4151baad70b21014bbc5a10ce4041860.html#response-data
- * 
+ *
  * @todo: Implement
  */
 export type DSGetSchemaResponse = GigyaResponse<{
@@ -147,7 +147,7 @@ export type DSGetTypesResponse = GigyaRequest<{
      * A list of the types which make up this DS schema.
      */
     types?: string[];
-}>
+}>;
 
 /**
  * Searches and retrieves data from Gigya's Data Store (DS) using an SQL-like query. For security reasons this method is not available for client side SDKs, only for server side SDKs. SQL queries are converted into Gigya's proprietary query language. SQL injection attacks are not possible because queries are both created by the customer and then converted by Gigya.

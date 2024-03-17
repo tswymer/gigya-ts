@@ -1,5 +1,5 @@
 {
-    "name": "node-gigya",
+    "name": "@gigya-ts/node-gigya",
     "version": "1.0.0",
     "description": "Node.js interface for the Gigya REST API",
     "main": "index.ts",
@@ -8,7 +8,7 @@
         "lint": "eslint \"**/*.ts*\""
     },
     "dependencies": {
-        "gigya-rest-api-types": "workspace:*"
+        "@gigya-ts/rest-api": "workspace:*"
     },
     "devDependencies": {
         "eslint-config-custom": "workspace:*",

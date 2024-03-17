@@ -1,4 +1,4 @@
-import { GigyaData, GigyaPreferences, GigyaSubscriptions } from 'gigya-rest-api-types';
+import { GigyaData, GigyaPreferences, GigyaSubscriptions } from '@gigya-ts/rest-api';
 import { GigyaAccountsNamespaceJS } from './accounts';
 
 export type GigyaWebSDK<

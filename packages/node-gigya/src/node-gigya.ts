@@ -7,7 +7,7 @@ import {
     GigyaPreferences,
     GigyaSocializeNamespace,
     GigyaSubscriptions,
-} from 'gigya-rest-api-types';
+} from '@gigya-ts/rest-api';
 
 export type GigyaServerCredentials = {
     userKey: string;
@@ -25,10 +25,7 @@ export type GigyaInitParams = {
     debug?: boolean;
 };
 
-// eslint-disable-next-line no-unused-vars
 type ParamsOf<T extends (...args: any[]) => any> = T extends (...args: infer P) => any ? P : never;
-
-// eslint-disable-next-line no-unused-vars
 type GigyaInputParams<T extends (...args: any[]) => any> = ParamsOf<T>[0];
 
 type GigyaRequestHeaders = {
@@ -103,14 +100,12 @@ export const Gigya = <
     };
 };
 
-// eslint-disable-next-line no-unused-vars
 type GigyaRequestFactoryParams<GigyaAPI extends (...args: any[]) => any> = {
     namespace: 'accounts' | 'ds' | 'socialize' | 'audit';
     endpoint: string;
     requestParams: GigyaInputParams<GigyaAPI>;
 } & GigyaInitParams;
 
-// eslint-disable-next-line no-unused-vars
 const gigyaRequestFactory = async <GigyaAPI extends (...args: any[]) => any>(
     params: GigyaRequestFactoryParams<GigyaAPI>,
 ): Promise<ReturnType<GigyaAPI>> => {
@@ -175,11 +170,17 @@ const gigyaRequestFactory = async <GigyaAPI extends (...args: any[]) => any>(
 const logGigyaRequest = (requestURL: string, requestHeaders: GigyaRequestHeaders, requestBody: URLSearchParams) => {
     console.log('Gigya Request:');
 
-    console.log(JSON.stringify({
-        requestURL,
-        requestHeaders,
-        requestBody,
-    }, null, 4));
+    console.log(
+        JSON.stringify(
+            {
+                requestURL,
+                requestHeaders,
+                requestBody,
+            },
+            null,
+            4,
+        ),
+    );
 };
 
 const logGigyaResponse = (response: any) => {

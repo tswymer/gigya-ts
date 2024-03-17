@@ -967,7 +967,7 @@ export type AccountsSetProfilePhotoResponse = GigyaResponse<{}>;
 
 /**
  * Searches and retrieves data from SAP Customer Data Cloud's Accounts Storage.
- * 
+ *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/b32ce0918af44c3ebd7e96650fa6cc1d.html#parameters
  */
 export type AccountsSearchRequest = GigyaRequest<{
@@ -978,7 +978,7 @@ export type AccountsSearchRequest = GigyaRequest<{
     /**
      * When set to true, the search response will include, in addition to the first page, another field named nextCursorId, which is used to fetch the next batch of results. This parameter should only be used on the first request and later should be removed from the request.
      * When openCursor is active, the Limit clause sets the number of results returned in the batch and should not be larger than 1000 (one thousand).
-     * 
+     *
      * @note When using a cursor with a Limit set, the number of results in a batch is not guaranteed.
      * @note You can't use a cursor if you have a group by or when using 'start'.
      * @note openCursor is not supported when using querySig and can only be used in server-to-server calls that include a userKey and secret.
@@ -986,7 +986,7 @@ export type AccountsSearchRequest = GigyaRequest<{
     openCursor?: boolean;
     /**
      * The cursor ID that contains the nextCursorId value received in the first search call.
-     * 
+     *
      * @note You can't pass both cursorId and query on the same request - cursorId brings the next page for the search for which it was opened. Also, the time between search requests using a cursorId must not exceed 5 minutes (300 seconds).
      * @note Each request should contain a different cursorId obtained from the response of the previous request (not the first) using the nextCursorId field. The exception to this rule is when a request fails or when a particular result set needs to be resent; in this case, resend the same cursorID (as long as it has not expired) to receive its associated result set.
      */

@@ -12,7 +12,7 @@ import {
     GigyaRequest,
     GigyaResponse,
     GigyaSubscriptions,
-} from 'gigya-rest-api-types';
+} from '@gigya-ts/rest-api';
 
 import { GigyaOnLoginEvent, GigyaOnLogoutEvent, GigyaUIDSignature, GigyaWebSDKFunction } from '../types/gigya-helpers';
 
@@ -66,7 +66,7 @@ export type AccountsGetSchemaRequestJS = AccountsGetSchemaRequest;
 
 /**
  * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4139777d70b21014bbc5a10ce4041860.html#parameters
- * 
+ *
  * @TODO: We probably need to omit some params from AccountsSetAccountInfoRequest for the JS version.
  */
 export type AccountsSetAccountInfoRequestJS<
@@ -78,8 +78,7 @@ export type AccountsSetAccountInfoRequestJS<
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4139777d70b21014bbc5a10ce4041860.html#response-object-data-members
  */
-export type AccountsSetAccountInfoResponseJS
-    = AccountsSetAccountInfoResponse;
+export type AccountsSetAccountInfoResponseJS = AccountsSetAccountInfoResponse;
 
 /**
  * @TODO: This is not documented in the Gigya WebSDK docs.
@@ -121,7 +120,7 @@ export type GigyaAccountsNamespaceJS<
     >;
     /**
      * This method sets account data into a user's account.
-     * 
+     *
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4139777d70b21014bbc5a10ce4041860.html
      */
     setAccountInfo: GigyaWebSDKFunction<

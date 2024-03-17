@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import { GigyaData, GigyaProfile } from 'gigya-rest-api-types';
+import { GigyaData, GigyaProfile } from '@gigya-ts/rest-api';
 
 export type GigyaWebSDKFunction<RequestSchema, ResponseSchema> = (
     params: RequestSchema & GigyaResponseWithCallback<ResponseSchema>,

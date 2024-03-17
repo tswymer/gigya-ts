@@ -30,7 +30,20 @@ importers:
         specifier: ^5.2.2
         version: 5.2.2
 
-  packages/gigya-rest-api-types:
+  packages/node-gigya:
+    dependencies:
+      '@gigya-ts/rest-api':
+        specifier: workspace:*
+        version: link:../rest-api
+    devDependencies:
+      eslint-config-custom:
+        specifier: workspace:*
+        version: link:../../shared-config/eslint-config-custom
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../shared-config/tsconfig
+
+  packages/rest-api:
     dependencies:
       typescript:
         specifier: ^5.2.2
@@ -43,24 +56,11 @@ importers:
         specifier: workspace:*
         version: link:../../shared-config/tsconfig
 
-  packages/gigya-web-sdk-types:
+  packages/web-sdk:
     dependencies:
-      gigya-rest-api-types:
+      '@gigya-ts/rest-api':
         specifier: workspace:*
-        version: link:../gigya-rest-api-types
-    devDependencies:
-      eslint-config-custom:
-        specifier: workspace:*
-        version: link:../../shared-config/eslint-config-custom
-      tsconfig:
-        specifier: workspace:*
-        version: link:../../shared-config/tsconfig
-
-  packages/node-gigya:
-    dependencies:
-      gigya-rest-api-types:
-        specifier: workspace:*
-        version: link:../gigya-rest-api-types
+        version: link:../rest-api
     devDependencies:
       eslint-config-custom:
         specifier: workspace:*
