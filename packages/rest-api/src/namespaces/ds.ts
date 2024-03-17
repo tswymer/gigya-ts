@@ -6,7 +6,7 @@ import { GigyaRequest, GigyaResponse } from '../types/gigya-helpers';
  */
 export type DSObject<DSObjectSchema> = {
     /**
-     * A unique identifier of the object
+     * The ID of the object
      */
     oid: string;
     /**
@@ -84,7 +84,9 @@ export type DSDeleteSchemaFieldsRequest = GigyaRequest<{
 export type DSDeleteSchemaFieldsResponse = GigyaResponse<{}>;
 
 /**
- * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4151948570b21014bbc5a10ce4041860.html#parameters
+ * Retrieves an object's or the specified datum from Gigya's Data Store.
+ *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4151948570b21014bbc5a10ce4041860.html#parameters
  */
 export type DSGetRequest = GigyaRequest<{
     /**
@@ -96,20 +98,22 @@ export type DSGetRequest = GigyaRequest<{
      */
     type: string;
     /**
-     * A comma-separated list of fields to retrieve. Acceptable values:
-     * - Data field names, specifying the complete path, e.g., 'album.photo.photoTitle_t'
-     * - Partial field names, to retrieve everything below that path, e.g., 'album.photo'
-     * - "*" to retrieve the entire stored object.
+     * A comma separated list of fields to retrieve. Acceptable values for this parameter:
+     * - Data field names, specifying the the complete path, i.e. album.photo.photoTitle_t
+     * - Partial field names (fields that contain only a part of the path to sub-objects, i.e. album.photo) - indicate to retrieve everything below that path.
+     * - "*" - indicates to retrieve the entire stored object.
      */
     fields?: string;
     /**
-     * If the object is associated with a user, then the ID of the user should be specified.
+     * If the object is associate with a user, then the ID of the user should be specified and forms a compound key together with the oid.
+     *
+     * @note If you call this method through an external OAuth2 SDK, then the UID may be passed implicitly within the access_token.
      */
     UID?: string;
 }>;
 
 /**
- * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4151948570b21014bbc5a10ce4041860.html#response-data
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4151948570b21014bbc5a10ce4041860.html?#response-data
  */
 export type DSGetResponse<DSObjectSchema> = GigyaResponse<DSObject<DSObjectSchema>>;
 
@@ -199,8 +203,9 @@ export type DSSearchResponse<DSObjectSchema> = GigyaResponse<{
     results?: DSObject<DSObjectSchema>[];
 }>;
 
-/* eslint-disable no-unused-vars */
 export type GigyaDSNamespace<DSObjectSchema> = {
+    delete: (params: DSDeleteRequest) => DSDeleteResponse;
+    get: (params: DSGetRequest) => DSGetResponse<DSObjectSchema>;
     getSchema: (params: DSGetSchemaRequest) => DSGetSchemaResponse;
     search: (params: DSSearchRequest) => DSSearchResponse<DSObjectSchema>;
 };
