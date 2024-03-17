@@ -1,6 +1,5 @@
 {
     "name": "gigya-ts",
-    "version": "0.0.0",
     "author": "tobi.wymer@googlemail.com",
     "scripts": {
         "build": "pnpm -r lint && pnpm -r run build",
