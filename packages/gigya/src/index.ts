@@ -1,1 +1,1 @@
-export * from './node-gigya';
+export * from './gigya';

@@ -1,26 +1,26 @@
 import { GigyaData, GigyaProfile } from '@gigya-ts/rest-api';
 
-export type GigyaWebSDKFunction<RequestSchema, ResponseSchema> = (
-    params: RequestSchema & GigyaResponseWithCallback<ResponseSchema>,
+export type GigyaJSFunction<JSRequestSchema, JSResponseSchema> = (
+    params: JSRequestSchema & GigyaJSRequestWithCallback<JSResponseSchema>,
 ) => void;
 
 /**
  * The Gigya WebSDK passes all responses from its APIs via callbacks functions.
  */
-export type GigyaResponseWithCallback<ResponseSchema> = {
+export type GigyaJSRequestWithCallback<JSResponseSchema> = {
     /**
      * A reference to a callback function. SAP Customer Data Cloud calls the specified function along with the results
      * of the API method when the API method completes.
      *
      * The callback function should be defined with the following signature: functionName(Response).
      */
-    callback: (response: ResponseSchema) => void;
+    callback: (response: JSResponseSchema) => void;
 };
 
 /**
  * Many Gigya responses include a UIDSignature and signatureTimestamp.
  */
-export type GigyaUIDSignature = {
+export type GigyaJSUIDSignature = {
     /**
      * The signature that should be used for login verification.
      */
@@ -36,7 +36,7 @@ export type GigyaUIDSignature = {
  *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41313c7e70b21014bbc5a10ce4041860.html#onlogin-event-data
  */
-export type GigyaOnLoginEvent<DataSchema extends GigyaData> = {
+export type GigyaJSOnLoginEvent<DataSchema extends GigyaData> = {
     /**
      * The name of the event: 'login'.
      */
@@ -85,14 +85,14 @@ export type GigyaOnLoginEvent<DataSchema extends GigyaData> = {
      * Whether the user asked to remember his credentials (using a "Remember me" checkbox).
      */
     remember: boolean;
-} & GigyaUIDSignature;
+} & GigyaJSUIDSignature;
 
 /**
  * The "onLogout" event schema from the accounts.addEventHandlers methon.
  *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41313c7e70b21014bbc5a10ce4041860.html#onlogout-event-data
  */
-export type GigyaOnLogoutEvent = {
+export type GigyaJSOnLogoutEvent = {
     /**
      * The name of the event: 'logout'.
      */

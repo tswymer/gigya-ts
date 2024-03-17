@@ -26,12 +26,6 @@ export type GigyaInitParams = {
 };
 
 type ParamsOf<T extends (...args: any[]) => any> = T extends (...args: infer P) => any ? P : never;
-type GigyaInputParams<T extends (...args: any[]) => any> = ParamsOf<T>[0];
-
-type GigyaRequestHeaders = {
-    'Content-Type': 'application/x-www-form-urlencoded';
-    Authorization?: string;
-};
 
 export const Gigya = <
     DataSchema extends GigyaData,
@@ -44,9 +38,9 @@ export const Gigya = <
 
     const accounts = <Endpoint extends keyof PersonalAccountsNamespace>(
         accountsEndpoint: Endpoint,
-        endpointParams: GigyaInputParams<PersonalAccountsNamespace[Endpoint]>,
+        endpointParams: ParamsOf<PersonalAccountsNamespace[Endpoint]>[0],
     ) =>
-        gigyaRequestFactory<PersonalAccountsNamespace[Endpoint]>({
+        gigyaRequestFactory<ReturnType<PersonalAccountsNamespace[Endpoint]>>({
             ...initParams,
             namespace: 'accounts',
             endpoint: accountsEndpoint,
@@ -61,9 +55,9 @@ export const Gigya = <
     // }),
     const ds = <DSObjectSchema, Endpoint extends keyof GigyaDSNamespace<DSObjectSchema>>(
         dsEndpoint: Endpoint,
-        endpointParams: GigyaInputParams<GigyaDSNamespace<DSObjectSchema>[Endpoint]>,
+        endpointParams: ParamsOf<GigyaDSNamespace<DSObjectSchema>[Endpoint]>[0],
     ) =>
-        gigyaRequestFactory<GigyaDSNamespace<DSObjectSchema>[Endpoint]>({
+        gigyaRequestFactory<ReturnType<GigyaDSNamespace<DSObjectSchema>[Endpoint]>>({
             ...initParams,
             namespace: 'ds',
             endpoint: dsEndpoint,
@@ -72,9 +66,9 @@ export const Gigya = <
 
     const socialize = <Endpoint extends keyof GigyaSocializeNamespace>(
         socializeEndpoint: Endpoint,
-        endpointParams: GigyaInputParams<GigyaSocializeNamespace[Endpoint]>,
+        endpointParams: ParamsOf<GigyaSocializeNamespace[Endpoint]>[0],
     ) =>
-        gigyaRequestFactory<GigyaSocializeNamespace[Endpoint]>({
+        gigyaRequestFactory<ReturnType<GigyaSocializeNamespace[Endpoint]>>({
             ...initParams,
             namespace: 'socialize',
             endpoint: socializeEndpoint,
@@ -83,9 +77,9 @@ export const Gigya = <
 
     const audit = <Endpoint extends keyof GigyaAuditNamespace>(
         socializeEndpoint: Endpoint,
-        endpointParams: GigyaInputParams<GigyaAuditNamespace[Endpoint]>,
+        endpointParams: ParamsOf<GigyaAuditNamespace[Endpoint]>[0],
     ) =>
-        gigyaRequestFactory<GigyaAuditNamespace[Endpoint]>({
+        gigyaRequestFactory<ReturnType<GigyaAuditNamespace[Endpoint]>>({
             ...initParams,
             namespace: 'audit',
             endpoint: socializeEndpoint,
@@ -100,15 +94,18 @@ export const Gigya = <
     };
 };
 
-type GigyaRequestFactoryParams<GigyaAPI extends (...args: any[]) => any> = {
+type GigyaRequestHeaders = {
+    'Content-Type': 'application/x-www-form-urlencoded';
+    Authorization?: string;
+};
+
+type GigyaRequestFactoryParams = {
     namespace: 'accounts' | 'ds' | 'socialize' | 'audit';
     endpoint: string;
-    requestParams: GigyaInputParams<GigyaAPI>;
+    requestParams: Record<string, unknown>;
 } & GigyaInitParams;
 
-const gigyaRequestFactory = async <GigyaAPI extends (...args: any[]) => any>(
-    params: GigyaRequestFactoryParams<GigyaAPI>,
-): Promise<ReturnType<GigyaAPI>> => {
+const gigyaRequestFactory = async <T>(params: GigyaRequestFactoryParams): Promise<T> => {
     const gigyaRequestURL = `https://accounts.${params.dataCenter}/${params.namespace}.${params.endpoint}`;
 
     const headers: GigyaRequestHeaders = {
@@ -150,12 +147,12 @@ const gigyaRequestFactory = async <GigyaAPI extends (...args: any[]) => any>(
     });
 
     if (!gigyaResponse.ok) {
-        let textResponse = 'Unable to parse gigya response as text';
+        let textResponse = 'Unanble to parse gigya response as text';
 
         try {
             textResponse = await gigyaResponse.text();
-        } catch (error) {
-            // Do nothing, we can't read the response
+        } catch {
+            // Do nothing
         }
 
         throw new Error(`Gigya request failed with status ${gigyaResponse.status}. Full response:\n${textResponse}`);
@@ -164,26 +161,20 @@ const gigyaRequestFactory = async <GigyaAPI extends (...args: any[]) => any>(
 
     if (params.debug) logGigyaResponse(parsedGigyaResponse);
 
-    return parsedGigyaResponse as ReturnType<GigyaAPI>;
+    return parsedGigyaResponse;
 };
 
 const logGigyaRequest = (requestURL: string, requestHeaders: GigyaRequestHeaders, requestBody: URLSearchParams) => {
     console.log('Gigya Request:');
 
-    console.log(
-        JSON.stringify(
-            {
-                requestURL,
-                requestHeaders,
-                requestBody,
-            },
-            null,
-            4,
-        ),
-    );
+    console.log({
+        requestURL,
+        requestHeaders,
+        requestBody,
+    });
 };
 
-const logGigyaResponse = (response: any) => {
+const logGigyaResponse = (response: unknown) => {
     console.log('Gigya Response:');
 
     console.log(response);
