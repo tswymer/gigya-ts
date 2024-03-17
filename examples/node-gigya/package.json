@@ -1,0 +1,16 @@
+{
+    "name": "@gigya-ts/node-gigya-example",
+    "version": "0.0.1",
+    "description": "Examples for the @gigya-ts/node-gigya project",
+    "scripts": {
+        "build": "tsc",
+        "lint": "eslint \"**/*.ts*\""
+    },
+    "dependencies": {
+        "@gigya-ts/node-gigya": "workspace:*"
+    },
+    "devDependencies": {
+        "eslint-config-custom": "workspace:*",
+        "tsconfig": "workspace:*"
+    }
+}
