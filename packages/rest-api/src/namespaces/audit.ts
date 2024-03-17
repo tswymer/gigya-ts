@@ -15,7 +15,6 @@ export type AuditSearchResponse = GigyaResponse<{
     dsResponse: string;
 }>;
 
-/* eslint-disable no-unused-vars */
 export type GigyaAuditNamespace = {
     search: (params: AuditSearchRequest) => AuditSearchResponse;
 };
