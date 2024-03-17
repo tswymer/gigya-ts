@@ -1,4 +1,4 @@
-import { Gigya } from '@gigya-ts/node-gigya';
+import { Gigya } from '@gigya-ts/gigya';
 
 async function getAccountInfoExample() {
     const gigya = Gigya({

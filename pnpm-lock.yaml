@@ -30,11 +30,11 @@ importers:
         specifier: ^5.2.2
         version: 5.2.2
 
-  examples/node-gigya:
+  examples/gigya:
     dependencies:
-      '@gigya-ts/node-gigya':
+      '@gigya-ts/gigya':
         specifier: workspace:*
-        version: link:../../packages/node-gigya
+        version: link:../../packages/gigya
     devDependencies:
       eslint-config-custom:
         specifier: workspace:*
@@ -43,20 +43,7 @@ importers:
         specifier: workspace:*
         version: link:../../shared-config/tsconfig
 
-  examples/rest-api:
-    dependencies:
-      '@gigya-ts/rest-api':
-        specifier: workspace:*
-        version: link:../../packages/rest-api
-    devDependencies:
-      eslint-config-custom:
-        specifier: workspace:*
-        version: link:../../shared-config/eslint-config-custom
-      tsconfig:
-        specifier: workspace:*
-        version: link:../../shared-config/tsconfig
-
-  packages/node-gigya:
+  packages/gigya:
     dependencies:
       '@gigya-ts/rest-api':
         specifier: workspace:*
