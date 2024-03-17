@@ -50,7 +50,7 @@ export type AccountsAuthGetMethodsResponse = GigyaResponse<{
  *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/a330ee71b4f84843a393c1935667e39a.html
  */
-export type AccountsAuthMagicLinkEmailGetConfigRequest = GigyaRequest<{}>;
+export type AccountsAuthMagicLinkEmailGetConfigRequest = GigyaRequest<Record<string, never>>;
 
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/a330ee71b4f84843a393c1935667e39a.html#response-data
@@ -179,6 +179,23 @@ export type AccountsAuthMagiclinkEmailSendResponse = GigyaResponse<{
      */
     code?: string;
 }>;
+
+/**
+ * This method deletes the specified user's account from SAP Customer Data Cloud's database.
+ *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4133a29470b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsDeleteRequest = GigyaRequest<{
+    /**
+     * The unique ID of the user, for whom to delete the account.
+     */
+    UID: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4133a29470b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsDeleteResponse = GigyaResponse<Record<string, never>>;
 
 export type AccountsGetAccountInfoRequest = GigyaRequest<{
     /**
@@ -419,6 +436,46 @@ export type AccountsGetAccountInfoResponse<
 }>;
 
 /**
+ * This API is used to obtain an id_token containing an existing user's data in JWSInformation published on non-SAP site format . This id_token can then be transmitted between servers, enabling a partner to share a user's data among multiple sites/API keys. You can validate the JWT using the originating site's public key returned from accounts.getJWTPublicKey.
+ *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41353af770b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsGetJWTRequest = GigyaRequest<{
+    /**
+     * Used to add the 'aud' claim to JWT tokens returned. The 'aud' claim tells the receivers of a JWT token which audience(s) the token is valid for. If a service receives the token but is not in the audience list, the service should reject the token.
+     */
+    audience?: string;
+    /**
+     * The UID of the user whose data is being requested. Must be a user for the site of the associated apiKey.
+     */
+    targetUID: string;
+    /**
+     * Any existing profile and/or data fields in the target site's database you want to explicitly return in the JWT for this targetUID.
+     *
+     * When requesting profilefields, it is not necessary to prepend 'profile.' (e.g., profile.firstName can be passed as firstName).
+     */
+    fields?: string;
+    /**
+     * The TTL of the returned JWT, in seconds. If this parameter is not passed, the default is 300.
+     */
+    expiration?: number;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41353af770b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsGetJWTResponse = GigyaResponse<{
+    /**
+     * The returned JWT containing the user's data.
+     */
+    id_token?: string;
+    /**
+     * If any fields that were passed do not exist for the requested apiKey, they will be ignored and listed here.
+     */
+    missingFields?: string;
+}>;
+
+/**
  * This method retrieves the schema of the Profile object and the Data object (the site specific custom data object) in Gigya's Accounts Storage. The schema defines a set of properties for static data fields. The properties act as meta-data, guiding Gigya how to handle the data in the specified fields.
  *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4135e80970b21014bbc5a10ce4041860.html
@@ -499,10 +556,11 @@ export type AccountsGetSchemaResponse = GigyaResponse<{
         };
     };
     /**
+     * @TODO: Fix this
      * A JSON object defining the schema of the Internal Fields object. See the format details in the Internal Fields object section on the {@link https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a0faa70b21014bbc5a10ce4041860.html?locale=en-US accounts.setSchema REST} page.
      */
     internalSchema?: {
-        fields: {};
+        fields: unknown;
     };
 }>;
 
@@ -651,6 +709,30 @@ export type AccountsLoginResponse = GigyaResponse<{
      */
     emails?: unknown;
     profile?: GigyaProfile;
+}>;
+
+/**
+ * This method logs out the specified user from your site or site group across all devices and terminates any active sessions and revokes any active OIDC refresh tokens.
+ *
+ * Please note, that this method does not disconnect the user from the social providers, the user's site account remains associated with any connected social accounts, even when logged out. When the user logs in again, full access to all the previously connected providers is restored, i.e. the association remains.
+ *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41376ba570b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsLogoutRequest = GigyaRequest<{
+    /**
+     * The unique ID of the user to logout of your site.
+     */
+    UID: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41376ba570b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsLogoutResponse = GigyaResponse<{
+    /**
+     * A comma separated list of providers that the user is connected to.
+     */
+    connectedProviders?: string;
 }>;
 
 /**
@@ -963,7 +1045,7 @@ export type AccountsSetProfilePhotoRequest = GigyaRequest<{
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4139fc6970b21014bbc5a10ce4041860.html#response-data
  */
-export type AccountsSetProfilePhotoResponse = GigyaResponse<{}>;
+export type AccountsSetProfilePhotoResponse = GigyaResponse<Record<string, never>>;
 
 /**
  * Searches and retrieves data from SAP Customer Data Cloud's Accounts Storage.
@@ -974,7 +1056,7 @@ export type AccountsSearchRequest = GigyaRequest<{
     /**
      * The SQL-like query used to search the audit log. When using cursors, this parameter should only be sent with the initial request and omitted from subsequent requests.
      */
-    query: string;
+    query?: string;
     /**
      * When set to true, the search response will include, in addition to the first page, another field named nextCursorId, which is used to fetch the next batch of results. This parameter should only be used on the first request and later should be removed from the request.
      * When openCursor is active, the Limit clause sets the number of results returned in the batch and should not be larger than 1000 (one thousand).
@@ -1618,7 +1700,6 @@ export type AccountsFinalizeRegistrationResponse<
     verifiedTimestamp?: number;
 }>;
 
-/* eslint-disable no-unused-vars */
 export type GigyaAccountsNamespace<
     DataSchema extends GigyaData,
     PreferencesSchema extends GigyaPreferences,
@@ -1635,11 +1716,14 @@ export type GigyaAccountsNamespace<
         params: AccountsAuthMagiclinkEmailSendRequest,
     ) => AccountsAuthMagiclinkEmailSendResponse;
     'auth.magiclink.getlink': (params: AccountsAuthMagiclinkGetLinkRequest) => AccountsAuthMagiclinkGetLinkResponse;
+    deleteAccount: (params: AccountsDeleteRequest) => AccountsDeleteResponse;
     getAccountInfo: (
         params: AccountsGetAccountInfoRequest,
     ) => AccountsGetAccountInfoResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>;
+    getJWT: (params: AccountsGetJWTRequest) => AccountsGetJWTResponse;
     getSchema: (params: AccountsGetSchemaRequest) => AccountsGetSchemaResponse;
     login: (params: AccountsLoginRequest) => AccountsLoginResponse;
+    logout: (params: AccountsLogoutRequest) => AccountsLogoutResponse;
     resetPassword: (params: AccountsResetPasswordRequest) => AccountsResetPasswordResponse;
     setAccountInfo: (
         params: AccountsSetAccountInfoRequest<DataSchema, PreferencesSchema, SubscriptionsSchema>,
