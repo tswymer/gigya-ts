@@ -1,11 +1,12 @@
 {
     "name": "@gigya-ts/node-gigya",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "description": "Node.js interface for the Gigya REST API",
     "main": "index.ts",
     "scripts": {
         "build": "tsc",
-        "lint": "eslint \"**/*.ts*\""
+        "lint": "eslint \"**/*.ts*\"",
+        "publish": "pnpm publish --dry-run"
     },
     "dependencies": {
         "@gigya-ts/rest-api": "workspace:*"
