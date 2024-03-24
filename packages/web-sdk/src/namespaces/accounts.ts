@@ -7,6 +7,8 @@ import {
     AccountsGetSchemaResponse,
     AccountsLoginRequest,
     AccountsLoginResponse,
+    AccountsResetPasswordRequest,
+    AccountsResetPasswordResponse,
     AccountsSetAccountInfoRequest,
     AccountsSetAccountInfoResponse,
     GigyaData,
@@ -16,10 +18,10 @@ import {
     GigyaSubscriptions,
 } from '@gigya-ts/rest-api';
 import {
+    GigyaJSFunction,
     GigyaJSOnLoginEvent,
     GigyaJSOnLogoutEvent,
     GigyaJSUIDSignature,
-    GigyaJSFunction,
 } from '../types/gigya-helpers';
 
 /**
@@ -90,12 +92,26 @@ export type AccountsGetSchemaRequestJS = AccountsGetSchemaRequest;
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413523ec70b21014bbc5a10ce4041860.html#parameters
  */
-export type AccountsGetJWTRequestJS = Pick<AccountsGetJWTRequest, 'fields' | 'expiration' | 'audience'>;
+export type AccountsGetJWTRequestJS = Pick<AccountsGetJWTRequest,
+    'fields' |
+    'expiration' |
+    'audience'
+>;
 
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413523ec70b21014bbc5a10ce4041860.html#response-data
  */
 export type AccountsGetJWTResponseJS = AccountsGetJWTResponse;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/c21d4e0445b84a779af1ad4868902c21.html#parameters
+ */
+export type AccountsResetPasswordRequestJS = Omit<AccountsResetPasswordRequest, 'sendEmail'>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/c21d4e0445b84a779af1ad4868902c21.html#response-data
+ */
+export type AccountsResetPasswordResponseJS = AccountsResetPasswordResponse;
 
 /**
  * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4139777d70b21014bbc5a10ce4041860.html#parameters
@@ -161,6 +177,10 @@ export type GigyaAccountsNamespaceJS<
      * This API is used to obtain an id_token containing the active session's user data.
      */
     getJWT: GigyaJSFunction<AccountsGetJWTRequestJS, AccountsGetJWTResponseJS>;
+    /**
+     * The password can be reset either via email or directly. The email format is according to the templates defined in the site policy.
+     */
+    resetPassword: GigyaJSFunction<AccountsResetPasswordRequestJS, AccountsResetPasswordResponseJS>;
     /**
      * This method sets account data into a user's account.
      *

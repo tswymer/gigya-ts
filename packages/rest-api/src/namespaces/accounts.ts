@@ -782,6 +782,19 @@ export type AccountsResetPasswordRequest = GigyaRequest<{
      */
     securityFields?: string;
     /**
+     * The CAPTCHA provider configured for the site. Possible values are:
+     * - reCaptchaV2
+     * - invisible
+     * - reCaptchaV3
+     * - reCaptchaEnterpriseScore
+     * - FunCaptcha
+     */
+    captchaType?: string;
+    /**
+     * The CAPTCHA challenge. This parameter is required only if the CAPTCHA failed login threshold in the site's policy has been reached (security.captcha.failedLoginThreshold).
+     */
+    captchaToken?: string;
+    /**
      * @todo: Type this out, this is probably used somewhere else too
      */
     clientContext?: unknown;
