@@ -11,6 +11,12 @@ import {
     AccountsResetPasswordResponse,
     AccountsSetAccountInfoRequest,
     AccountsSetAccountInfoResponse,
+    AccountsInitRegistrationRequest,
+    AccountsInitRegistrationResponse,
+    AccountsRegisterRequest,
+    AccountsRegisterResponse,
+    AccountsFinalizeRegistrationRequest,
+    AccountsFinalizeRegistrationResponse,
     GigyaData,
     GigyaPreferences,
     GigyaRequest,
@@ -92,11 +98,7 @@ export type AccountsGetSchemaRequestJS = AccountsGetSchemaRequest;
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413523ec70b21014bbc5a10ce4041860.html#parameters
  */
-export type AccountsGetJWTRequestJS = Pick<AccountsGetJWTRequest,
-    'fields' |
-    'expiration' |
-    'audience'
->;
+export type AccountsGetJWTRequestJS = Pick<AccountsGetJWTRequest, 'fields' | 'expiration' | 'audience'>;
 
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413523ec70b21014bbc5a10ce4041860.html#response-data
@@ -133,6 +135,48 @@ export type AccountsSetAccountInfoResponseJS = AccountsSetAccountInfoResponse;
  * @TODO: This is not documented in the Gigya WebSDK docs.
  */
 export type AccountsGetSchemaResponseJS = AccountsGetSchemaResponse;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4136cef070b21014bbc5a10ce4041860.html#method-parameters
+ */
+export type AccountsInitRegistrationRequestJS = Omit<AccountsInitRegistrationRequest, 'dataCenter'>;
+
+/**
+ * @TODO: This is not documented in the Gigya WebSDK docs.
+ */
+export type AccountsInitRegistrationResponseJS = AccountsInitRegistrationResponse;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41389fe070b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsRegisterRequestJS<
+    DataSchema extends GigyaData,
+    PreferencesSchema extends GigyaPreferences,
+    SubscriptionsSchema extends GigyaSubscriptions,
+> = AccountsRegisterRequest<DataSchema, PreferencesSchema, SubscriptionsSchema>;
+
+/**
+ * @TODO: This is not documented in the Gigya WebSDK docs.
+ */
+export type AccountsRegisterResponseJS<
+    DataSchema extends GigyaData,
+    PreferencesSchema extends GigyaPreferences,
+    SubscriptionsSchema extends GigyaSubscriptions,
+> = AccountsRegisterResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4134b19d70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsFinalizeRegistrationRequestJS = AccountsFinalizeRegistrationRequest;
+
+/**
+ * @TODO: This is not documented in the Gigya WebSDK docs.
+ */
+export type AccountsFinalizeRegistrationResponseJS<
+    DataSchema extends GigyaData,
+    PreferencesSchema extends GigyaPreferences,
+    SubscriptionsSchema extends GigyaSubscriptions,
+> = AccountsFinalizeRegistrationResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>;
 
 export type GigyaAccountsNamespaceJS<
     DataSchema extends GigyaData,
@@ -196,4 +240,41 @@ export type GigyaAccountsNamespaceJS<
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4135d4e170b21014bbc5a10ce4041860.html
      */
     getSchema: GigyaJSFunction<AccountsGetSchemaRequestJS, AccountsGetSchemaResponseJS>;
+
+    /**
+     * This method initializes a registration process at a site.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4136cef070b21014bbc5a10ce4041860.html
+     */
+    initRegistration: GigyaJSFunction<AccountsInitRegistrationRequestJS, AccountsInitRegistrationResponseJS>;
+
+    /**
+     * This method registers a new user at your site.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41389fe070b21014bbc5a10ce4041860.html
+     */
+    register: GigyaJSFunction<
+        AccountsRegisterRequestJS<DataSchema, PreferencesSchema, SubscriptionsSchema>,
+        AccountsRegisterResponseJS<DataSchema, PreferencesSchema, SubscriptionsSchema>
+    >;
+
+    /**
+     *  This method completes on-site user registration.
+
+        For registration through a social network, see accounts.socialLogin.
+
+        On-site registration requires three API calls:
+
+            1. accounts.initRegistration
+            2. accounts.register
+            3. accounts.finalizeRegistration
+
+        This method is not required if the finalizeRegistration parameter was set to true in accounts.register.
+
+        @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4134b19d70b21014bbc5a10ce4041860.html
+     */
+    finalizeRegistration: GigyaJSFunction<
+        AccountsFinalizeRegistrationRequestJS,
+        AccountsFinalizeRegistrationResponseJS<DataSchema, PreferencesSchema, SubscriptionsSchema>
+    >;
 };
