@@ -1754,6 +1754,25 @@ export type AccountsFinalizeRegistrationResponse<
     verifiedTimestamp?: number;
 }>;
 
+/**
+ * In implementations of Consent Management, this method returns all the consent statements defined for a given site.
+ *
+ * There are no parameters for this API. The statements returned are based on the API key passed in the authorization parameters.
+ *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/660b99419e294030968610cbb27f42bf.html#parameters
+ */
+export type AccountsGetConsentStatementsRequest = GigyaRequest<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/660b99419e294030968610cbb27f42bf.html#response-data
+ */
+export type AccountsGetConsentStatementsResponse<PreferencesSchema extends GigyaPreferences> = GigyaResponse<{
+    /**
+     * An array of preference objects defined for this site.
+     */
+    preferences?: PreferencesSchema;
+}>;
+
 export type GigyaAccountsNamespace<
     DataSchema extends GigyaData,
     PreferencesSchema extends GigyaPreferences,
@@ -1777,6 +1796,9 @@ export type GigyaAccountsNamespace<
     getAccountInfo: (
         params: AccountsGetAccountInfoRequest,
     ) => AccountsGetAccountInfoResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>;
+    getConsentStatements: (
+        params: AccountsGetConsentStatementsRequest,
+    ) => AccountsGetConsentStatementsResponse<PreferencesSchema>;
     getJWT: (params: AccountsGetJWTRequest) => AccountsGetJWTResponse;
     getSchema: (params: AccountsGetSchemaRequest) => AccountsGetSchemaResponse;
     initRegistration: (params: AccountsInitRegistrationRequest) => AccountsInitRegistrationResponse;

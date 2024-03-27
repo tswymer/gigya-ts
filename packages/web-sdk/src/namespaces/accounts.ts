@@ -17,6 +17,8 @@ import {
     AccountsRegisterResponse,
     AccountsFinalizeRegistrationRequest,
     AccountsFinalizeRegistrationResponse,
+    AccountsGetConsentStatementsRequest,
+    AccountsGetConsentStatementsResponse,
     GigyaData,
     GigyaPreferences,
     GigyaRequest,
@@ -191,6 +193,17 @@ export type AccountsFinalizeRegistrationResponseJS<
     SubscriptionsSchema extends GigyaSubscriptions,
 > = Omit<AccountsFinalizeRegistrationResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>, 'password'>;
 
+/**
+ * @TODO: This is not documented in the Gigya WebSDK docs.
+ */
+export type AccountsGetConsentStatementsRequestJS = AccountsGetConsentStatementsRequest;
+
+/**
+ * @TODO: This is not documented in the Gigya WebSDK docs.
+ */
+export type AccountsGetConsentStatementsResponseJS<PreferencesSchema extends GigyaPreferences> =
+    AccountsGetConsentStatementsResponse<PreferencesSchema>;
+
 export type GigyaAccountsNamespaceJS<
     DataSchema extends GigyaData,
     PreferencesSchema extends GigyaPreferences,
@@ -238,6 +251,14 @@ export type GigyaAccountsNamespaceJS<
     getAccountInfo: GigyaJSFunction<
         AccountsGetAccountInfoRequestJS,
         AccountsGetAccountInfoResponseJS<DataSchema, PreferencesSchema, SubscriptionsSchema>
+    >;
+
+    /**
+     * @TODO: This is not documented in the Gigya WebSDK docs.
+     */
+    getConsentStatements: GigyaJSFunction<
+        AccountsGetConsentStatementsRequestJS,
+        AccountsGetConsentStatementsResponseJS<PreferencesSchema>
     >;
 
     /**
