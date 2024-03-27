@@ -1136,31 +1136,31 @@ export type AccountsSearchResponse<
 
 /**
  *  This method initializes a registration process at a site. To fully register a user to your site requires three API calls:
-
-        1. accounts.initRegistration
-        2. accounts.register
-        3. accounts.finalizeRegistration
-
-    The method returns a regToken (registration token) in the response, which is required when calling accounts.register/ accounts.finalizeRegistration/ accounts.linkAccounts.
-
-    @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4136e1f370b21014bbc5a10ce4041860.html
+ *
+ *      1. accounts.initRegistration
+ *      2. accounts.register
+ *      3. accounts.finalizeRegistration
+ *
+ *  The method returns a regToken (registration token) in the response, which is required when calling accounts.register/ accounts.finalizeRegistration/ accounts.linkAccounts.
+ *
+ *  @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4136e1f370b21014bbc5a10ce4041860.html
  */
 export type AccountsInitRegistrationRequest = GigyaRequest<{
     /**
      *  *Early Adopters parameter - supported only with Global Access*
-
-        The data center in which the registering user's data will be stored. Acceptable values:
-
-        - us1
-        - eu1
-        - au1
-        - cn1
+     *
+     *  The data center in which the registering user's data will be stored. Acceptable values:
+     *
+     *   - us1
+     *   - eu1
+     *   - au1
+     *   - cn1
      */
-    dataCenter?: string;
+    dataCenter?: 'us1' | 'eu1' | 'au1' | 'cn1';
     /**
-     * Defines whether the regToken that is returned can be used to create a full registered account or a lite account.
-    
-        Set this to TRUE to create a lite account.
+     *  Defines whether the regToken that is returned can be used to create a full registered account or a lite account.
+     *
+     *  Set this to TRUE to create a lite account.
      */
     isLite?: boolean;
 }>;
@@ -1779,26 +1779,26 @@ export type GigyaAccountsNamespace<
     ) => AccountsAuthMagiclinkEmailSendResponse;
     'auth.magiclink.getlink': (params: AccountsAuthMagiclinkGetLinkRequest) => AccountsAuthMagiclinkGetLinkResponse;
     deleteAccount: (params: AccountsDeleteRequest) => AccountsDeleteResponse;
+    finalizeRegistration: (
+        params: AccountsFinalizeRegistrationRequest,
+    ) => AccountsFinalizeRegistrationResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>;
     getAccountInfo: (
         params: AccountsGetAccountInfoRequest,
     ) => AccountsGetAccountInfoResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>;
     getJWT: (params: AccountsGetJWTRequest) => AccountsGetJWTResponse;
     getSchema: (params: AccountsGetSchemaRequest) => AccountsGetSchemaResponse;
+    initRegistration: (params: AccountsInitRegistrationRequest) => AccountsInitRegistrationResponse;
     login: (params: AccountsLoginRequest) => AccountsLoginResponse;
     logout: (params: AccountsLogoutRequest) => AccountsLogoutResponse;
+    register: (
+        params: AccountsRegisterRequest<DataSchema, PreferencesSchema, SubscriptionsSchema>,
+    ) => AccountsRegisterResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>;
     resetPassword: (params: AccountsResetPasswordRequest) => AccountsResetPasswordResponse;
+    search: (
+        params: AccountsSearchRequest,
+    ) => AccountsSearchResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>;
     setAccountInfo: (
         params: AccountsSetAccountInfoRequest<DataSchema, PreferencesSchema, SubscriptionsSchema>,
     ) => AccountsSetAccountInfoResponse;
     setProfilePhoto: (params: AccountsSetProfilePhotoRequest) => AccountsSetProfilePhotoResponse;
-    search: (
-        params: AccountsSearchRequest,
-    ) => AccountsSearchResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>;
-    initRegistration: (params: AccountsInitRegistrationRequest) => AccountsInitRegistrationResponse;
-    register: (
-        params: AccountsRegisterRequest<DataSchema, PreferencesSchema, SubscriptionsSchema>,
-    ) => AccountsRegisterResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>;
-    finalizeRegistration: (
-        params: AccountsFinalizeRegistrationRequest,
-    ) => AccountsFinalizeRegistrationResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>;
 };
