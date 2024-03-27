@@ -186,7 +186,7 @@ export type AccountsFinalizeRegistrationResponseJS<
     DataSchema extends GigyaData,
     PreferencesSchema extends GigyaPreferences,
     SubscriptionsSchema extends GigyaSubscriptions,
-> = AccountsFinalizeRegistrationResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>;
+> = Omit<AccountsFinalizeRegistrationResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>, 'password'>;
 
 export type GigyaAccountsNamespaceJS<
     DataSchema extends GigyaData,
