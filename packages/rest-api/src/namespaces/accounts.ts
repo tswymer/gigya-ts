@@ -655,10 +655,6 @@ export type AccountsLoginRequest = GigyaRequest<{
      * This parameter defines your client-side environment, which in return determines the server response data fields. The default value of this parameter is "browser", which means that by default you receive cookie-related data in the response.
      */
     targetEnv?: 'browser' | 'mobile';
-    /**
-     * This may be used in some cases to suppress logic applied by the Web SDK, such as automatic opening of screens (e.g., in a registration completion scenario). This parameter may not be used with REST APIs.
-     */
-    ignoreInterruptions?: boolean;
 }>;
 
 export type AccountsLoginResponse = GigyaResponse<{
@@ -1279,10 +1275,6 @@ export type AccountsRegisterRequest<
      * Records the source of the registration. The default value is the URL of the current page but it can be any string value. regSource is stored in the account and can be used by verification emails to determine which page should be opened.
      */
     regSource?: string;
-    /**
-     * This may be used in some cases to suppress logic applied by the Web SDK, such as automatic opening of screens (e.g., in a registration completion scenario). This parameter may not be used with REST APIs.
-     */
-    ignoreInterruptions?: boolean;
 }>;
 
 /**
