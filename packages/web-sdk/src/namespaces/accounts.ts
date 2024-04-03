@@ -1,29 +1,27 @@
 import {
+    AccountsFinalizeRegistrationRequest,
+    AccountsFinalizeRegistrationResponse,
     AccountsGetAccountInfoRequest,
     AccountsGetAccountInfoResponse,
     AccountsGetJWTRequest,
     AccountsGetJWTResponse,
     AccountsGetSchemaRequest,
     AccountsGetSchemaResponse,
+    AccountsInitRegistrationRequest,
+    AccountsInitRegistrationResponse,
     AccountsLoginRequest,
     AccountsLoginResponse,
+    AccountsRegisterRequest,
+    AccountsRegisterResponse,
     AccountsResetPasswordRequest,
     AccountsResetPasswordResponse,
     AccountsSetAccountInfoRequest,
     AccountsSetAccountInfoResponse,
-    AccountsInitRegistrationRequest,
-    AccountsInitRegistrationResponse,
-    AccountsRegisterRequest,
-    AccountsRegisterResponse,
-    AccountsFinalizeRegistrationRequest,
-    AccountsFinalizeRegistrationResponse,
-    AccountsGetConsentStatementsRequest,
-    AccountsGetConsentStatementsResponse,
     GigyaData,
     GigyaPreferences,
     GigyaRequest,
     GigyaResponse,
-    GigyaSubscriptions,
+    GigyaSubscriptions
 } from '@gigya-ts/rest-api';
 import {
     GigyaJSFunction,
@@ -194,17 +192,6 @@ export type AccountsFinalizeRegistrationResponseJS<
     SubscriptionsSchema extends GigyaSubscriptions,
 > = Omit<AccountsFinalizeRegistrationResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>, 'password'>;
 
-/**
- * @TODO: This is not documented in the Gigya WebSDK docs.
- */
-export type AccountsGetConsentStatementsRequestJS = AccountsGetConsentStatementsRequest;
-
-/**
- * @TODO: This is not documented in the Gigya WebSDK docs.
- */
-export type AccountsGetConsentStatementsResponseJS<PreferencesSchema extends GigyaPreferences> =
-    AccountsGetConsentStatementsResponse<PreferencesSchema>;
-
 export type GigyaAccountsNamespaceJS<
     DataSchema extends GigyaData,
     PreferencesSchema extends GigyaPreferences,
@@ -253,15 +240,6 @@ export type GigyaAccountsNamespaceJS<
         AccountsGetAccountInfoRequestJS,
         AccountsGetAccountInfoResponseJS<DataSchema, PreferencesSchema, SubscriptionsSchema>
     >;
-
-    /**
-     * @TODO: This is not documented in the Gigya WebSDK docs.
-     */
-    getConsentStatements: GigyaJSFunction<
-        AccountsGetConsentStatementsRequestJS,
-        AccountsGetConsentStatementsResponseJS<PreferencesSchema>
-    >;
-
     /**
      * This API is used to obtain an id_token containing the active session's user data.
      */
