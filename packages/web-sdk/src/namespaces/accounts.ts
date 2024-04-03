@@ -1,12 +1,18 @@
 import {
+    AccountsFinalizeRegistrationRequest,
+    AccountsFinalizeRegistrationResponse,
     AccountsGetAccountInfoRequest,
     AccountsGetAccountInfoResponse,
     AccountsGetJWTRequest,
     AccountsGetJWTResponse,
     AccountsGetSchemaRequest,
     AccountsGetSchemaResponse,
+    AccountsInitRegistrationRequest,
+    AccountsInitRegistrationResponse,
     AccountsLoginRequest,
     AccountsLoginResponse,
+    AccountsRegisterRequest,
+    AccountsRegisterResponse,
     AccountsResetPasswordRequest,
     AccountsResetPasswordResponse,
     AccountsSetAccountInfoRequest,
@@ -15,7 +21,7 @@ import {
     GigyaPreferences,
     GigyaRequest,
     GigyaResponse,
-    GigyaSubscriptions,
+    GigyaSubscriptions
 } from '@gigya-ts/rest-api';
 import {
     GigyaJSFunction,
@@ -46,7 +52,12 @@ export type AccountsAddEventsHandlersResponseJS = GigyaResponse<Record<string, n
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/eb93d538b9ae45bfadd9a8aaa8806753.html#parameters
  */
-export type AccountsLoginRequestJS = Omit<AccountsLoginRequest, 'clientContext'>;
+export type AccountsLoginRequestJS = Omit<AccountsLoginRequest, 'clientContext'> & {
+    /**
+     * This may be used in some cases to suppress logic applied by the Web SDK, such as automatic opening of screens (e.g., in a registration completion scenario). This parameter may not be used with REST APIs.
+     */
+    ignoreInterruptions?: boolean;
+};
 
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/eb93d538b9ae45bfadd9a8aaa8806753.html?#response-data
@@ -82,7 +93,11 @@ export type AccountsGetAccountInfoResponseJS<
     DataSchema extends GigyaData,
     PreferencesSchema extends GigyaPreferences,
     SubscriptionsSchema extends GigyaSubscriptions,
-> = AccountsGetAccountInfoResponse<DataSchema, PreferencesSchema, SubscriptionsSchema> & GigyaJSUIDSignature;
+> = AccountsGetAccountInfoResponse<DataSchema, PreferencesSchema, SubscriptionsSchema> & GigyaJSUIDSignature & {
+    password: {
+        created?: string;
+    }
+}
 
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4135d4e170b21014bbc5a10ce4041860.html#parameters
@@ -92,11 +107,7 @@ export type AccountsGetSchemaRequestJS = AccountsGetSchemaRequest;
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413523ec70b21014bbc5a10ce4041860.html#parameters
  */
-export type AccountsGetJWTRequestJS = Pick<AccountsGetJWTRequest,
-    'fields' |
-    'expiration' |
-    'audience'
->;
+export type AccountsGetJWTRequestJS = Pick<AccountsGetJWTRequest, 'fields' | 'expiration' | 'audience'>;
 
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413523ec70b21014bbc5a10ce4041860.html#response-data
@@ -134,6 +145,53 @@ export type AccountsSetAccountInfoResponseJS = AccountsSetAccountInfoResponse;
  */
 export type AccountsGetSchemaResponseJS = AccountsGetSchemaResponse;
 
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4136cef070b21014bbc5a10ce4041860.html#method-parameters
+ */
+export type AccountsInitRegistrationRequestJS = Omit<AccountsInitRegistrationRequest, 'dataCenter'>;
+
+/**
+ * @TODO: This is not documented in the Gigya WebSDK docs.
+ */
+export type AccountsInitRegistrationResponseJS = AccountsInitRegistrationResponse;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41389fe070b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsRegisterRequestJS<
+    DataSchema extends GigyaData,
+    PreferencesSchema extends GigyaPreferences,
+    SubscriptionsSchema extends GigyaSubscriptions,
+> = AccountsRegisterRequest<DataSchema, PreferencesSchema, SubscriptionsSchema> & {
+    /**
+     * This may be used in some cases to suppress logic applied by the Web SDK, such as automatic opening of screens (e.g., in a registration completion scenario). This parameter may not be used with REST APIs.
+     */
+    ignoreInterruptions?: boolean;
+};
+
+/**
+ * @TODO: This is not documented in the Gigya WebSDK docs.
+ */
+export type AccountsRegisterResponseJS<
+    DataSchema extends GigyaData,
+    PreferencesSchema extends GigyaPreferences,
+    SubscriptionsSchema extends GigyaSubscriptions,
+> = Omit<AccountsRegisterResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>, 'password'>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4134b19d70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsFinalizeRegistrationRequestJS = AccountsFinalizeRegistrationRequest;
+
+/**
+ * @TODO: This is not documented in the Gigya WebSDK docs.
+ */
+export type AccountsFinalizeRegistrationResponseJS<
+    DataSchema extends GigyaData,
+    PreferencesSchema extends GigyaPreferences,
+    SubscriptionsSchema extends GigyaSubscriptions,
+> = Omit<AccountsFinalizeRegistrationResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>, 'password'>;
+
 export type GigyaAccountsNamespaceJS<
     DataSchema extends GigyaData,
     PreferencesSchema extends GigyaPreferences,
@@ -152,18 +210,27 @@ export type GigyaAccountsNamespaceJS<
         AccountsAddEventsHandlersRequestJS<DataSchema>,
         AccountsAddEventsHandlersResponseJS
     >;
+
     /**
-     * This method logs in a user to your site and opens a session for the logged-in user on success.
+     *  This method completes on-site user registration.
      *
-     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/eb93d538b9ae45bfadd9a8aaa8806753.html
-     */
-    login: GigyaJSFunction<AccountsLoginRequestJS, AccountsLoginResponseJS>;
-    /**
-     * This method Logs out the current user of your site.
+     *  For registration through a social network, see accounts.socialLogin.
      *
-     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4137589670b21014bbc5a10ce4041860.html
+     *  On-site registration requires three API calls:
+     *
+     *      1. accounts.initRegistration
+     *      2. accounts.register
+     *      3. accounts.finalizeRegistration
+     *
+     *  This method is not required if the finalizeRegistration parameter was set to true in accounts.register.
+     *
+     *  @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4134b19d70b21014bbc5a10ce4041860.html
      */
-    logout: GigyaJSFunction<AccountsLogoutRequestJS, AccountsLogoutResponseJS>;
+    finalizeRegistration: GigyaJSFunction<
+        AccountsFinalizeRegistrationRequestJS,
+        AccountsFinalizeRegistrationResponseJS<DataSchema, PreferencesSchema, SubscriptionsSchema>
+    >;
+
     /**
      * This method retrieves user account data.
      *
@@ -177,10 +244,50 @@ export type GigyaAccountsNamespaceJS<
      * This API is used to obtain an id_token containing the active session's user data.
      */
     getJWT: GigyaJSFunction<AccountsGetJWTRequestJS, AccountsGetJWTResponseJS>;
+
+    /**
+     * This method retrieves the schema of the Profile object and the Data object (the site specific custom data object) in Gigya's Accounts Storage.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4135d4e170b21014bbc5a10ce4041860.html
+     */
+    getSchema: GigyaJSFunction<AccountsGetSchemaRequestJS, AccountsGetSchemaResponseJS>;
+
+    /**
+     * This method initializes a registration process at a site.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4136cef070b21014bbc5a10ce4041860.html
+     */
+    initRegistration: GigyaJSFunction<AccountsInitRegistrationRequestJS, AccountsInitRegistrationResponseJS>;
+
+    /**
+     * This method logs in a user to your site and opens a session for the logged-in user on success.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/eb93d538b9ae45bfadd9a8aaa8806753.html
+     */
+    login: GigyaJSFunction<AccountsLoginRequestJS, AccountsLoginResponseJS>;
+
+    /**
+     * This method Logs out the current user of your site.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4137589670b21014bbc5a10ce4041860.html
+     */
+    logout: GigyaJSFunction<AccountsLogoutRequestJS, AccountsLogoutResponseJS>;
+
+    /**
+     * This method registers a new user at your site.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41389fe070b21014bbc5a10ce4041860.html
+     */
+    register: GigyaJSFunction<
+        AccountsRegisterRequestJS<DataSchema, PreferencesSchema, SubscriptionsSchema>,
+        AccountsRegisterResponseJS<DataSchema, PreferencesSchema, SubscriptionsSchema>
+    >;
+
     /**
      * The password can be reset either via email or directly. The email format is according to the templates defined in the site policy.
      */
     resetPassword: GigyaJSFunction<AccountsResetPasswordRequestJS, AccountsResetPasswordResponseJS>;
+
     /**
      * This method sets account data into a user's account.
      *
@@ -190,10 +297,4 @@ export type GigyaAccountsNamespaceJS<
         AccountsSetAccountInfoRequestJS<DataSchema, PreferencesSchema, SubscriptionsSchema>,
         AccountsSetAccountInfoResponseJS
     >;
-    /**
-     * This method retrieves the schema of the Profile object and the Data object (the site specific custom data object) in Gigya's Accounts Storage.
-     *
-     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4135d4e170b21014bbc5a10ce4041860.html
-     */
-    getSchema: GigyaJSFunction<AccountsGetSchemaRequestJS, AccountsGetSchemaResponseJS>;
 };

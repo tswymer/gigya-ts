@@ -6,6 +6,8 @@ export type GigyaDataCenter =
     | 'cn1.sapcdm.cn'
     | 'global.gigya.com';
 
+export type GigyaRegion = 'us1' | 'eu1' | 'au1' | 'cn1';
+
 export type GigyaRequest<T> = T & CommonRequestParams;
 
 export type GigyaResponse<T> = T & CommonResponseParams;
