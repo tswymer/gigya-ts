@@ -1,4 +1,4 @@
-import { GigyaRequest, GigyaResponse } from '../types/gigya-helpers';
+import { GigyaRegion, GigyaRequest, GigyaResponse } from '../types/gigya-helpers';
 import { GigyaSubscriptions, UpdateSubscriptions } from '../types/gigya-subscriptions';
 import { GigyaData, GigyaIdentity, GigyaPreferences, GigyaProfile } from './gigya';
 
@@ -616,7 +616,7 @@ export type AccountsLoginRequest = GigyaRequest<{
      * - au1
      * - cn1
      */
-    dataCenter?: 'us1' | 'eu1' | 'au1' | 'cn1';
+    dataCenter?: GigyaRegion;
     /**
      * A comma-separated list of fields to include in the response. The possible values are:
     /**
@@ -1152,7 +1152,7 @@ export type AccountsInitRegistrationRequest = GigyaRequest<{
      *   - au1
      *   - cn1
      */
-    dataCenter?: 'us1' | 'eu1' | 'au1' | 'cn1';
+    dataCenter?: GigyaRegion;
     /**
      *  Defines whether the regToken that is returned can be used to create a full registered account or a lite account.
      *
