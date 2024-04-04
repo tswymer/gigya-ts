@@ -1,6 +1,6 @@
 import { GigyaRegion, GigyaRequest, GigyaResponse } from '../types/gigya-helpers';
 import { GigyaSubscriptions, UpdateSubscriptions } from '../types/gigya-subscriptions';
-import { GigyaData, GigyaIdentity, GigyaPreferences, GigyaProfile } from './gigya';
+import { GigyaData, GigyaIdentity, GigyaPreferences, GigyaProfile, GigyaValidationError } from './gigya';
 
 /**
  * This API retrieves the authentication methods associated to a specific user when using a custom identifier with an aToken or identifier.
@@ -1016,10 +1016,8 @@ export type AccountsSetAccountInfoResponse = GigyaResponse<{
     UID?: string;
     /**
      * In case of a data validation errors (errorCode 400006), you will receive this field as an array of error objects. Each object represents a validation error regarding one of the following fields: username, password, secretQuestion, secretAnswer, email.
-     *
-     * @note: type this out
      */
-    validationErrors?: unknown;
+    validationErrors?: GigyaValidationError[];
 }>;
 
 /**
@@ -1307,10 +1305,8 @@ export type AccountsRegisterResponse<
     unverifiedEmails?: Array<string>;
     /**
      * In case of a data validation errors (errorCode 400006), you will receive this field as an array of error objects. Each object represents a validation error regarding one of the following required fields: username, password, secretQuestion, secretAnswer, email.
-     *
-     * @note: type this out
      */
-    validationErrors?: unknown;
+    validationErrors?: GigyaValidationError[];
     /**
      * Indicates whether a new user was created in this call.
      */

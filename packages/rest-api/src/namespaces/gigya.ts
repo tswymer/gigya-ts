@@ -1,3 +1,9 @@
+export type GigyaValidationError = {
+    errorCode: number;
+    message: string;
+    fieldName: string;
+};
+
 export type GigyaProfile = {
     firstName?: string;
     lastName?: string;
