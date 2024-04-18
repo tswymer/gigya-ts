@@ -15,12 +15,12 @@ export type AuditSearchRequest = GigyaRequest<{
      * The cursor ID that contains the nextCursorId value received in the first search call. You cannot pass both cursorId and query on the same request - cursorId brings the next page for the search for which it was opened. In addition, the time between search requests using a cursorId must not exceed 5 minutes.
      * Each request should contain a different cursorId obtained from the response of the previous request (not the first) using the nextCursorId field. The exception to this rule is when a request fails or when a particular result set needs to be re-sent; in this case, resend the same cursorID (as long as it has not expired) to receive its associated result set.
      */
-    cursorId: string;
+    cursorId?: string;
     /**
      * When set to true, the search response will include, in addition to the first page, another field named nextCursorId, which is used to fetch the next batch of results. This parameter should only be used on the first request and later should be removed from the request. When openCursor is true, the Limit clause sets the number of results returned in the batch.
      * You cannot use a cursor if you have a group by or when using start.
      */
-    openCursor: boolean;
+    openCursor?: boolean;
 }>;
 
 /**
