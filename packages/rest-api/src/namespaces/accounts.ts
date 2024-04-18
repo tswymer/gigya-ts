@@ -389,7 +389,7 @@ export type AccountsGetAccountInfoResponse<
      * - riskPolicy - Determines the rule set from the defined rulesSets configured in accounts.rba.setPolicy or one of the default policies.
      * - riskPolicyLocked - Determines whether the user can change their own riskPolicy. If true, only an admin can change the user's riskPolicy.
      */
-    rba?: {
+    rbaPolicy?: {
         riskPolicy?: string;
         riskPolicyLocked?: boolean;
     };
