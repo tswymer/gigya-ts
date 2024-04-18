@@ -1,5 +1,6 @@
 import { AuditLogObject } from '../types/gigya-audit';
 import { GigyaRequest, GigyaResponse } from '../types/gigya-helpers';
+
 /**
  * The method enables you to search your site's audit log using an SQL-like query. A short delay is possible between the writing of audit log data and its availability in queries.
  *
@@ -38,6 +39,10 @@ export type AuditSearchResponse = GigyaResponse<{
      * An array of auditLog objects.
      */
     results: AuditLogObject[];
+    /**
+     * Used to fetch the next batch of results. This parameter is not returned on the last batch of results, its absence means that the result set is finished.
+     */
+    nextCursorId: string | null
 }>;
 
 export type GigyaAuditNamespace = {
