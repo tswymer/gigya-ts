@@ -1769,6 +1769,54 @@ export type AccountsGetConsentStatementsResponse<PreferencesSchema extends Gigya
     preferences?: PreferencesSchema;
 }>;
 
+export type AccountsOtpUpdateRequest = GigyaRequest<{
+    /**
+     * The API key of the site.
+     */
+    apiKey: string;
+    /**
+     * Secure token obtained from the sendCode API.
+     */
+    vToken: string;
+    /**
+     * The 6-digit code received in the SMS.
+     */
+    code: number;
+    /**
+     * The unique identifier of the user whose login information is being updated. 
+    */
+    UID?: string;
+
+    /**
+     * A string consisting of up to 100 characters. The CID sets categories for reporting.
+     */
+    CID?: string;
+
+    /**
+     * Determines the format of the response. Default - JSON
+     */
+    format?: string;
+
+    /**
+     * This parameter may be used to pass data through the current method and return it, unchanged, within the response.
+     */
+    context?: string;
+    /**
+     * This may be used in some cases to suppress logic applied by the Web SDK, such as automatic opening of screens (e.g., in a registration completion scenario). This parameter may not be used with REST APIs.
+     */
+    ignoreInterruptions?:Boolean;
+    /**
+     * The default value of this parameter is false, which means that the HTTP status code in SAP Customer Data Cloud's response is always 200 (OK), even if an error occurs.
+     */
+    httpStatusCodes?:Boolean;
+    /**
+     * The regToken returned from accounts.initRegistration, accounts.register or accounts.login API calls when the registration process has not been finalized. 
+     */
+    regToken?:string;
+}>
+
+export type AccountsOtpUpdateResponse = GigyaResponse<Record<string, never>>;
+
 export type GigyaAccountsNamespace<
     DataSchema extends GigyaData,
     PreferencesSchema extends GigyaPreferences,
@@ -1785,6 +1833,7 @@ export type GigyaAccountsNamespace<
         params: AccountsAuthMagiclinkEmailSendRequest,
     ) => AccountsAuthMagiclinkEmailSendResponse;
     'auth.magiclink.getlink': (params: AccountsAuthMagiclinkGetLinkRequest) => AccountsAuthMagiclinkGetLinkResponse;
+    'otp.update': (params: AccountsOtpUpdateRequest) => AccountsOtpUpdateResponse;
     deleteAccount: (params: AccountsDeleteRequest) => AccountsDeleteResponse;
     finalizeRegistration: (
         params: AccountsFinalizeRegistrationRequest,
