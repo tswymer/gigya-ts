@@ -1769,53 +1769,42 @@ export type AccountsGetConsentStatementsResponse<PreferencesSchema extends Gigya
     preferences?: PreferencesSchema;
 }>;
 
-export type AccountsOtpUpdateRequest = GigyaRequest<{
-    /**
-     * The API key of the site.
-     */
-    apiKey: string;
+/**
+ * This method is used to update a user's phone number when using Phone Number Login, or their email in an email code verification flow. 
+ * 
+ * It requires the vToken and code returned from accounts.OTP.sendCode.
+ * 
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413807a270b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsOTPUpdateRequest = GigyaRequest<{
     /**
      * Secure token obtained from the sendCode API.
      */
     vToken: string;
     /**
      * The 6-digit code received in the SMS.
+     * 
+     * The length of the code may change, so we recommend that your implementation will not expect a fixed number of digits.
      */
     code: number;
     /**
      * The unique identifier of the user whose login information is being updated. 
-    */
+     * 
+     * You are required to pass only one of the parameters either UID or regToken.
+     */
     UID?: string;
-
     /**
-     * A string consisting of up to 100 characters. The CID sets categories for reporting.
+     * The regToken returned from accounts.initRegistration, accounts.register or accounts.login API calls when the registration process has not been finalized.
+     * 
+     * You are required to pass only one of the parameters either UID or regToken.
      */
-    CID?: string;
-
-    /**
-     * Determines the format of the response. Default - JSON
-     */
-    format?: string;
-
-    /**
-     * This parameter may be used to pass data through the current method and return it, unchanged, within the response.
-     */
-    context?: string;
-    /**
-     * This may be used in some cases to suppress logic applied by the Web SDK, such as automatic opening of screens (e.g., in a registration completion scenario). This parameter may not be used with REST APIs.
-     */
-    ignoreInterruptions?:Boolean;
-    /**
-     * The default value of this parameter is false, which means that the HTTP status code in SAP Customer Data Cloud's response is always 200 (OK), even if an error occurs.
-     */
-    httpStatusCodes?:Boolean;
-    /**
-     * The regToken returned from accounts.initRegistration, accounts.register or accounts.login API calls when the registration process has not been finalized. 
-     */
-    regToken?:string;
+    regToken?: string;
 }>
 
-export type AccountsOtpUpdateResponse = GigyaResponse<Record<string, never>>;
+/**
+ * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413807a270b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsOTPUpdateResponse = GigyaResponse<Record<string, never>>;
 
 export type GigyaAccountsNamespace<
     DataSchema extends GigyaData,
@@ -1833,7 +1822,6 @@ export type GigyaAccountsNamespace<
         params: AccountsAuthMagiclinkEmailSendRequest,
     ) => AccountsAuthMagiclinkEmailSendResponse;
     'auth.magiclink.getlink': (params: AccountsAuthMagiclinkGetLinkRequest) => AccountsAuthMagiclinkGetLinkResponse;
-    'otp.update': (params: AccountsOtpUpdateRequest) => AccountsOtpUpdateResponse;
     deleteAccount: (params: AccountsDeleteRequest) => AccountsDeleteResponse;
     finalizeRegistration: (
         params: AccountsFinalizeRegistrationRequest,
@@ -1849,6 +1837,7 @@ export type GigyaAccountsNamespace<
     initRegistration: (params: AccountsInitRegistrationRequest) => AccountsInitRegistrationResponse;
     login: (params: AccountsLoginRequest) => AccountsLoginResponse;
     logout: (params: AccountsLogoutRequest) => AccountsLogoutResponse;
+    'otp.update': (params: AccountsOTPUpdateRequest) => AccountsOTPUpdateResponse;
     register: (
         params: AccountsRegisterRequest<DataSchema, PreferencesSchema, SubscriptionsSchema>,
     ) => AccountsRegisterResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>;
