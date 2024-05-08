@@ -1811,7 +1811,7 @@ export type AccountsOTPUpdateResponse = GigyaResponse<Record<string, never>>;
  *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41388cd270b21014bbc5a10ce4041860.html?q=reset%20TFA#parameters
  */
-export type AccountsRBAUnlocRequest = GigyaRequest<{
+export type AccountsRBAUnlockRequest = GigyaRequest<{
     /**
      * The loginID of the user whose account is to be unlocked (email or username; dependent upon schema). You must pass either a loginID, UID or ip.
      */
@@ -1934,7 +1934,7 @@ export type GigyaAccountsNamespace<
     login: (params: AccountsLoginRequest) => AccountsLoginResponse;
     logout: (params: AccountsLogoutRequest) => AccountsLogoutResponse;
     'otp.update': (params: AccountsOTPUpdateRequest) => AccountsOTPUpdateResponse;
-    'rba.unlock': (params: AccountsRBAUnlocRequest) => AccountsRBAUnlockResponse;
+    'rba.unlock': (params: AccountsRBAUnlockRequest) => AccountsRBAUnlockResponse;
     register: (
         params: AccountsRegisterRequest<DataSchema, PreferencesSchema, SubscriptionsSchema>,
     ) => AccountsRegisterResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>;
