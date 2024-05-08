@@ -1807,6 +1807,31 @@ export type AccountsOTPUpdateRequest = GigyaRequest<{
 export type AccountsOTPUpdateResponse = GigyaResponse<Record<string, never>>;
 
 /**
+ * This API unlocks either the specified user's account or the specified IP, depending upon which parameters are passed.
+ *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41388cd270b21014bbc5a10ce4041860.html?q=reset%20TFA#parameters
+ */
+export type AccountsRBAUnlocRequest = GigyaRequest<{
+    /**
+     * The loginID of the user whose account is to be unlocked (email or username; dependent upon schema). You must pass either a loginID, UID or ip.
+     */
+    loginID?: string;
+    /**
+     * The UID of the user whose account is to be unlocked. You must pass either a loginID, UID or ip.
+     */
+    UID?: string;
+    /**
+     * The IP address to unlock. You must pass either a loginID, UID or ip.
+     */
+    ip?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41388cd270b21014bbc5a10ce4041860.html?q=reset%20TFA#response-data
+ */
+export type AccountsRBAUnlockResponse = GigyaResponse<{}>;
+
+/**
  * This method resets the means of identification (e.g., SMS or authenticating app) used as the second step of authentication in a TFA flow for a specified user. The user will be prompted to enter a new verification method on their next login.
  *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c65da70b21014bbc5a10ce4041860.html?q=reset%20TFA#parameters
@@ -1888,6 +1913,7 @@ export type GigyaAccountsNamespace<
     login: (params: AccountsLoginRequest) => AccountsLoginResponse;
     logout: (params: AccountsLogoutRequest) => AccountsLogoutResponse;
     'otp.update': (params: AccountsOTPUpdateRequest) => AccountsOTPUpdateResponse;
+    'rba.unlock': (params: AccountsRBAUnlocRequest) => AccountsRBAUnlockResponse;
     register: (
         params: AccountsRegisterRequest<DataSchema, PreferencesSchema, SubscriptionsSchema>,
     ) => AccountsRegisterResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>;
