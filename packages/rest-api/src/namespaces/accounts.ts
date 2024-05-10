@@ -1809,7 +1809,7 @@ export type AccountsOTPUpdateResponse = GigyaResponse<Record<string, never>>;
 /**
  * This API unlocks either the specified user's account or the specified IP, depending upon which parameters are passed.
  *
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41388cd270b21014bbc5a10ce4041860.html?q=reset%20TFA#parameters
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41388cd270b21014bbc5a10ce4041860.html#parameters
  */
 export type AccountsRBAUnlockRequest = GigyaRequest<{
     /**
@@ -1827,7 +1827,7 @@ export type AccountsRBAUnlockRequest = GigyaRequest<{
 }>;
 
 /**
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41388cd270b21014bbc5a10ce4041860.html?q=reset%20TFA#response-data
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41388cd270b21014bbc5a10ce4041860.html#response-data
  */
 export type AccountsRBAUnlockResponse = GigyaResponse<{}>;
 
@@ -1859,7 +1859,7 @@ export type AccountsResendVerificationCodeResponse = GigyaResponse<{}>;
 /**
  * This method resets the means of identification (e.g., SMS or authenticating app) used as the second step of authentication in a TFA flow for a specified user. The user will be prompted to enter a new verification method on their next login.
  *
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c65da70b21014bbc5a10ce4041860.html?q=reset%20TFA#parameters
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c65da70b21014bbc5a10ce4041860.html#parameters
  */
 export type AccountsTFAResetTFARequest = GigyaRequest<{
     /**
@@ -1877,14 +1877,14 @@ export type AccountsTFAResetTFARequest = GigyaRequest<{
 }>;
 
 /**
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c65da70b21014bbc5a10ce4041860.html?q=reset%20TFA#response-data
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c65da70b21014bbc5a10ce4041860.html#response-data
  */
 export type AccountsTFAResetTFAResponse = GigyaResponse<{}>;
 
 /**
  * This method unregisters devices from the list of verified devices for the user, used in Risk-Based Authentication flows. A verified device is a device (phone or web browser) that has already been verified with an SMS, TOTP, or email verification code. The method may unregister all devices, or those with an active session.
  *
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413cc8e070b21014bbc5a10ce4041860.html?q=reset%20TFA#parameters
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413cc8e070b21014bbc5a10ce4041860.html#parameters
  */
 export type AccountsTFAUnregisterDeviceRequest = GigyaRequest<{
     /**
@@ -1898,7 +1898,7 @@ export type AccountsTFAUnregisterDeviceRequest = GigyaRequest<{
 }>;
 
 /**
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413cc8e070b21014bbc5a10ce4041860.html?q=reset%20TFA#response-data
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413cc8e070b21014bbc5a10ce4041860.html#response-data
  */
 export type AccountsTFAUnregisterDeviceResponse = GigyaResponse<{}>;
 
