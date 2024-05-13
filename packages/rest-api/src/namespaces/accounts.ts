@@ -1770,10 +1770,10 @@ export type AccountsGetConsentStatementsResponse<PreferencesSchema extends Gigya
 }>;
 
 /**
- * This method is used to update a user's phone number when using Phone Number Login, or their email in an email code verification flow. 
- * 
+ * This method is used to update a user's phone number when using Phone Number Login, or their email in an email code verification flow.
+ *
  * It requires the vToken and code returned from accounts.OTP.sendCode.
- * 
+ *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413807a270b21014bbc5a10ce4041860.html#parameters
  */
 export type AccountsOTPUpdateRequest = GigyaRequest<{
@@ -1783,28 +1783,124 @@ export type AccountsOTPUpdateRequest = GigyaRequest<{
     vToken: string;
     /**
      * The 6-digit code received in the SMS.
-     * 
+     *
      * The length of the code may change, so we recommend that your implementation will not expect a fixed number of digits.
      */
     code: number;
     /**
-     * The unique identifier of the user whose login information is being updated. 
-     * 
+     * The unique identifier of the user whose login information is being updated.
+     *
      * You are required to pass only one of the parameters either UID or regToken.
      */
     UID?: string;
     /**
      * The regToken returned from accounts.initRegistration, accounts.register or accounts.login API calls when the registration process has not been finalized.
-     * 
+     *
      * You are required to pass only one of the parameters either UID or regToken.
      */
     regToken?: string;
-}>
+}>;
 
 /**
  * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413807a270b21014bbc5a10ce4041860.html#response-data
  */
 export type AccountsOTPUpdateResponse = GigyaResponse<Record<string, never>>;
+
+/**
+ * This API unlocks either the specified user's account or the specified IP, depending upon which parameters are passed.
+ *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41388cd270b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsRBAUnlockRequest = GigyaRequest<{
+    /**
+     * The loginID of the user whose account is to be unlocked (email or username; dependent upon schema). You must pass either a loginID, UID or ip.
+     */
+    loginID?: string;
+    /**
+     * The UID of the user whose account is to be unlocked. You must pass either a loginID, UID or ip.
+     */
+    UID?: string;
+    /**
+     * The IP address to unlock. You must pass either a loginID, UID or ip.
+     */
+    ip?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41388cd270b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsRBAUnlockResponse = GigyaResponse<{}>;
+
+/**
+ * This method is used to resend a validation email to unverified addresses associated with the account. The email format is according to the templates defined in the policy. For more information on the email format, refer to account.setPolicies or to the Email Templates section of the User Management Policies guide.
+ *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4138f19d70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsResendVerificationCodeRequest = GigyaRequest<{
+    /**
+     * The unique ID of a logged-in user. This is the UID you receive from Gigya after a successful login of this user.
+     */
+    UID?: string;
+    /**
+     * The regToken returned from accounts.initRegistration, accounts.register or accounts.login API calls when the registration process has not been finalized. Please note that the regToken you receive from Gigya is valid for only one hour.
+     */
+    regToken?: string;
+    /**
+     * The email address to which to send a verification email. If specified the verification email will only be sent to this address, otherwise it will be sent to all unverified email addresses. If this email address is not associated with the account already it will be automatically added as another unverified email address and a verification email will be sent to that address. If loginIdentifiers in the policy (accounts.setPolicies) contains "email" then this email will also be added as an unlocked login identifier.
+     */
+    email?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4138f19d70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsResendVerificationCodeResponse = GigyaResponse<{}>;
+
+/**
+ * This method resets the means of identification (e.g., SMS or authenticating app) used as the second step of authentication in a TFA flow for a specified user. The user will be prompted to enter a new verification method on their next login.
+ *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c65da70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAResetTFARequest = GigyaRequest<{
+    /**
+     * The unique ID of the user, for whom to reset the verified phone numbers.
+     */
+    UID: string;
+    /**
+     * The TFA provider to reset. Supported values:
+     *   gigyaPhone
+     *   gigyaTotp
+     *   gigyaPush
+     * If no provider is sent, all active providers will be reset. Note that gigyaEmail cannot be reset using this method but via email verification flows instead.
+     */
+    provider?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c65da70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAResetTFAResponse = GigyaResponse<{}>;
+
+/**
+ * This method unregisters devices from the list of verified devices for the user, used in Risk-Based Authentication flows. A verified device is a device (phone or web browser) that has already been verified with an SMS, TOTP, or email verification code. The method may unregister all devices, or those with an active session.
+ *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413cc8e070b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAUnregisterDeviceRequest = GigyaRequest<{
+    /**
+     * The UID of the user whose TFA you want to reset.
+     */
+    UID: string;
+    /**
+     * Indicates whether to unregister all the user devices (but not to disable the TFA providers). This may be used, for example, if the user loses their mobile phone, which is used for the TFA validation. When set to 'false', only devices for which there is a current active session will be unregistered. The default value is "false".
+     */
+    allDevices?: boolean;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413cc8e070b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAUnregisterDeviceResponse = GigyaResponse<{}>;
 
 export type GigyaAccountsNamespace<
     DataSchema extends GigyaData,
@@ -1838,9 +1934,11 @@ export type GigyaAccountsNamespace<
     login: (params: AccountsLoginRequest) => AccountsLoginResponse;
     logout: (params: AccountsLogoutRequest) => AccountsLogoutResponse;
     'otp.update': (params: AccountsOTPUpdateRequest) => AccountsOTPUpdateResponse;
+    'rba.unlock': (params: AccountsRBAUnlockRequest) => AccountsRBAUnlockResponse;
     register: (
         params: AccountsRegisterRequest<DataSchema, PreferencesSchema, SubscriptionsSchema>,
     ) => AccountsRegisterResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>;
+    resendVerificationCode: (params: AccountsResendVerificationCodeRequest) => AccountsResendVerificationCodeResponse;
     resetPassword: (params: AccountsResetPasswordRequest) => AccountsResetPasswordResponse;
     search: (
         params: AccountsSearchRequest,
@@ -1849,4 +1947,6 @@ export type GigyaAccountsNamespace<
         params: AccountsSetAccountInfoRequest<DataSchema, PreferencesSchema, SubscriptionsSchema>,
     ) => AccountsSetAccountInfoResponse;
     setProfilePhoto: (params: AccountsSetProfilePhotoRequest) => AccountsSetProfilePhotoResponse;
+    'tfa.resetTFA': (params: AccountsTFAResetTFARequest) => AccountsTFAResetTFAResponse;
+    'tfa.unregisterDevice': (params: AccountsTFAUnregisterDeviceRequest) => AccountsTFAUnregisterDeviceResponse;
 };
