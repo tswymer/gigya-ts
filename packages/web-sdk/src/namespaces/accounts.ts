@@ -23,6 +23,7 @@ import {
     GigyaResponse,
     GigyaSubscriptions
 } from '@gigya-ts/rest-api';
+
 import {
     GigyaJSFunction,
     GigyaJSOnLoginEvent,
@@ -139,6 +140,136 @@ export type AccountsSetAccountInfoRequestJS<
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4139777d70b21014bbc5a10ce4041860.html#response-object-data-members
  */
 export type AccountsSetAccountInfoResponseJS = AccountsSetAccountInfoResponse;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a5b7170b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsShowScreenSetRequestJS = GigyaRequest<{
+    /**
+     * A reference to the screen-set to be presented. The value of this parameter is the ID of a screen-set. The screen-set is either defined on the same page from which this method is called, or it is stored on Gigya servers. For the default screen-set names, see Default Screen-sets.
+     * 
+     * @note: Important: When using custom screen-sets, ensure that the default screen-sets in your Site's Policies are defined and configured correctly.
+     * 
+     * When a user is redirected back to your site, the previous screen-set data is lost and if any errors are triggered, the necessary screens to display will be determined from the default screen-set as defined within your Site Policies.
+     */
+    screenSet: string;
+    /**
+     * 	An ID of a <div> element on the page in which you want to display the screens. If this parameter is not specified then the screens will be displayed as a dialog (popup) at the center of the page. For recommended best practice while using this parameter, see Implementing With the containerID Parameter.
+     */
+    containerID?: string;
+    /**
+     * Using this parameter you may specify that the login flow will use page redirects instead of using a popup. This gives a solution for environments where popups are unavailable (e.g., mobile web view controls). This parameter accepts two values:
+     * - **popup** (default).
+     * - **redirect** - The login flow will use page redirects. When the login process completes successfully, the user is redirected to the URL specified by the redirectURL parameter (see below). If the redirectURL parameter is not specified, the user will be redirected to the original page from which the login process started.
+     * 
+     * The context object will not be passed when authFlow: 'redirect'. 
+     */
+    authFlow?: 'popup' | 'redirect';
+    /**
+     * This property defines whether to use the currently specified screen-set lang or not when sending system emails to the user, TFA, email verification, etc.
+     * 
+     * The default is true. When set to true, the screen-set will always send the lang parameter with the request. This is the previous legacy behavior.
+     * 
+     * If set to false, the screen-set will not send the lang parameter in the request, and the email language will be set according to the following hierarchy:
+     * - If the user has a locale defined and a template exists for that language, then the email will be sent in the user's locale.
+     * - If the user does not have a locale defined the email template defined as the default in the site's policies will be used.
+     */
+    communicationLangByScreenSet?: boolean;
+    /**
+     * A JSON object consisting of key/value pairs.
+     */
+    params?: Record<string, unknown>;
+    /**
+     * Specifies the container style of the screen-set. Options are:
+     * - **modern** - (Default) Uses the default updated and responsive dialog style for the screen-set.
+     * - **legacy** - Retains pre-October 26th, 2015 dialog style, however, screens remain responsive.
+     * 
+     * @note: The default value of modern only applies to screen-sets created after October 26th, 2015. Screen-Sets created before this date will default to legacy.
+     */
+    dialogStyle?: 'modern' | 'legacy';
+    /**
+     * Specifies the type of the device the UI is to be displayed on. The possible values are:
+     * - **desktop** - (default)
+     * - **mobile**
+     * - **auto** - When this value is used, you must also include the following meta tag in the <head> section of your site for mobile devices to be automatically recognized:
+     * 
+     * \<meta name="viewport" content="width=device-width">
+     * 
+     * Otherwise, the device will be recognized as a desktop device.
+     */
+    deviceType?: 'desktop' | 'mobile' | 'auto';
+    /**
+     * A comma-delimited list of provider names to include in the method execution. This parameter enables you to dynamically change the providers displayed in the screen-set. If you do not set this parameter, by default all the providers are enabled (i.e., the screen-set will display all connected providers).
+     * 
+     * For example, if you would like the screen-set to only show Twitter, define: enabledProviders: "twitter".
+     * 
+     * Valid provider names include: amazon, blogger, facebook, foursquare, googleplus, kakao, line, linkedin, livedoor, microsoft, mixi, naver, netlog, odnoklassniki, paypaloauth, qq, renren, sina, spiceworks, twitter, vkontakte, wechat, wordpress, xing, yahoo, yahoojapan.(Note: messenger has been replaced by microsoft, however, for backward compatibility, either can be used).
+     * 
+     * @note: In order to use this parameter to dynamically load providers in your screen-set, make sure not to define providers in the UI Builder or in markup. If you define providers directly in the screen-set (in the UI Builder or in markup), those settings will override this parameter.
+     */
+    enabledProviders?: string;
+    /**
+     * The objective of this parameter is to support Over The Air app installsInformation published on non-SAP site for Android devices during Google+ login. Set this parameter with the package nameInformation published on non-SAP site of your Android app (for example: "com.yourdomain.app"). As a result, after signing in with Google+, users have the option to send your Android app to their device instantly, without leaving your website. As a preliminary step you'll need to Utilize Google+ Native Android Sign-on on your Android app. The package nameInformation published on non-SAP site passed to this parameter is the same one you enter when enabling the Google+ APIInformation published on non-SAP site.
+     */
+    googlePlayAppID?: string;
+    /**
+     * Defines a language to automatically translate Screen-Set error messages. The supported languages and their codes can be found in our Language Support guide. This parameter will also display the specified localization, if one exists for the language in your screen-set.
+     * 
+     * @note: It is important to note that the lang parameter only changes the language of the returned on-screen errors, to have screen-sets display in a language other than English you must create a localization for each language you require.
+     */
+    lang?: string;
+    /**
+     * A screen-set to use on mobile devices. This screen-set should be opened to cover the entire screen and not resized when switching screens.
+     */
+    mobileScreenSet?: string;
+    /**
+     * This parameter is only applicable when redirectURL is specified and it determines how the user info data is passed to the redirectURLs. This parameter accepts two values:
+     * - **get** (default) - The user info values should be passed as query string parameters.
+     * - **post** - The user info should be passed as POST fields.
+     */
+    redirectMethod?: 'get' | 'post';
+    /**
+     * A URL to which to redirect the user when the login process has successfully completed. You must provide an absolute URL - relative URLs are not supported.
+     * 
+     * The following additional parameters are appended to the URL string: UID, UIDSig, timestamp, loginProvider, loginProviderUID, nickname, photoURL, thumbnailURL, firstName, lastName, gender, birthDay, birthMonth, birthYear, email, country, state, city, zip, profileURL, provider.
+     * 
+     * These parameters are equivalent to the User object fields. Please find the parameters' description in the User object reference page.
+     * 
+     * When redirectURL is explicitly defined by the partner the user object fields should always be sent with the redirect regardless of the authFlow mode.
+     * 
+     * This parameter is required if using authFlow: 'redirect' (above).
+     * 
+     * @note: We strongly advise providing a secure (ssl) HTTPS URL.
+     */
+    redirectURL?: string;
+    /**
+     * Records the source of the registration. The default value is the URL of the current page but it can be any string value. regSource is stored in the account and can be used by verification emails to determine which page should be opened (see accounts.set Policies). Can also be set via the Global Conf object.
+     */
+    regSource?: string;
+    /**
+     * 	A ticket that is used to complete the registration process. This parameter may be used in a scenario where a user may begin registration via social login on one page but the site redirects them to a registration page to complete his registration.
+     */
+    regToken?: string;
+    /**
+     * This parameter defines the length of time that Gigya should keep the user's login session valid. It can be configured via WebSDK Configuration, via an individual API call, or left empty. If no value is specified, the default values are 0 or -2, depending on whether your site uses RaaS or not (see below); Global configuration overrides the default, and setting the value via individual API calls override the global configuration.
+     * 
+     * The expected values are:
+     * - **0** - Session expires when the browser closes. This is the default behavior when RaaS is enabled in your site. This behavior is dependent upon the browser's cookie handling procedures, i.e., Chrome keeps processes running in the background even after the browser is technically closed, this keeps the cookies valid until the background processes are terminated. This value is not supported when using our Mobile SDKs, and the session will behave as if set to -2.
+     * - **-1** - Session ends after a 60 second period; Gigya gives you the option of creating a cookie that is stored on the site visitor's client (browser), allowing the site to control the session length within this 60 second window, after which the session is terminated if no cookie is found. A typical use case is when the session could include sensitive data (such as credit card details), and the session should be short, with the option of restarting the duration when users perform actions. Useful if you always set the session expiration via individual API methods or with each request, such as when the site session is controlled by a CMS (e.g., Drupal). For additional information, see how to define a session expiration cookie. Note: This setting is not supported on Safari.
+     * - **-2** - Session is valid forever. This is the default behavior when RaaS is not enabled in your site.
+     * - Any custom integer - Defines the number of seconds the session is active, e.g., 3600 (one hour).
+     */
+    sessionExpiration?: number;
+    /**
+     * Specifies which screen of the screen-set to render initially. The value of this parameter is the ID of a screen. By default, if this parameter is not specified, Gigya will initially present the first screen defined within the screen-set. For names of screens within the default screen-sets, see the Default Screen-sets.
+     */
+    startScreen?: string;
+}>;
+
+/**
+ * This doesn't seem to be documented?
+ */
+export type AccountsShowScreenSetResponseJS = GigyaResponse<Record<string, never>>;
 
 /**
  * @TODO: This is not documented in the Gigya WebSDK docs.
@@ -296,5 +427,17 @@ export type GigyaAccountsNamespaceJS<
     setAccountInfo: GigyaJSFunction<
         AccountsSetAccountInfoRequestJS<DataSchema, PreferencesSchema, SubscriptionsSchema>,
         AccountsSetAccountInfoResponseJS
+    >;
+
+    /**
+     * This method loads a screen-set.
+     * 
+     * This API binds the screen-set to its functionality, and, by default, renders the initial screen of the screen-set. When using this method with Screen-Sets hosted on Gigya (via the UI Builder), the latest version of the screen-set in your account will always be the one displayed.
+     * 
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a5b7170b21014bbc5a10ce4041860.html
+     */
+    showScreenSet: GigyaJSFunction<
+        AccountsShowScreenSetRequestJS,
+        AccountsShowScreenSetResponseJS
     >;
 };

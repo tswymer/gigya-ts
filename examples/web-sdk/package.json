@@ -1,0 +1,18 @@
+{
+    "name": "@gigya-ts/gigya-example",
+    "version": "0.0.0",
+    "description": "Examples for the @gigya-ts/gigya project",
+    "private": true,
+    "scripts": {
+        "build": "tsc && cp src/index.html dist/index.html",
+        "dev": "pnpm build && npx http-server dist",
+        "lint": "eslint \"**/*.ts*\""
+    },
+    "dependencies": {
+        "@gigya-ts/web-sdk": "workspace:*"
+    },
+    "devDependencies": {
+        "eslint-config-custom": "workspace:*",
+        "tsconfig": "workspace:*"
+    }
+}

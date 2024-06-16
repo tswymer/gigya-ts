@@ -43,6 +43,19 @@ importers:
         specifier: workspace:*
         version: link:../../shared-config/tsconfig
 
+  examples/web-sdk:
+    dependencies:
+      '@gigya-ts/web-sdk':
+        specifier: workspace:*
+        version: link:../../packages/web-sdk
+    devDependencies:
+      eslint-config-custom:
+        specifier: workspace:*
+        version: link:../../shared-config/eslint-config-custom
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../shared-config/tsconfig
+
   packages/gigya:
     dependencies:
       '@gigya-ts/rest-api':

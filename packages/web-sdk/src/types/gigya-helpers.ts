@@ -14,7 +14,7 @@ export type GigyaJSRequestWithCallback<JSResponseSchema> = {
      *
      * The callback function should be defined with the following signature: functionName(Response).
      */
-    callback: (response: JSResponseSchema) => void;
+    callback?: (response: JSResponseSchema) => void;
 };
 
 /**
