@@ -10,8 +10,11 @@ async function getAccountInfoExample() {
         }
     });
 
-    const getAccountInfoResponse = await gigya.accounts('getAccountInfo', {
+    const getAccountInfoResponse = await gigya.accounts('setAccountInfo', {
         UID: 'YOUR_UID',
+        profile: {
+            lastName: 'Doe',
+        }
     });
 
     if (getAccountInfoResponse.errorCode !== 0) throw new Error(getAccountInfoResponse.errorDetails);

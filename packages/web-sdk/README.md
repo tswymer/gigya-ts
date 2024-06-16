@@ -1,1 +1,1 @@
-# gigya-web-sdk-types
+# @gigya-ts/web-sdk
