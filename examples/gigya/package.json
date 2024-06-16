@@ -1,7 +1,8 @@
 {
     "name": "@gigya-ts/gigya-example",
-    "version": "0.0.1",
+    "version": "0.0.0",
     "description": "Examples for the @gigya-ts/gigya project",
+    "private": true,
     "scripts": {
         "build": "tsc",
         "lint": "eslint \"**/*.ts*\""

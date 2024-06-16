@@ -1,5 +1,6 @@
 {
     "name": "tsconfig",
     "description": "Shared tsconfig for all packages in the monorepo.",
-    "version": "0.0.0"
+    "version": "0.0.0",
+    "private": true
 }
