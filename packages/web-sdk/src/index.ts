@@ -1,3 +1,3 @@
-// Type definitions for the Gigya Web SDK
-// Definitions by: Tobias Wymer https://github.com/tswymer
 export * from './namespaces/gigya';
+
+export type * from '@gigya-ts/rest-api';

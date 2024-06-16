@@ -564,16 +564,16 @@ export type GigyaData = {
  * Documentation: {@link https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4169054f70b21014bbc5a10ce4041860.html Preferences Object REST}
  */
 export type GigyaPreferences = {
-    terms?: GigyaPreference;
-    privacy?: GigyaPreference;
-    [preferenceID: string]: GigyaPreference | GigyaPrefence | undefined;
+    terms?: OptionallyNestedGigyaPreference;
+    privacy?: OptionallyNestedGigyaPreference;
+    [preferenceID: string]: OptionallyNestedGigyaPreference | GigyaPreference | undefined;
 };
 
 /**
  * Sub-type of GigyaPreferences to allow for nested preferences.
  */
-type GigyaPreference = {
-    [preferenceID: string]: GigyaPreference | GigyaPrefence;
+type OptionallyNestedGigyaPreference = {
+    [preferenceID: string]: OptionallyNestedGigyaPreference | GigyaPreference;
 };
 
 /**
@@ -581,7 +581,7 @@ type GigyaPreference = {
  *
  * Documentation: {@link https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4169054f70b21014bbc5a10ce4041860.html Preference Object REST}
  */
-export type GigyaPrefence = {
+export type GigyaPreference = {
     /**
      * Whether or not the user granted their consent to this statement.
      */

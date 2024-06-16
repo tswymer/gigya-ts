@@ -1,5 +1,8 @@
 import { GigyaData, GigyaProfile } from '@gigya-ts/rest-api';
 
+/**
+ * Generic type for Gigya Web SDK methods that accept a callback function.
+ */
 export type GigyaJSFunction<JSRequestSchema, JSResponseSchema> = (
     params: JSRequestSchema & GigyaJSRequestWithCallback<JSResponseSchema>,
 ) => void;
