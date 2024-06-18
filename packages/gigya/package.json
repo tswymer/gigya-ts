@@ -1,6 +1,6 @@
 {
     "name": "@gigya-ts/gigya",
-    "version": "0.0.12",
+    "version": "0.0.13",
     "description": "Type-safe Gigya client for the browser and Node.js",
     "type": "module",
     "main": "dist/index.js",
