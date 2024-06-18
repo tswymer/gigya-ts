@@ -1770,6 +1770,63 @@ export type AccountsGetConsentStatementsResponse<PreferencesSchema extends Gigya
 }>;
 
 /**
+ * This method is the first to call in a Phone Number Login flow, and is used in an email code verification flow.
+ *
+ * It accepts the user's phone number or email, returns a vToken, and sends an authentication code to the user.
+ *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4137e1be70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsOTPSendCodeRequest = GigyaRequest<{
+    /**
+     * The code of the language in which to send the SMS. For supported codes, see {@link https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4141d83470b21014bbc5a10ce4041860.html Advanced Customizations and Localization}.
+     */
+    lang: string;
+    /**
+     *The phone number to which the verification code is sent. This parameter is required for phone number login or update flows.
+     */
+    phoneNumber?: string;
+    /**
+     * The email to which the verification code is sent. This parameter is required for email code verification flows.
+     */
+    email?: string;
+    /**
+     * Whether or not to send the code for the phone update flow. This may be set to "false" if you choose to send an SMS via your application, instead of using the SAP Customer Data Cloud capability.
+     */
+    sendCode?: boolean;
+    /**
+     * The CAPTCHA provider configured for the site. Possible values are:
+     *   - reCaptchaV2
+     *   - invisible
+     *   - reCaptchaV3
+     *   - reCaptchaEnterpriseScore
+     *   - FunCaptcha
+     */
+    captchaType?: string;
+    /**
+     * The token returned from the CAPTCHA provider.
+     */
+    captchaToken?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4137e1be70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsOTPSendCodeResponse = GigyaResponse<{
+    /**
+     * A secured token that holds the phone data and expires after 10 minutes. It contains the following fields:
+     *   - apiKey - The API key of the site.
+     *   - phoneNumber - The phone number associated with the user's account to send the SMS code.
+     *   - code - The 4 digit code.
+     *   - gmid - Only necessary if the method call was originated from the client-side.
+     */
+    vToken?: string;
+    /**
+     * The code used for logging the user in. This may be returned only when making the call with admin credentials.
+     */
+    code?: string;
+}>;
+
+/**
  * This method is used to update a user's phone number when using Phone Number Login, or their email in an email code verification flow.
  *
  * It requires the vToken and code returned from accounts.OTP.sendCode.
@@ -1933,6 +1990,7 @@ export type GigyaAccountsNamespace<
     initRegistration: (params: AccountsInitRegistrationRequest) => AccountsInitRegistrationResponse;
     login: (params: AccountsLoginRequest) => AccountsLoginResponse;
     logout: (params: AccountsLogoutRequest) => AccountsLogoutResponse;
+    'otp.sendCode': (params: AccountsOTPSendCodeRequest) => AccountsOTPSendCodeResponse;
     'otp.update': (params: AccountsOTPUpdateRequest) => AccountsOTPUpdateResponse;
     'rba.unlock': (params: AccountsRBAUnlockRequest) => AccountsRBAUnlockResponse;
     register: (
