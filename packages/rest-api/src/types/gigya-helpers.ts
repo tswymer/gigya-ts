@@ -8,6 +8,8 @@ export type GigyaDataCenter =
 
 export type GigyaRegion = 'us1' | 'eu1' | 'au1' | 'cn1';
 
+export type GigyaCaptchaType = 'reCaptchaV2' | 'invisible' | 'reCaptchaV3' | 'reCaptchaEnterpriseScore' | 'FunCaptcha';
+
 export type GigyaRequest<T> = T & CommonRequestParams;
 
 export type GigyaResponse<T> = T & CommonResponseParams;

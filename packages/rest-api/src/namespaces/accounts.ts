@@ -1,4 +1,4 @@
-import { GigyaRegion, GigyaRequest, GigyaResponse } from '../types/gigya-helpers';
+import { GigyaCaptchaType, GigyaRegion, GigyaRequest, GigyaResponse } from '../types/gigya-helpers';
 import { GigyaSubscriptions, UpdateSubscriptions } from '../types/gigya-subscriptions';
 import { GigyaData, GigyaIdentity, GigyaPreferences, GigyaProfile, GigyaValidationError } from './gigya';
 
@@ -1801,7 +1801,7 @@ export type AccountsOTPSendCodeRequest = GigyaRequest<{
      *   - reCaptchaEnterpriseScore
      *   - FunCaptcha
      */
-    captchaType?: string;
+    captchaType?: GigyaCaptchaType;
     /**
      * The token returned from the CAPTCHA provider.
      */
