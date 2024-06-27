@@ -1959,6 +1959,23 @@ export type AccountsTFAUnregisterDeviceRequest = GigyaRequest<{
  */
 export type AccountsTFAUnregisterDeviceResponse = GigyaResponse<{}>;
 
+/**
+ * This API removes the phone number from the specified account.
+ *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/8f313cc471f549d49fcc8ab3a430aea9.html#parameters
+ */
+export type AccountsOTPDeleteRequest = GigyaRequest<{
+    /**
+     * The UID of the user whose TFA you want to reset.
+     */
+    UID: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/8f313cc471f549d49fcc8ab3a430aea9.html#response-data
+ */
+export type AccountsOTPDeleteResponse = GigyaResponse<{}>;
+
 export type GigyaAccountsNamespace<
     DataSchema extends GigyaData,
     PreferencesSchema extends GigyaPreferences,
@@ -1992,6 +2009,7 @@ export type GigyaAccountsNamespace<
     logout: (params: AccountsLogoutRequest) => AccountsLogoutResponse;
     'otp.sendCode': (params: AccountsOTPSendCodeRequest) => AccountsOTPSendCodeResponse;
     'otp.update': (params: AccountsOTPUpdateRequest) => AccountsOTPUpdateResponse;
+    'otp.delete': (params: AccountsOTPDeleteRequest) => AccountsOTPDeleteResponse;
     'rba.unlock': (params: AccountsRBAUnlockRequest) => AccountsRBAUnlockResponse;
     register: (
         params: AccountsRegisterRequest<DataSchema, PreferencesSchema, SubscriptionsSchema>,
