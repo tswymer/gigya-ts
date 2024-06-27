@@ -42,7 +42,7 @@ export type AuditSearchResponse = GigyaResponse<{
     /**
      * Used to fetch the next batch of results. This parameter is not returned on the last batch of results, its absence means that the result set is finished.
      */
-    nextCursorId: string | null
+    nextCursorId: string | null;
 }>;
 
 export type GigyaAuditNamespace = {

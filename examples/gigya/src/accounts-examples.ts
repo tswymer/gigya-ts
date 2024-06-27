@@ -6,15 +6,15 @@ async function getAccountInfoExample() {
         dataCenter: 'eu1.gigya.com',
         credentials: {
             userKey: 'YOUR_USER_KEY',
-            secret: 'YOUR_SECRET'
-        }
+            secret: 'YOUR_SECRET',
+        },
     });
 
     const getAccountInfoResponse = await gigya.accounts('setAccountInfo', {
         UID: 'YOUR_UID',
         profile: {
             lastName: 'Doe',
-        }
+        },
     });
 
     if (getAccountInfoResponse.errorCode !== 0) throw new Error(getAccountInfoResponse.errorDetails);

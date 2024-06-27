@@ -5,18 +5,16 @@ type MyDataSchema = {
     myCustomObject: {
         myCustomNumber: number;
     };
-}
+};
 
 type MyPreferencesSchema = {
     terms: {
-        myTerms: GigyaPreference,
-    },
-    myCustomPreference: GigyaPreference,
-}
+        myTerms: GigyaPreference;
+    };
+    myCustomPreference: GigyaPreference;
+};
 
-type MySubscriptionsSchema = {
-
-}
+type MySubscriptionsSchema = {};
 
 declare global {
     interface Window {
