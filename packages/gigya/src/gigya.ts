@@ -46,7 +46,7 @@ export const Gigya = <
         accountsEndpoint: Endpoint,
         endpointParams: ParamsOf<PersonalAccountsNamespace[Endpoint]>[0],
     ) =>
-        gigyaRequestFactory<ReturnType<PersonalAccountsNamespace[Endpoint]>>({
+        sendGigyaRequest<ReturnType<PersonalAccountsNamespace[Endpoint]>>({
             ...initParams,
             namespace: 'accounts',
             endpoint: accountsEndpoint,
@@ -68,7 +68,7 @@ export const Gigya = <
         dsEndpoint: Endpoint,
         endpointParams: ParamsOf<GigyaDSNamespace<DSObjectSchema>[Endpoint]>[0],
     ) =>
-        gigyaRequestFactory<ReturnType<GigyaDSNamespace<DSObjectSchema>[Endpoint]>>({
+        sendGigyaRequest<ReturnType<GigyaDSNamespace<DSObjectSchema>[Endpoint]>>({
             ...initParams,
             namespace: 'ds',
             endpoint: dsEndpoint,
@@ -84,7 +84,7 @@ export const Gigya = <
         reportsEndpoint: Endpoint,
         endpointParams: ParamsOf<GigyaReportsNamespace[Endpoint]>[0],
     ) =>
-        gigyaRequestFactory<ReturnType<GigyaReportsNamespace[Endpoint]>>({
+        sendGigyaRequest<ReturnType<GigyaReportsNamespace[Endpoint]>>({
             ...initParams,
             namespace: 'reports',
             endpoint: reportsEndpoint,
@@ -100,7 +100,7 @@ export const Gigya = <
         socializeEndpoint: Endpoint,
         endpointParams: ParamsOf<GigyaSocializeNamespace[Endpoint]>[0],
     ) =>
-        gigyaRequestFactory<ReturnType<GigyaSocializeNamespace[Endpoint]>>({
+        sendGigyaRequest<ReturnType<GigyaSocializeNamespace[Endpoint]>>({
             ...initParams,
             namespace: 'socialize',
             endpoint: socializeEndpoint,
@@ -116,7 +116,7 @@ export const Gigya = <
         socializeEndpoint: Endpoint,
         endpointParams: ParamsOf<GigyaAuditNamespace[Endpoint]>[0],
     ) =>
-        gigyaRequestFactory<ReturnType<GigyaAuditNamespace[Endpoint]>>({
+        sendGigyaRequest<ReturnType<GigyaAuditNamespace[Endpoint]>>({
             ...initParams,
             namespace: 'audit',
             endpoint: socializeEndpoint,
@@ -137,13 +137,13 @@ type GigyaRequestHeaders = {
     Authorization?: string;
 };
 
-type GigyaRequestFactoryParams = {
+type SendGigyaRequestParams = {
     namespace: 'accounts' | 'ds' | 'socialize' | 'audit' | 'reports';
     endpoint: string;
     requestParams: Record<string, unknown>;
 } & GigyaInitParams;
 
-const gigyaRequestFactory = async <T>(params: GigyaRequestFactoryParams): Promise<T> => {
+const sendGigyaRequest = async <T>(params: SendGigyaRequestParams): Promise<T> => {
     const gigyaRequestURL = `https://accounts.${params.dataCenter}/${params.namespace}.${params.endpoint}`;
 
     const headers: GigyaRequestHeaders = {
