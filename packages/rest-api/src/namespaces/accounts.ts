@@ -211,7 +211,29 @@ export type AccountsGetAccountInfoRequest = GigyaRequest<{
      */
     regToken?: string;
     /**
-     * A comma-separated list of fields to include in the response. The possible values are: identities-active , identities-all , identities-global , loginIDs , emails, profile, data, memberships, password, isLockedOut, lastLoginLocation, regSource, irank, rba, subscriptions, userInfo, preferences,groups,internal, customIdentifiers. The default value is "profile,data, subscriptions" so if this parameter is not used, the response returns the Profile and data objects, and subscriptions, if any are associated with the user.
+     * A comma-separated list of fields to include in the response. The possible values are: 
+     * - identities-active
+     * - identities-all
+     * - identities-global
+     * - loginIDs
+     * - emails
+     * - profile
+     * - data
+     * - memberships
+     * - password
+     * - isLockedOut
+     * - lastLoginLocation
+     * - regSource
+     * - irank
+     * - rba
+     * - subscriptions
+     * - userInfo
+     * - preferences
+     * - groups
+     * - internal
+     * - customIdentifiers
+     * 
+     * The default value is "profile,data,subscriptions" so if this parameter is not used, the response returns the Profile and data objects, and subscriptions, if any are associated with the user.
      *
      * @note Make sure the parameter does not contain spaces between the values.
      */
