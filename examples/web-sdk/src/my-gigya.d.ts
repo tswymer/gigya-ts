@@ -5,8 +5,8 @@ import { GigyaPreference, GigyaWebSDK } from '@gigya-ts/web-sdk';
  */
 type MyDataSchema = {
     myDataSchemaString: string;
-    myDataSchemaObject: {
-        myCustomNumber: number;
+    myDataSchemaObject?: {
+        myCustomNumber?: number;
     };
 };
 
@@ -14,10 +14,10 @@ type MyDataSchema = {
  * Your custom preferences schema, as you have it defined in Gigya / SAP Customer Data Cloud.
  */
 type MyPreferencesSchema = {
-    terms: {
+    terms?: {
         myTerms: GigyaPreference;
     };
-    myPreferences: GigyaPreference;
+    myPreferences?: GigyaPreference;
 };
 
 /**
