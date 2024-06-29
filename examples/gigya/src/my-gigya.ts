@@ -6,7 +6,7 @@ import { Gigya, GigyaPreference } from "@gigya-ts/gigya";
 type MyDataSchema = {
     myDataSchemaString: string;
     myDataSchemaObject?: {
-        myCustomNumber?: number;
+        myDataSchemaNumber?: number;
     };
 };
 
@@ -15,9 +15,9 @@ type MyDataSchema = {
  */
 type MyPreferencesSchema = {
     terms?: {
-        myTerms: GigyaPreference;
+        myTermsSchema: GigyaPreference;
     };
-    myPreferences?: GigyaPreference;
+    myPreferencesSchema?: GigyaPreference;
 };
 
 /**
@@ -40,3 +40,8 @@ export const myGigya = Gigya<MyDataSchema, MyPreferencesSchema, MySubscriptionsS
         secret: 'YOUR_SECRET',
     },
 });
+
+/**
+ * Export a helper type for your Gigya instance.
+ */
+export type MyGigya = typeof myGigya;

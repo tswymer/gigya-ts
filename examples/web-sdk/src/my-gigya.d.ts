@@ -6,7 +6,7 @@ import { GigyaPreference, GigyaWebSDK } from '@gigya-ts/web-sdk';
 type MyDataSchema = {
     myDataSchemaString: string;
     myDataSchemaObject?: {
-        myCustomNumber?: number;
+        myDataSchemaNumber?: number;
     };
 };
 
@@ -15,9 +15,9 @@ type MyDataSchema = {
  */
 type MyPreferencesSchema = {
     terms?: {
-        myTerms: GigyaPreference;
+        myTermsSchema: GigyaPreference;
     };
-    myPreferences?: GigyaPreference;
+    myPreferencesSchema?: GigyaPreference;
 };
 
 /**
