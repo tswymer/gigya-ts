@@ -5,6 +5,7 @@ import {
     GigyaDataCenter,
     GigyaDSNamespace,
     GigyaPreferences,
+    GigyaReportsNamespace,
     GigyaSocializeNamespace,
     GigyaSubscriptions,
 } from '@gigya-ts/rest-api';
@@ -36,6 +37,11 @@ export const Gigya = <
 ) => {
     type PersonalAccountsNamespace = GigyaAccountsNamespace<DataSchema, PreferencesSchema, SubscriptionsSchema>;
 
+    /**
+     * The "gigya.accounts" namespace.
+     * 
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413128b070b21014bbc5a10ce4041860.html
+     */
     const accounts = <Endpoint extends keyof PersonalAccountsNamespace>(
         accountsEndpoint: Endpoint,
         endpointParams: ParamsOf<PersonalAccountsNamespace[Endpoint]>[0],
@@ -53,6 +59,11 @@ export const Gigya = <
     // gigya.ds<MyDSObjectSchema, 'search'>('search', {
     //     query: 'SELECT * FROM myObject',
     // }),
+    /**
+     * The "gigya.ds" namespace.
+     * 
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/415026de70b21014bbc5a10ce4041860.html
+     */
     const ds = <DSObjectSchema, Endpoint extends keyof GigyaDSNamespace<DSObjectSchema>>(
         dsEndpoint: Endpoint,
         endpointParams: ParamsOf<GigyaDSNamespace<DSObjectSchema>[Endpoint]>[0],
@@ -64,6 +75,27 @@ export const Gigya = <
             requestParams: endpointParams,
         });
 
+    /**
+     * The "gigya.reports" namespace.
+     * 
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/416c2bdc70b21014bbc5a10ce4041860.html
+     */
+    const reports = <Endpoint extends keyof GigyaReportsNamespace>(
+        reportsEndpoint: Endpoint,
+        endpointParams: ParamsOf<GigyaReportsNamespace[Endpoint]>[0],
+    ) =>
+        gigyaRequestFactory<ReturnType<GigyaReportsNamespace[Endpoint]>>({
+            ...initParams,
+            namespace: 'reports',
+            endpoint: reportsEndpoint,
+            requestParams: endpointParams,
+        });
+
+    /**
+     * The "gigya.socialize" namespace.
+     * 
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41735f5270b21014bbc5a10ce4041860.html
+     */
     const socialize = <Endpoint extends keyof GigyaSocializeNamespace>(
         socializeEndpoint: Endpoint,
         endpointParams: ParamsOf<GigyaSocializeNamespace[Endpoint]>[0],
@@ -75,6 +107,11 @@ export const Gigya = <
             requestParams: endpointParams,
         });
 
+    /**
+     * The "gigya.audit" namespace.
+     * 
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41436e2b70b21014bbc5a10ce4041860.html
+     */
     const audit = <Endpoint extends keyof GigyaAuditNamespace>(
         socializeEndpoint: Endpoint,
         endpointParams: ParamsOf<GigyaAuditNamespace[Endpoint]>[0],
@@ -89,6 +126,7 @@ export const Gigya = <
     return {
         accounts,
         ds,
+        reports,
         socialize,
         audit,
     };
@@ -100,7 +138,7 @@ type GigyaRequestHeaders = {
 };
 
 type GigyaRequestFactoryParams = {
-    namespace: 'accounts' | 'ds' | 'socialize' | 'audit';
+    namespace: 'accounts' | 'ds' | 'socialize' | 'audit' | 'reports';
     endpoint: string;
     requestParams: Record<string, unknown>;
 } & GigyaInitParams;
