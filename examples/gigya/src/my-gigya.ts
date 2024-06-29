@@ -42,6 +42,6 @@ export const myGigya = Gigya<MyDataSchema, MyPreferencesSchema, MySubscriptionsS
 });
 
 /**
- * Export a helper type for your Gigya instance.
+ * Helper type for a Gigya instance with your custom schemas.
  */
 export type MyGigya = typeof myGigya;
