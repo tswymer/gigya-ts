@@ -4,9 +4,18 @@ SAP Customer Data Cloud, formally known as Gigya, does not provide official Type
 
 **This is an unofficial project and is not supported by SAP or any other party. Use at your own risk.**
 
-As the SAP Customer Data Cloud APIs still use the `gigya` namespace, this project also adopts that name. This project is, however, still fully compatible with and built for SAP Customer Data Cloud.
+As the SAP Customer Data Cloud APIs still use the `gigya` namespace, this project also adopts that name. This project is fully compatible with SAP Customer Data Cloud.
 
 # Features
+
+-   Adds strong typing your SAP Customer Data Cloud projects, including your custom schemas.
+-   Exposes simple client to interface with the Gigya REST API, supporting both Node.js and the browser ([@gigya-ts/gigya](packages/gigya/README.md)).
+-   Add type-safety to projects using the Gigya Web SDK ([@gigya-ts/web-sdk](packages/web-sdk/README.md)).
+-   Shares the same type definitions across all packages, ensuring full-stack consistency.
+-   Tiny package sizes, almost everything is just type definitions ([@gigya-ts/rest-api](packages/rest-api/README.md)).
+-   No external dependencies.
+
+# Project Structure
 
 This project is split into sub-projects, each of which provide their own features and documentation. Please refer to each of the sub-projects for more information on installation and usage:
 
