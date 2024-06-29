@@ -1,6 +1,7 @@
 export * from './namespaces/gigya';
 export * from './namespaces/accounts';
 export * from './namespaces/ds';
+export * from './namespaces/reports';
 export * from './namespaces/socialize';
 export * from './namespaces/audit';
 
