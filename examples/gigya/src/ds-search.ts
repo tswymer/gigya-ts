@@ -1,4 +1,4 @@
-import { MyGigya } from "./my-gigya";
+import { MyGigya } from './my-gigya';
 
 type DSPhotoAlbumSchema = {
     albumName: string;
@@ -17,6 +17,7 @@ export async function dsSearchPhotoAlbumsExample(gigya: MyGigya, albumName: stri
     });
 
     // Check for a successful response
+    // prettier-ignore
     if (dsSearchResponse.errorCode !== 0) throw new Error([
         `Failed to ds.search: ${dsSearchResponse.errorMessage}`,
         `Error Code: ${dsSearchResponse.errorCode}`,

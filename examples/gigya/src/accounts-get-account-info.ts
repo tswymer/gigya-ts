@@ -1,4 +1,4 @@
-import { MyGigya } from "./my-gigya";
+import { MyGigya } from './my-gigya';
 
 export async function getAccountInfoExample(gigya: MyGigya, UID: string) {
     // Execute the "accounts.getAccountInfo" API method
@@ -9,6 +9,7 @@ export async function getAccountInfoExample(gigya: MyGigya, UID: string) {
     });
 
     // Check for a successful response
+    // prettier-ignore
     if (getAccountInfoResponse.errorCode !== 0) throw new Error([
         `Failed to getAccountInfo: ${getAccountInfoResponse.errorMessage}`,
         `Error Code: ${getAccountInfoResponse.errorCode}`,

@@ -39,7 +39,7 @@ export const Gigya = <
 
     /**
      * The "gigya.accounts" namespace.
-     * 
+     *
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413128b070b21014bbc5a10ce4041860.html
      */
     const accounts = <Endpoint extends keyof PersonalAccountsNamespace>(
@@ -61,7 +61,7 @@ export const Gigya = <
     // }),
     /**
      * The "gigya.ds" namespace.
-     * 
+     *
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/415026de70b21014bbc5a10ce4041860.html
      */
     const ds = <DSObjectSchema, Endpoint extends keyof GigyaDSNamespace<DSObjectSchema>>(
@@ -77,7 +77,7 @@ export const Gigya = <
 
     /**
      * The "gigya.reports" namespace.
-     * 
+     *
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/416c2bdc70b21014bbc5a10ce4041860.html
      */
     const reports = <Endpoint extends keyof GigyaReportsNamespace>(
@@ -93,7 +93,7 @@ export const Gigya = <
 
     /**
      * The "gigya.socialize" namespace.
-     * 
+     *
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41735f5270b21014bbc5a10ce4041860.html
      */
     const socialize = <Endpoint extends keyof GigyaSocializeNamespace>(
@@ -109,7 +109,7 @@ export const Gigya = <
 
     /**
      * The "gigya.audit" namespace.
-     * 
+     *
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41436e2b70b21014bbc5a10ce4041860.html
      */
     const audit = <Endpoint extends keyof GigyaAuditNamespace>(

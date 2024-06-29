@@ -1,4 +1,4 @@
-import { MyGigya } from "./my-gigya";
+import { MyGigya } from './my-gigya';
 
 export async function accountsSearchLastNamesExample(gigya: MyGigya, lastName: string) {
     // Execute the "ds.search" API method
@@ -7,6 +7,7 @@ export async function accountsSearchLastNamesExample(gigya: MyGigya, lastName: s
     });
 
     // Check for a successful response
+    // prettier-ignore
     if (accountsSearchResponse.errorCode !== 0) throw new Error([
         `Failed to accounts.search: ${accountsSearchResponse.errorMessage}`,
         `Error Code: ${accountsSearchResponse.errorCode}`,

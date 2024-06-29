@@ -44,7 +44,19 @@ export type GetAccountsStatsResponse = GigyaResponse<{
     /**
      * The headers of the response data.
      */
-    headers: Array<'date' | 'cid' | 'initRegistrations' | 'registrations' | 'finalizeRegistrations' | 'socialLogins' | 'newSocialUsers' | 'siteLogins' | 'emailVerifications' | 'passwordResets' | 'newUsers'>;
+    headers: Array<
+        | 'date'
+        | 'cid'
+        | 'initRegistrations'
+        | 'registrations'
+        | 'finalizeRegistrations'
+        | 'socialLogins'
+        | 'newSocialUsers'
+        | 'siteLogins'
+        | 'emailVerifications'
+        | 'passwordResets'
+        | 'newUsers'
+    >;
     /**
      * The data of the response. The format of the data field is determined by the 'format' parameter of the request.
      */

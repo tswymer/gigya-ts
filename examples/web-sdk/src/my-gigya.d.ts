@@ -27,9 +27,9 @@ type MySubscriptionsSchema = {};
 
 /**
  * The WebSDK ("gigya" object) is in the global scope, so you can access it from anywhere in your application.
- * 
+ *
  * Here we extend the global scope to include the "gigya" object, passing your own schemas so that we get type-safe responses with you use the WebSDK.
- * 
+ *
  * We also define a global "onGigyaServiceReady" function, which is called when the Gigya service is ready.
  */
 declare global {
