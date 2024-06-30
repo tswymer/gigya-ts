@@ -10,7 +10,7 @@ describe('gigya authentication: anonymous', async () => {
     });
 
     await it('should successfully run accounts.getPolicies for public policies', async () => {
-        const getPoliciesResponse = await anoymousGigya.accounts('getPolicies', {
+        const getPoliciesResponse = await anoymousGigya.accounts.getPolicies({
             sections: 'gigyaPlugins,passwordComplexity,registration,security',
         });
 
@@ -23,7 +23,7 @@ describe('gigya authentication: anonymous', async () => {
     });
 
     await it('should fail running "accounts.getPolicies" for private policies with "Permission denied"', async () => {
-        const getAccountInfoResponse = await anoymousGigya.accounts('getPolicies', {
+        const getAccountInfoResponse = await anoymousGigya.accounts.getPolicies({
             sections: 'accountOptions,emailVerification,federation,twoFactorAuth',
         });
 
@@ -68,7 +68,7 @@ describe('gigya authentication: asymmetric-key', async () => {
 
 async function testAuthenticatedGigya(gigya: ReturnType<typeof Gigya>) {
     await it('should successfully run accounts.getPolicies for public policies', async () => {
-        const getPoliciesResponse = await gigya.accounts('getPolicies', {
+        const getPoliciesResponse = await gigya.accounts.getPolicies({
             sections: 'gigyaPlugins,passwordComplexity,registration,security',
         });
 
@@ -82,7 +82,7 @@ async function testAuthenticatedGigya(gigya: ReturnType<typeof Gigya>) {
     });
 
     await it('should successfully run "accounts.getPolicies" for private policies', async () => {
-        const getPoliciesResponse = await gigya.accounts('getPolicies', {
+        const getPoliciesResponse = await gigya.accounts.getPolicies({
             sections: 'accountOptions,emailVerification,federation,twoFactorAuth',
         });
 

@@ -9,7 +9,7 @@ export async function setAccountInfoExample(
     grantedMyPreferencesSchema: boolean,
 ) {
     // Execute the "accounts.setAccountInfo" API method
-    const setAccountInfoResponse = await gigya.accounts('setAccountInfo', {
+    const setAccountInfoResponse = await gigya.accounts.setAccountInfo({
         UID,
         profile: { lastName },
         // Type-safe requests including your custom data schema

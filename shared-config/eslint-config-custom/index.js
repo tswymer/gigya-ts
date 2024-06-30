@@ -5,6 +5,7 @@ const config = {
     env: {
         browser: true,
         node: true,
+        es6: true,
     },
     parser: '@typescript-eslint/parser',
     parserOptions: {
