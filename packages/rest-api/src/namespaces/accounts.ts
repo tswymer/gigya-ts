@@ -499,9 +499,9 @@ export type AccountsGetJWTResponse = GigyaResponse<{
 
 /**
  * This method retrieves account policies. Refer to the accounts.setPolicies method parameters for a detailed specification of the policies.
- * 
+ *
  * @TODO: Type out the specific policies
- * 
+ *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41359a2970b21014bbc5a10ce4041860.html#parameters
  */
 export type AccountsGetPoliciesRequest = GigyaRequest<{
@@ -518,7 +518,7 @@ export type AccountsGetPoliciesRequest = GigyaRequest<{
      * - security
      * - twoFactorAuth
      * - federation
-     *  
+     *
      * @note Non-privileged requests (not signed with the application secret) may only request the following policies: registration, gigyaPlugins, passwordComplexity, and security.
      */
     sections?: string;
@@ -547,7 +547,7 @@ export type AccountsGetPoliciesResponse = GigyaResponse<{
     emailVerification?: unknown;
     /**
      * The email notifications policy.
-     * 
+     *
      * @note: This is not part of the official documentation currently.
      */
     emailNotifications?: unknown;

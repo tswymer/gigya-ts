@@ -40,3 +40,15 @@ jobs:
 
             - name: Lint and build
               run: pnpm run build
+
+            - name: Test
+              env:
+                  GIGYA_DATA_CENTER: ${{ secrets.GIGYA_DATA_CENTER }}
+                  GIGYA_API_KEY: ${{ secrets.GIGYA_API_KEY }}
+                  GIGYA_USER_KEY: ${{ secrets.GIGYA_USER_KEY }}
+                  GIGYA_USER_SECRET: ${{ secrets.GIGYA_USER_SECRET }}
+                  GIGYA_PRIVATE_KEY: ${{ secrets.GIGYA_PRIVATE_KEY }}
+              # Create a .env file in the examples/gigya directory, because node throws an error if it doesn't exist
+              run: |
+                  touch ${{ github.workspace }}/examples/gigya/.env 
+                  pnpm test

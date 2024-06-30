@@ -6,7 +6,7 @@ describe('gigya authentication: anonymous', async () => {
     const anoymousGigya = Gigya({
         apiKey: process.env.GIGYA_API_KEY as string,
         dataCenter: process.env.GIGYA_DATA_CENTER as GigyaDataCenter,
-        credentials: undefined,
+        credentials: { type: 'none' },
     });
 
     await it('should successfully run accounts.getPolicies for public policies', async () => {

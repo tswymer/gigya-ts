@@ -12,6 +12,9 @@ import {
     GigyaSubscriptions,
 } from '@gigya-ts/rest-api';
 
+/**
+ * The different types of credentials that can be used to authenticate Gigya requests.
+ */
 type GigyaCrendentials =
     | {
         type: 'user-key-secret';
@@ -34,17 +37,26 @@ type GigyaCrendentials =
     | {
         type: 'asymmetric-key';
         /**
+         * The application or user key to use for the request.
+         */
+        userKey: string;
+        /**
          * The private key to use for the request.
          */
         privateKey: string;
     }
-    | undefined;
+    | {
+        type: 'none';
+    };
 
 /**
  * Helper type to extract the parameters of a function, useful for getting the input type of a gigya request.
  */
 type ParamsOf<T extends (...args: any[]) => any> = T extends (...args: infer P) => any ? P : never;
 
+/**
+ * The parameters to initialize the Gigya client.
+ */
 type GigyaInitParams = {
     dataCenter: GigyaDataCenter;
     apiKey: string;
@@ -52,23 +64,26 @@ type GigyaInitParams = {
     debug?: boolean;
 };
 
+/**
+ * Wrapper client for the Gigya REST API.
+ */
 export function Gigya<
     DataSchema extends GigyaData,
     PreferencesSchema extends GigyaPreferences,
     SubscriptionsSchema extends GigyaSubscriptions,
 >(initParams: GigyaInitParams) {
-    type PersonalAccountsNamespace = GigyaAccountsNamespace<DataSchema, PreferencesSchema, SubscriptionsSchema>;
+    type MyAccountsNamespace = GigyaAccountsNamespace<DataSchema, PreferencesSchema, SubscriptionsSchema>;
 
     /**
      * The "gigya.accounts" namespace.
      *
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413128b070b21014bbc5a10ce4041860.html
      */
-    const accounts = <Endpoint extends keyof PersonalAccountsNamespace>(
+    const accounts = <Endpoint extends keyof MyAccountsNamespace>(
         accountsEndpoint: Endpoint,
-        endpointParams: ParamsOf<PersonalAccountsNamespace[Endpoint]>[0],
+        endpointParams: ParamsOf<MyAccountsNamespace[Endpoint]>[0],
     ) =>
-        sendGigyaRequest<ReturnType<PersonalAccountsNamespace[Endpoint]>>({
+        sendGigyaRequest<ReturnType<MyAccountsNamespace[Endpoint]>>({
             ...initParams,
             namespace: 'accounts',
             endpoint: accountsEndpoint,
@@ -188,6 +203,11 @@ export function Gigya<
     };
 }
 
+/**
+ * Helper function to execute a Gigya request.
+ *
+ * This function constructs the request URL, adds the necessary headers and body, and executes the request.
+ */
 async function sendGigyaRequest<T>(
     params: {
         namespace: 'accounts' | 'audit' | 'ds' | 'fidm' | 'idx' | 'reports' | 'socialize';
@@ -224,13 +244,13 @@ async function sendGigyaRequest<T>(
     }
 
     // Create the headers and body of the request, adding the provided credentials
-    const { headers, body } = addCredentialsToGigyaRequest({
+    const { headers, body } = await addCredentialsToGigyaRequest({
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: initialBody,
         credentials: params.credentials,
     });
 
-    if (params.debug) logGigyaRequest(gigyaRequestURL, body);
+    if (params.debug) logGigyaRequest(gigyaRequestURL, headers, body);
 
     // Execute the request
     const gigyaResponse = await fetch(gigyaRequestURL, {
@@ -257,6 +277,9 @@ async function sendGigyaRequest<T>(
     return parsedGigyaResponse;
 }
 
+/**
+ * Helper type to represent the headers and body of a Gigya request.
+ */
 type GigyaRequestHeadersAndBody = {
     headers: { 'Content-Type': string; Authorization?: string };
     body: URLSearchParams;
@@ -266,20 +289,53 @@ type GigyaRequestHeadersAndBody = {
 /**
  * Handles the different authentication methods for Gigya requests.
  */
-function addCredentialsToGigyaRequest(request: GigyaRequestHeadersAndBody): GigyaRequestHeadersAndBody {
+async function addCredentialsToGigyaRequest(request: GigyaRequestHeadersAndBody): Promise<GigyaRequestHeadersAndBody> {
     // Handle different types of credentials
     switch (request.credentials?.type) {
         case 'user-key-secret': {
+            // Add the user key and secret to the request body
             request.body.append('userKey', request.credentials.userKey);
             request.body.append('secret', request.credentials.secret);
             break;
         }
         case 'bearer-token': {
+            // Add the bearer token to the request headers
             request.headers.Authorization = `Bearer ${request.credentials.token}`;
             break;
         }
         case 'asymmetric-key': {
-            throw new Error('Asymmetric key authentication is not yet implemented.');
+            // Construct the JWT header and body
+            const header = toBase64URL(
+                JSON.stringify({
+                    alg: 'RS256',
+                    typ: 'JWT',
+                    kid: request.credentials.userKey,
+                }),
+            );
+            const body = toBase64URL(
+                JSON.stringify({
+                    iat: Math.floor(Date.now() / 1000),
+                    jti: crypto.randomUUID(),
+                }),
+            );
+
+            // Import the private key to sign the request
+            const signingKey = await importGigyaPrivateKey(request.credentials.privateKey);
+
+            // Sign the JWT
+            const signatureBuffer = await crypto.subtle.sign(
+                signingKey.algorithm.name,
+                signingKey,
+                Buffer.from(`${header}.${body}`),
+            );
+            const signature = toBase64URL(Buffer.from(signatureBuffer));
+
+            // Construct the JWT
+            const jwt = `${header}.${body}.${signature}`;
+
+            // Add the JWT to the request headers
+            request.headers.Authorization = `Bearer ${jwt}`;
+            break;
         }
         case undefined:
             break;
@@ -288,17 +344,70 @@ function addCredentialsToGigyaRequest(request: GigyaRequestHeadersAndBody): Gigy
     return request;
 }
 
-function logGigyaRequest(requestURL: string, requestBody: URLSearchParams) {
-    console.log('Gigya Request:');
+/**
+ * Converts a string or buffer to a base64 URL-safe string, used in JWTs.
+ */
+function toBase64URL(input: string | Buffer) {
+    return Buffer.from(input).toString('base64').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+}
 
-    console.log({
+/**
+ * Imports a private key from Gigya to use to sign requests.
+ */
+async function importGigyaPrivateKey(privateKey: string) {
+    // Gigya provides PKCS#1 keys, so we need to check that they were converted to PKCS#8 first
+    // openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in gigya-pkcs1.key -out gigya-pkcs8.key
+    if (
+        privateKey.includes('-----BEGIN RSA PRIVATE KEY-----') ||
+        privateKey.includes('-----END RSA PRIVATE KEY-----')
+    ) {
+        throw new Error(
+            'You have provided a PKCS#1 key, but this function requires a PKCS#8 key. Please convert your key to PKCS#8.',
+        );
+    }
+
+    // Fetch the key from between the header and footer
+    const pemContents = privateKey
+        .replace('-----BEGIN PRIVATE KEY-----', '')
+        .replace('-----END PRIVATE KEY-----', '')
+        .replace(/\\n/g, '')
+        .replace(/\n/g, '')
+        .replace(/\r/g, '');
+
+    // Base64 decode the key and convert it to a buffer
+    const keyContents = Buffer.from(pemContents, 'base64');
+
+    // Create a CryptoKey from the binary DER
+    return crypto.subtle.importKey(
+        'pkcs8',
+        keyContents,
+        {
+            name: 'RSASSA-PKCS1-v1_5',
+            hash: 'SHA-256',
+        },
+        false,
+        ['sign'],
+    );
+}
+
+/**
+ * Helper function to log a Gigya request to the console.
+ */
+function logGigyaRequest(
+    requestURL: string,
+    headers: GigyaRequestHeadersAndBody['headers'],
+    requestBody: URLSearchParams,
+) {
+    console.log('Gigya Request:', {
         requestURL,
+        headers,
         requestBody,
     });
 }
 
+/**
+ * Helper function to log a Gigya response to the console.
+ */
 function logGigyaResponse(response: unknown) {
-    console.log('Gigya Response:');
-
-    console.log(response);
+    console.log('Gigya Response:', response);
 }

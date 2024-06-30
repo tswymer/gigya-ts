@@ -9,7 +9,9 @@ describe('accounts.getSchema API', async () => {
 
     await it('should respond with errorCode 0', () => assert.equal(getSchemaResponse.errorCode, 0));
 
-    await it('should include a profile schema in the response', () => assert.notEqual(getSchemaResponse.profileSchema?.fields, undefined));
+    await it('should include a profile schema in the response', () =>
+        assert.notEqual(getSchemaResponse.profileSchema?.fields, undefined));
 
-    await it('should include a data schema in the response', () => assert.notEqual(getSchemaResponse.dataSchema?.fields, undefined));
+    await it('should include a data schema in the response', () =>
+        assert.notEqual(getSchemaResponse.dataSchema?.fields, undefined));
 });
