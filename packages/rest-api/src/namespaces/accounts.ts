@@ -498,6 +498,82 @@ export type AccountsGetJWTResponse = GigyaResponse<{
 }>;
 
 /**
+ * This method retrieves account policies. Refer to the accounts.setPolicies method parameters for a detailed specification of the policies.
+ * 
+ * @TODO: Type out the specific policies
+ * 
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41359a2970b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsGetPoliciesRequest = GigyaRequest<{
+    /**
+     * A comma-separated list specifying which sections of the policies to include in the response. The available policies are:
+     * - registration
+     * - gigyaPlugins
+     * - accountOptions
+     * - passwordComplexity
+     * - emailVerification
+     * - emailNotifications
+     * - passwordReset
+     * - profilePhoto
+     * - security
+     * - twoFactorAuth
+     * - federation
+     *  
+     * @note Non-privileged requests (not signed with the application secret) may only request the following policies: registration, gigyaPlugins, passwordComplexity, and security.
+     */
+    sections?: string;
+}>;
+
+export type AccountsGetPoliciesResponse = GigyaResponse<{
+    /**
+     * The registration policy.
+     */
+    registration?: unknown;
+    /**
+     * The Gigya plugins policy.
+     */
+    gigyaPlugins?: unknown;
+    /**
+     * The account options policy.
+     */
+    accountOptions?: unknown;
+    /**
+     * The password complexity policy.
+     */
+    passwordComplexity?: unknown;
+    /**
+     * The email verification policy.
+     */
+    emailVerification?: unknown;
+    /**
+     * The email notifications policy.
+     * 
+     * @note: This is not part of the official documentation currently.
+     */
+    emailNotifications?: unknown;
+    /**
+     * The password reset policy.
+     */
+    passwordReset?: unknown;
+    /**
+     * The profile photo policy.
+     */
+    profilePhoto?: unknown;
+    /**
+     * The security policy.
+     */
+    security?: unknown;
+    /**
+     * The two-factor authentication policy.
+     */
+    twoFactorAuth?: unknown;
+    /**
+     * The federation policy.
+     */
+    federation?: unknown;
+}>;
+
+/**
  * This method retrieves the schema of the Profile object and the Data object (the site specific custom data object) in Gigya's Accounts Storage. The schema defines a set of properties for static data fields. The properties act as meta-data, guiding Gigya how to handle the data in the specified fields.
  *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4135e80970b21014bbc5a10ce4041860.html
@@ -2025,6 +2101,7 @@ export type GigyaAccountsNamespace<
         params: AccountsGetConsentStatementsRequest,
     ) => AccountsGetConsentStatementsResponse<PreferencesSchema>;
     getJWT: (params: AccountsGetJWTRequest) => AccountsGetJWTResponse;
+    getPolicies: (params: AccountsGetPoliciesRequest) => AccountsGetPoliciesResponse;
     getSchema: (params: AccountsGetSchemaRequest) => AccountsGetSchemaResponse;
     initRegistration: (params: AccountsInitRegistrationRequest) => AccountsInitRegistrationResponse;
     login: (params: AccountsLoginRequest) => AccountsLoginResponse;
