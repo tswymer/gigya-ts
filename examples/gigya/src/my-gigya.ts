@@ -33,12 +33,12 @@ type MySubscriptionsSchema = {};
  * Use this to make requests to your Gigya site.
  */
 export const myGigya = Gigya<MyDataSchema, MyPreferencesSchema, MySubscriptionsSchema>({
-    apiKey: process.env.GIGYA_API_KEY as string,
-    dataCenter: process.env.GIGYA_DATA_CENTER as GigyaDataCenter,
+    apiKey: process.env.GIGYA_API_KEY ?? '',
+    dataCenter: (process.env.GIGYA_DATA_CENTER as GigyaDataCenter) ?? 'eu1.gigya.com',
     credentials: {
         type: 'user-key-secret',
-        userKey: process.env.GIGYA_USER_KEY as string,
-        secret: process.env.GIGYA_USER_SECRET as string,
+        userKey: process.env.GIGYA_USER_KEY ?? '',
+        secret: process.env.GIGYA_USER_SECRET ?? '',
     },
 });
 

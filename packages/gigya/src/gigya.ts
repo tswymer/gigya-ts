@@ -34,6 +34,10 @@ type GigyaCrendentials =
     | {
         type: 'asymmetric-key';
         /**
+         * The application or user key to use for the request.
+         */
+        userKey: string;
+        /**
          * The private key to use for the request.
          */
         privateKey: string;
@@ -224,13 +228,13 @@ async function sendGigyaRequest<T>(
     }
 
     // Create the headers and body of the request, adding the provided credentials
-    const { headers, body } = addCredentialsToGigyaRequest({
+    const { headers, body } = await addCredentialsToGigyaRequest({
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: initialBody,
         credentials: params.credentials,
     });
 
-    if (params.debug) logGigyaRequest(gigyaRequestURL, body);
+    if (params.debug) logGigyaRequest(gigyaRequestURL, headers, body);
 
     // Execute the request
     const gigyaResponse = await fetch(gigyaRequestURL, {
@@ -266,7 +270,7 @@ type GigyaRequestHeadersAndBody = {
 /**
  * Handles the different authentication methods for Gigya requests.
  */
-function addCredentialsToGigyaRequest(request: GigyaRequestHeadersAndBody): GigyaRequestHeadersAndBody {
+async function addCredentialsToGigyaRequest(request: GigyaRequestHeadersAndBody): Promise<GigyaRequestHeadersAndBody> {
     // Handle different types of credentials
     switch (request.credentials?.type) {
         case 'user-key-secret': {
@@ -279,7 +283,37 @@ function addCredentialsToGigyaRequest(request: GigyaRequestHeadersAndBody): Gigy
             break;
         }
         case 'asymmetric-key': {
-            throw new Error('Asymmetric key authentication is not yet implemented.');
+            const header = stringToBase64URL(JSON.stringify({
+                alg: 'RS256',
+                typ: 'JWT',
+                kid: request.credentials.userKey
+            }));
+
+            const body = stringToBase64URL(JSON.stringify({
+                iat: Math.floor(Date.now() / 1000),
+                jti: crypto.randomUUID(),
+            }));
+
+            const signingKey = await importAsymmetricSigningKey(request.credentials.privateKey);
+
+            console.log('name', signingKey.algorithm.name);
+
+            try {
+                const signatureBuffer = await crypto.subtle.sign({
+                    name: signingKey.algorithm.name, // 'RSA-PSS',
+                    saltLength: 0,
+                }, signingKey, Buffer.from(`${header}.${body}`));
+
+                const signature = bufferToBase64URL(Buffer.from(signatureBuffer));
+
+                const jwt = `${header}.${body}.${signature}`;
+
+                request.headers.Authorization = `Bearer ${jwt}`;
+                break;
+            } catch (error) {
+                throw new Error(`Failed to sign the request: ${error}`);
+            }
+
         }
         case undefined:
             break;
@@ -288,11 +322,62 @@ function addCredentialsToGigyaRequest(request: GigyaRequestHeadersAndBody): Gigy
     return request;
 }
 
-function logGigyaRequest(requestURL: string, requestBody: URLSearchParams) {
+function stringToBase64URL(str: string) {
+    const base64 = Buffer.from(str).toString('base64');
+
+    return base64
+        .replace(/=/g, "")
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_");
+}
+
+function bufferToBase64URL(buffer: Buffer) {
+    const base64 = buffer.toString('base64');
+
+    return base64
+        .replace(/=/g, "")
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_");
+}
+
+/**
+ * Imports a private key from Gigya to use to sign requests.
+ */
+async function importAsymmetricSigningKey(privateKey: string) {
+    if (privateKey.includes('-----BEGIN RSA PRIVATE KEY-----') || privateKey.includes('-----END RSA PRIVATE KEY-----')) {
+        // throw new Error('You have provided a PKCS#1 key, but this function requires a PKCS#8 key. Please convert your key to PKCS#8.');
+    }
+
+    // Fetch the key from between the header and footer
+    const pemContents = privateKey
+        .replace('-----BEGIN PRIVATE KEY-----', '')
+        .replace('-----END PRIVATE KEY-----', '')
+        .replace(/\\n/g, '')
+        .replace(/\n/g, '')
+        .replace(/\r/g, '');
+
+    try {
+        // Base64 decode the key and convert it to an ArrayBuffer
+        const binaryDer = Buffer.from(pemContents, 'base64');
+
+        // Create a CryptoKey from the binary DER
+        const signingKey = await crypto.subtle.importKey('pkcs8', binaryDer, {
+            name: "RSA-PSS",
+            hash: "SHA-256",
+        }, false, ['sign']);
+
+        return signingKey;
+    } catch (error) {
+        throw new Error(`Failed to import the private key: ${error}`);
+    }
+}
+
+function logGigyaRequest(requestURL: string, headers: GigyaRequestHeadersAndBody['headers'], requestBody: URLSearchParams) {
     console.log('Gigya Request:');
 
     console.log({
         requestURL,
+        headers,
         requestBody,
     });
 }
