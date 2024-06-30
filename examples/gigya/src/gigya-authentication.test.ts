@@ -58,6 +58,7 @@ describe('gigya authentication: asymmetric-key', async () => {
         dataCenter: process.env.GIGYA_DATA_CENTER as GigyaDataCenter,
         credentials: {
             type: 'asymmetric-key',
+            userKey: process.env.GIGYA_USER_KEY as string,
             privateKey: process.env.GIGYA_PRIVATE_KEY as string,
         },
     });
