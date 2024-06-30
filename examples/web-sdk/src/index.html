@@ -3,12 +3,33 @@
     <head>
         <meta charset="UTF-8" />
         <title>Web SDK Example</title>
-        <script src="index.js"></script>
+        <script type="module" src="index.js"></script>
+
         <script
             type="text/javascript"
             lang="javascript"
             src="https://cdns.gigya.com/JS/gigya.js?apikey=3_mguHvyO40mAI8ozGJLSFiYAMicGHRYkOaz56NX5uvYlRjrI5qHdfBxw25Q-SYYz8"
         ></script>
     </head>
-    <body></body>
+
+    <body>
+        <div>
+            <h1>@gigya-ts/web-sdk - Example</h1>
+        </div>
+
+        <div>
+            <h2>isGigyaServiceReady:</h2>
+            <p id="is-gigya-service-ready">No</p>
+        </div>
+
+        <div>
+            <h2>Profile Schema:</h2>
+            <pre id="gigya-profile-schema">-</pre>
+        </div>
+
+        <div>
+            <h2>Data Schema:</h2>
+            <pre id="gigya-data-schema">-</pre>
+        </div>
+    </body>
 </html>
