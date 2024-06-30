@@ -36,6 +36,7 @@ export const myGigya = Gigya<MyDataSchema, MyPreferencesSchema, MySubscriptionsS
     apiKey: 'YOUR_API_KEY',
     dataCenter: 'eu1.gigya.com',
     credentials: {
+        type: 'key-secret',
         userKey: 'YOUR_USER_KEY',
         secret: 'YOUR_SECRET',
     },

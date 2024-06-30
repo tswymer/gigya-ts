@@ -10,31 +10,47 @@ import {
     GigyaSubscriptions,
 } from '@gigya-ts/rest-api';
 
-export type GigyaServerCredentials = {
+type GigyaCrendentials = {
+    type: 'key-secret',
+    /**
+     * The application or user key to use for the request.
+     */
     userKey: string;
+    /**
+     * The secret to use for the request.
+     */
     secret: string;
-};
+} | {
+    type: 'bearer-token',
+    /**
+     * The bearer token to use for the request.
+     */
+    token: string;
+} | {
+    type: 'asymmetric-key',
+    /**
+     * The private key to use for the request.
+     */
+    privateKey: string;
+} | undefined;
 
-export type GigyaClientCredentials = {
-    accessToken: string;
-};
+/**
+ * Helper type to extract the parameters of a function, useful for getting the input type of a gigya request.
+ */
+type ParamsOf<T extends (...args: any[]) => any> = T extends (...args: infer P) => any ? P : never;
 
-export type GigyaInitParams = {
+type GigyaInitParams = {
     dataCenter: GigyaDataCenter;
     apiKey: string;
-    credentials?: GigyaClientCredentials | GigyaServerCredentials;
+    credentials: GigyaCrendentials;
     debug?: boolean;
 };
 
-type ParamsOf<T extends (...args: any[]) => any> = T extends (...args: infer P) => any ? P : never;
-
-export const Gigya = <
+export function Gigya<
     DataSchema extends GigyaData,
     PreferencesSchema extends GigyaPreferences,
     SubscriptionsSchema extends GigyaSubscriptions,
->(
-    initParams: GigyaInitParams,
-) => {
+>(initParams: GigyaInitParams) {
     type PersonalAccountsNamespace = GigyaAccountsNamespace<DataSchema, PreferencesSchema, SubscriptionsSchema>;
 
     /**
@@ -130,90 +146,114 @@ export const Gigya = <
         socialize,
         audit,
     };
-};
+}
 
-type GigyaRequestHeaders = {
-    'Content-Type': 'application/x-www-form-urlencoded';
-    Authorization?: string;
-};
-
-type SendGigyaRequestParams = {
+async function sendGigyaRequest<T>(params: {
     namespace: 'accounts' | 'ds' | 'socialize' | 'audit' | 'reports';
     endpoint: string;
     requestParams: Record<string, unknown>;
-} & GigyaInitParams;
-
-const sendGigyaRequest = async <T>(params: SendGigyaRequestParams): Promise<T> => {
+} & GigyaInitParams): Promise<T> {
+    // Create the URL for the request
     const gigyaRequestURL = `https://accounts.${params.dataCenter}/${params.namespace}.${params.endpoint}`;
 
-    const headers: GigyaRequestHeaders = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        ...(params.credentials && 'accessToken' in params.credentials
-            ? { Authorization: `Bearer ${params.credentials.accessToken}` }
-            : {}),
-    };
+    // Add all attributes to the request body
+    const initialBody = new URLSearchParams();
 
-    const body = new URLSearchParams();
+    // Append the API key to the request body
+    initialBody.append('apiKey', params.apiKey);
 
-    body.append('apiKey', params.apiKey);
+    // Add each of the request parameters to the request body
+    for (const paramName in params.requestParams) {
+        const requestParam = params.requestParams[paramName];
 
-    if (params.credentials && 'userKey' in params.credentials && 'secret' in params.credentials) {
-        body.append('userKey', params.credentials.userKey);
-        body.append('secret', params.credentials.secret);
-    }
-
-    for (const name in params.requestParams) {
-        const param = params.requestParams[name];
-
+        // Depending on the type of the parameter, add it to the request body in the appropriate way
         switch (true) {
-            case typeof param === 'undefined':
+            // Don't add undefined parameters to the request body
+            case typeof requestParam === 'undefined': break;
+            // Stringify objects
+            case typeof requestParam === 'object':
+                initialBody.append(paramName, JSON.stringify(requestParam));
                 break;
-            case typeof param === 'object':
-                body.append(name, JSON.stringify(param));
-                break;
-            default:
-                body.append(name, String(param));
+            // Add all other parameters as strings
+            default: initialBody.append(paramName, String(requestParam));
         }
     }
 
-    if (params.debug) logGigyaRequest(gigyaRequestURL, headers, body);
+    // Create the headers and body of the request, adding the provided credentials
+    const { headers, body } = addCredentialsToGigyaRequest({
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: initialBody,
+        credentials: params.credentials,
+    });
 
+    if (params.debug) logGigyaRequest(gigyaRequestURL, body);
+
+    // Execute the request
     const gigyaResponse = await fetch(gigyaRequestURL, {
         method: 'POST',
         headers,
         body,
     });
 
+    // @TODO: Anyone using the "httpStatusCodes" param on a Gigya API will cause this to fail currently :)
     if (!gigyaResponse.ok) {
-        let textResponse = 'Unanble to parse gigya response as text';
-
+        let textResponse: string;
         try {
             textResponse = await gigyaResponse.text();
         } catch {
-            // Do nothing
+            textResponse = 'Unanble to parse gigya response as text.';
         }
-
         throw new Error(`Gigya request failed with status ${gigyaResponse.status}. Full response:\n${textResponse}`);
     }
+
     const parsedGigyaResponse = await gigyaResponse.json();
 
     if (params.debug) logGigyaResponse(parsedGigyaResponse);
 
     return parsedGigyaResponse;
-};
+}
 
-const logGigyaRequest = (requestURL: string, requestHeaders: GigyaRequestHeaders, requestBody: URLSearchParams) => {
+type GigyaRequestHeadersAndBody = {
+    headers: { 'Content-Type': string, 'Authorization'?: string };
+    body: URLSearchParams;
+    credentials: GigyaInitParams['credentials']
+}
+
+/**
+ * Handles the different authentication methods for Gigya requests.
+ */
+function addCredentialsToGigyaRequest(request: GigyaRequestHeadersAndBody): GigyaRequestHeadersAndBody {
+    // Handle different types of credentials
+    switch (request.credentials?.type) {
+        case 'key-secret': {
+            request.body.append('userKey', request.credentials.userKey);
+            request.body.append('secret', request.credentials.secret);
+            break;
+        }
+        case 'bearer-token': {
+            request.headers.Authorization = `Bearer ${request.credentials.token}`;
+            break;
+        }
+        case 'asymmetric-key': {
+            throw new Error('Asymmetric key authentication is not yet implemented.');
+        }
+        case undefined: break;
+    }
+
+    return request;
+}
+
+function logGigyaRequest(requestURL: string, requestBody: URLSearchParams) {
     console.log('Gigya Request:');
 
     console.log({
         requestURL,
-        requestHeaders,
         requestBody,
     });
-};
+}
 
-const logGigyaResponse = (response: unknown) => {
+function logGigyaResponse(response: unknown) {
     console.log('Gigya Response:');
 
     console.log(response);
-};
+}
