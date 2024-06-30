@@ -3,6 +3,7 @@ import { MyGigya } from './my-gigya';
 export async function setAccountInfoExample(
     gigya: MyGigya,
     UID: string,
+    lastName: string,
     myDataSchemaString: string,
     myDataSchemaNumber: number,
     grantedMyPreferencesSchema: boolean,
@@ -10,9 +11,7 @@ export async function setAccountInfoExample(
     // Execute the "accounts.setAccountInfo" API method
     const setAccountInfoResponse = await gigya.accounts('setAccountInfo', {
         UID,
-        profile: {
-            lastName: 'Doe',
-        },
+        profile: { lastName },
         // Type-safe requests including your custom data schema
         data: {
             myDataSchemaString,
