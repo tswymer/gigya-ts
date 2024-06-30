@@ -4,6 +4,8 @@ import {
     GigyaData,
     GigyaDataCenter,
     GigyaDSNamespace,
+    GigyaFIdMNamespace,
+    GigyaIDXNamespace,
     GigyaPreferences,
     GigyaReportsNamespace,
     GigyaSocializeNamespace,
@@ -12,30 +14,30 @@ import {
 
 type GigyaCrendentials =
     | {
-          type: 'key-secret';
-          /**
-           * The application or user key to use for the request.
-           */
-          userKey: string;
-          /**
-           * The secret to use for the request.
-           */
-          secret: string;
-      }
+        type: 'key-secret';
+        /**
+         * The application or user key to use for the request.
+         */
+        userKey: string;
+        /**
+         * The secret to use for the request.
+         */
+        secret: string;
+    }
     | {
-          type: 'bearer-token';
-          /**
-           * The bearer token to use for the request.
-           */
-          token: string;
-      }
+        type: 'bearer-token';
+        /**
+         * The bearer token to use for the request.
+         */
+        token: string;
+    }
     | {
-          type: 'asymmetric-key';
-          /**
-           * The private key to use for the request.
-           */
-          privateKey: string;
-      }
+        type: 'asymmetric-key';
+        /**
+         * The private key to use for the request.
+         */
+        privateKey: string;
+    }
     | undefined;
 
 /**
@@ -73,6 +75,22 @@ export function Gigya<
             requestParams: endpointParams,
         });
 
+    /**
+     * The "gigya.audit" namespace.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41436e2b70b21014bbc5a10ce4041860.html
+     */
+    const audit = <Endpoint extends keyof GigyaAuditNamespace>(
+        socializeEndpoint: Endpoint,
+        endpointParams: ParamsOf<GigyaAuditNamespace[Endpoint]>[0],
+    ) =>
+        sendGigyaRequest<ReturnType<GigyaAuditNamespace[Endpoint]>>({
+            ...initParams,
+            namespace: 'audit',
+            endpoint: socializeEndpoint,
+            requestParams: endpointParams,
+        });
+
     // @TODO: This isn't super elegant, because you now need to pass the name of the DS endpoint as a string, which
     // is annoying and doesn't look great. Here's an example, see how I need specify 'search' twice:
     //
@@ -92,6 +110,38 @@ export function Gigya<
             ...initParams,
             namespace: 'ds',
             endpoint: dsEndpoint,
+            requestParams: endpointParams,
+        });
+
+    /**
+     * The "gigya.fidm" namespace.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/813ddca3a4aa45f79fc35c1c72661668.html
+     */
+    const fidm = <Endpoint extends keyof GigyaFIdMNamespace>(
+        fidmEndpoint: Endpoint,
+        endpointParams: ParamsOf<GigyaFIdMNamespace[Endpoint]>[0],
+    ) =>
+        sendGigyaRequest<ReturnType<GigyaFIdMNamespace[Endpoint]>>({
+            ...initParams,
+            namespace: 'fidm',
+            endpoint: fidmEndpoint,
+            requestParams: endpointParams,
+        });
+
+    /**
+     * The "gigya.idx" namespace.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/813ddca3a4aa45f79fc35c1c72661668.html
+     */
+    const idx = <Endpoint extends keyof GigyaIDXNamespace>(
+        idxEndpoint: Endpoint,
+        endpointParams: ParamsOf<GigyaIDXNamespace[Endpoint]>[0],
+    ) =>
+        sendGigyaRequest<ReturnType<GigyaIDXNamespace[Endpoint]>>({
+            ...initParams,
+            namespace: 'idx',
+            endpoint: idxEndpoint,
             requestParams: endpointParams,
         });
 
@@ -127,34 +177,20 @@ export function Gigya<
             requestParams: endpointParams,
         });
 
-    /**
-     * The "gigya.audit" namespace.
-     *
-     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41436e2b70b21014bbc5a10ce4041860.html
-     */
-    const audit = <Endpoint extends keyof GigyaAuditNamespace>(
-        socializeEndpoint: Endpoint,
-        endpointParams: ParamsOf<GigyaAuditNamespace[Endpoint]>[0],
-    ) =>
-        sendGigyaRequest<ReturnType<GigyaAuditNamespace[Endpoint]>>({
-            ...initParams,
-            namespace: 'audit',
-            endpoint: socializeEndpoint,
-            requestParams: endpointParams,
-        });
-
     return {
         accounts,
+        audit,
         ds,
+        fidm,
+        idx,
         reports,
         socialize,
-        audit,
     };
 }
 
 async function sendGigyaRequest<T>(
     params: {
-        namespace: 'accounts' | 'ds' | 'socialize' | 'audit' | 'reports';
+        namespace: 'accounts' | 'audit' | 'ds' | 'fidm' | 'idx' | 'reports' | 'socialize';
         endpoint: string;
         requestParams: Record<string, unknown>;
     } & GigyaInitParams,
