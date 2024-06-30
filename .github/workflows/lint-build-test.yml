@@ -40,3 +40,6 @@ jobs:
 
             - name: Lint and build
               run: pnpm run build
+
+            - name: Test
+              run: pnpm test

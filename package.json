@@ -3,6 +3,7 @@
     "author": "tobi.wymer@googlemail.com",
     "scripts": {
         "build": "pnpm -r lint && pnpm -r build",
+        "test": "pnpm -r test",
         "publish-packages": "pnpm -r build && pnpm publish -r --filter \"./packages/**\"",
         "prettier": "prettier --write \"**/*.ts\""
     },
