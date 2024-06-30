@@ -14,7 +14,7 @@ import {
 
 type GigyaCrendentials =
     | {
-        type: 'key-secret';
+        type: 'user-key-secret';
         /**
          * The application or user key to use for the request.
          */
@@ -269,7 +269,7 @@ type GigyaRequestHeadersAndBody = {
 function addCredentialsToGigyaRequest(request: GigyaRequestHeadersAndBody): GigyaRequestHeadersAndBody {
     // Handle different types of credentials
     switch (request.credentials?.type) {
-        case 'key-secret': {
+        case 'user-key-secret': {
             request.body.append('userKey', request.credentials.userKey);
             request.body.append('secret', request.credentials.secret);
             break;

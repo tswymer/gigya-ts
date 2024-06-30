@@ -1,4 +1,4 @@
-import { Gigya, GigyaPreference } from '@gigya-ts/gigya';
+import { Gigya, GigyaDataCenter, GigyaPreference } from '@gigya-ts/gigya';
 
 /**
  * Your custom data schema, as you have it defined in Gigya / SAP Customer Data Cloud.
@@ -33,12 +33,12 @@ type MySubscriptionsSchema = {};
  * Use this to make requests to your Gigya site.
  */
 export const myGigya = Gigya<MyDataSchema, MyPreferencesSchema, MySubscriptionsSchema>({
-    apiKey: 'YOUR_API_KEY',
-    dataCenter: 'eu1.gigya.com',
+    apiKey: process.env.GIGYA_API_KEY as string,
+    dataCenter: process.env.GIGYA_DATA_CENTER as GigyaDataCenter,
     credentials: {
-        type: 'key-secret',
-        userKey: 'YOUR_USER_KEY',
-        secret: 'YOUR_SECRET',
+        type: 'user-key-secret',
+        userKey: process.env.GIGYA_USER_KEY as string,
+        secret: process.env.GIGYA_USER_SECRET as string,
     },
 });
 
