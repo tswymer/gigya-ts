@@ -14,22 +14,16 @@ See [@gigya-ts/web-sdk](/packages/web-sdk/README.md) for more information.
 git clone https://github.com/tswymer/gigya-ts.git
 ```
 
-2. Install dependencies:
+2. Navigate to the repository and install dependencies:
 
 ```bash
 cd gigya-ts && pnpm install
 ```
 
-3. Navigate to the example project:
+3. Navigate to the example project and start the development server:
 
 ```bash
-cd examples/web-sdk
+cd examples/web-sdk && pnpm dev
 ```
 
-4. Start the development server:
-
-```bash
-pnpm dev
-```
-
-5. Open your browser and navigate to `http://localhost:8080`.
+4. Open your browser and navigate to `http://localhost:8080`.
