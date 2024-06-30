@@ -10,29 +10,33 @@ import {
     GigyaSubscriptions,
 } from '@gigya-ts/rest-api';
 
-type GigyaCrendentials = {
-    type: 'key-secret',
-    /**
-     * The application or user key to use for the request.
-     */
-    userKey: string;
-    /**
-     * The secret to use for the request.
-     */
-    secret: string;
-} | {
-    type: 'bearer-token',
-    /**
-     * The bearer token to use for the request.
-     */
-    token: string;
-} | {
-    type: 'asymmetric-key',
-    /**
-     * The private key to use for the request.
-     */
-    privateKey: string;
-} | undefined;
+type GigyaCrendentials =
+    | {
+          type: 'key-secret';
+          /**
+           * The application or user key to use for the request.
+           */
+          userKey: string;
+          /**
+           * The secret to use for the request.
+           */
+          secret: string;
+      }
+    | {
+          type: 'bearer-token';
+          /**
+           * The bearer token to use for the request.
+           */
+          token: string;
+      }
+    | {
+          type: 'asymmetric-key';
+          /**
+           * The private key to use for the request.
+           */
+          privateKey: string;
+      }
+    | undefined;
 
 /**
  * Helper type to extract the parameters of a function, useful for getting the input type of a gigya request.
@@ -148,11 +152,13 @@ export function Gigya<
     };
 }
 
-async function sendGigyaRequest<T>(params: {
-    namespace: 'accounts' | 'ds' | 'socialize' | 'audit' | 'reports';
-    endpoint: string;
-    requestParams: Record<string, unknown>;
-} & GigyaInitParams): Promise<T> {
+async function sendGigyaRequest<T>(
+    params: {
+        namespace: 'accounts' | 'ds' | 'socialize' | 'audit' | 'reports';
+        endpoint: string;
+        requestParams: Record<string, unknown>;
+    } & GigyaInitParams,
+): Promise<T> {
     // Create the URL for the request
     const gigyaRequestURL = `https://accounts.${params.dataCenter}/${params.namespace}.${params.endpoint}`;
 
@@ -169,13 +175,15 @@ async function sendGigyaRequest<T>(params: {
         // Depending on the type of the parameter, add it to the request body in the appropriate way
         switch (true) {
             // Don't add undefined parameters to the request body
-            case typeof requestParam === 'undefined': break;
+            case typeof requestParam === 'undefined':
+                break;
             // Stringify objects
             case typeof requestParam === 'object':
                 initialBody.append(paramName, JSON.stringify(requestParam));
                 break;
             // Add all other parameters as strings
-            default: initialBody.append(paramName, String(requestParam));
+            default:
+                initialBody.append(paramName, String(requestParam));
         }
     }
 
@@ -214,10 +222,10 @@ async function sendGigyaRequest<T>(params: {
 }
 
 type GigyaRequestHeadersAndBody = {
-    headers: { 'Content-Type': string, 'Authorization'?: string };
+    headers: { 'Content-Type': string; Authorization?: string };
     body: URLSearchParams;
-    credentials: GigyaInitParams['credentials']
-}
+    credentials: GigyaInitParams['credentials'];
+};
 
 /**
  * Handles the different authentication methods for Gigya requests.
@@ -237,7 +245,8 @@ function addCredentialsToGigyaRequest(request: GigyaRequestHeadersAndBody): Gigy
         case 'asymmetric-key': {
             throw new Error('Asymmetric key authentication is not yet implemented.');
         }
-        case undefined: break;
+        case undefined:
+            break;
     }
 
     return request;
