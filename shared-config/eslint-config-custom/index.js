@@ -12,7 +12,7 @@ const config = {
         sourceType: 'module',
     },
     extends: ['eslint:recommended'],
-    plugins: ['@typescript-eslint'],
+    plugins: ['@typescript-eslint', 'plugin:@typescript-eslint/recommended'],
     ignorePatterns: ['dist/*'],
     rules: {
         'eol-last': ['error', 'always'],
