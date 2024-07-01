@@ -81,7 +81,7 @@ export function Gigya<
          * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413128b070b21014bbc5a10ce4041860.html
          */
         accounts: new Proxy({} as MyAccountsNamespace, {
-            get: (_target: MyAccountsNamespace, endpoint: keyof MyAccountsNamespace) =>
+            get: (_target, endpoint: keyof MyAccountsNamespace) =>
                 (requestParams: ParamsOf<MyAccountsNamespace[typeof endpoint]>[0]) =>
                     gigyaRequestHandler({
                         ...initParams,
@@ -97,7 +97,7 @@ export function Gigya<
          * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41436e2b70b21014bbc5a10ce4041860.html
          */
         audit: new Proxy({} as GigyaAuditNamespace, {
-            get: (_target: GigyaAuditNamespace, endpoint: keyof GigyaAuditNamespace) =>
+            get: (_target, endpoint: keyof GigyaAuditNamespace) =>
                 (requestParams: ParamsOf<GigyaAuditNamespace[typeof endpoint]>[0]) =>
                     gigyaRequestHandler({
                         ...initParams,
@@ -113,7 +113,7 @@ export function Gigya<
          * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/415026de70b21014bbc5a10ce4041860.html
          */
         ds: new Proxy({} as GigyaDSNamespace, {
-            get: (_target: GigyaDSNamespace, endpoint: keyof GigyaDSNamespace) =>
+            get: (_target, endpoint: keyof GigyaDSNamespace) =>
                 (requestParams: ParamsOf<GigyaDSNamespace[typeof endpoint]>[0]) =>
                     gigyaRequestHandler({
                         ...initParams,
@@ -129,7 +129,7 @@ export function Gigya<
          * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/813ddca3a4aa45f79fc35c1c72661668.html
          */
         fidm: new Proxy({} as GigyaFIdMNamespace, {
-            get: (_target: GigyaFIdMNamespace, endpoint: keyof GigyaFIdMNamespace) =>
+            get: (_target, endpoint: keyof GigyaFIdMNamespace) =>
                 (requestParams: ParamsOf<GigyaFIdMNamespace[typeof endpoint]>[0]) =>
                     gigyaRequestHandler({
                         ...initParams,
@@ -145,7 +145,7 @@ export function Gigya<
          * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/813ddca3a4aa45f79fc35c1c72661668.html
          */
         idx: new Proxy({} as GigyaIDXNamespace, {
-            get: (_target: GigyaIDXNamespace, endpoint: keyof GigyaIDXNamespace) =>
+            get: (_target, endpoint: keyof GigyaIDXNamespace) =>
                 (requestParams: ParamsOf<GigyaIDXNamespace[typeof endpoint]>[0]) =>
                     gigyaRequestHandler({
                         ...initParams,
@@ -161,7 +161,7 @@ export function Gigya<
          * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/416c2bdc70b21014bbc5a10ce4041860.html
          */
         reports: new Proxy({} as GigyaReportsNamespace, {
-            get: (_target: GigyaReportsNamespace, endpoint: keyof GigyaReportsNamespace) =>
+            get: (_target, endpoint: keyof GigyaReportsNamespace) =>
                 (requestParams: ParamsOf<GigyaReportsNamespace[typeof endpoint]>[0]) =>
                     gigyaRequestHandler({
                         ...initParams,
@@ -177,7 +177,7 @@ export function Gigya<
          * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41735f5270b21014bbc5a10ce4041860.html
          */
         socialize: new Proxy({} as GigyaSocializeNamespace, {
-            get: (_target: GigyaSocializeNamespace, endpoint: keyof GigyaSocializeNamespace) =>
+            get: (_target, endpoint: keyof GigyaSocializeNamespace) =>
                 (requestParams: ParamsOf<GigyaSocializeNamespace[typeof endpoint]>[0]) =>
                     gigyaRequestHandler({
                         ...initParams,
