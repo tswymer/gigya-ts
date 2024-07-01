@@ -82,7 +82,7 @@ export function Gigya<
          */
         accounts: new Proxy({} as MyAccountsNamespace, {
             get: (_target: MyAccountsNamespace, endpoint: keyof MyAccountsNamespace) =>
-                async (requestParams: ParamsOf<MyAccountsNamespace[typeof endpoint]>[0]) =>
+                (requestParams: ParamsOf<MyAccountsNamespace[typeof endpoint]>[0]) =>
                     gigyaRequestHandler({
                         ...initParams,
                         namespace: 'accounts',
@@ -98,7 +98,7 @@ export function Gigya<
          */
         audit: new Proxy({} as GigyaAuditNamespace, {
             get: (_target: GigyaAuditNamespace, endpoint: keyof GigyaAuditNamespace) =>
-                async (requestParams: ParamsOf<GigyaAuditNamespace[typeof endpoint]>[0]) =>
+                (requestParams: ParamsOf<GigyaAuditNamespace[typeof endpoint]>[0]) =>
                     gigyaRequestHandler({
                         ...initParams,
                         namespace: 'audit',
@@ -114,7 +114,7 @@ export function Gigya<
          */
         ds: new Proxy({} as GigyaDSNamespace, {
             get: (_target: GigyaDSNamespace, endpoint: keyof GigyaDSNamespace) =>
-                async (requestParams: ParamsOf<GigyaDSNamespace[typeof endpoint]>[0]) =>
+                (requestParams: ParamsOf<GigyaDSNamespace[typeof endpoint]>[0]) =>
                     gigyaRequestHandler({
                         ...initParams,
                         namespace: 'ds',
@@ -130,7 +130,7 @@ export function Gigya<
          */
         fidm: new Proxy({} as GigyaFIdMNamespace, {
             get: (_target: GigyaFIdMNamespace, endpoint: keyof GigyaFIdMNamespace) =>
-                async (requestParams: ParamsOf<GigyaFIdMNamespace[typeof endpoint]>[0]) =>
+                (requestParams: ParamsOf<GigyaFIdMNamespace[typeof endpoint]>[0]) =>
                     gigyaRequestHandler({
                         ...initParams,
                         namespace: 'fidm',
@@ -146,7 +146,7 @@ export function Gigya<
          */
         idx: new Proxy({} as GigyaIDXNamespace, {
             get: (_target: GigyaIDXNamespace, endpoint: keyof GigyaIDXNamespace) =>
-                async (requestParams: ParamsOf<GigyaIDXNamespace[typeof endpoint]>[0]) =>
+                (requestParams: ParamsOf<GigyaIDXNamespace[typeof endpoint]>[0]) =>
                     gigyaRequestHandler({
                         ...initParams,
                         namespace: 'idx',
@@ -162,7 +162,7 @@ export function Gigya<
          */
         reports: new Proxy({} as GigyaReportsNamespace, {
             get: (_target: GigyaReportsNamespace, endpoint: keyof GigyaReportsNamespace) =>
-                async (requestParams: ParamsOf<GigyaReportsNamespace[typeof endpoint]>[0]) =>
+                (requestParams: ParamsOf<GigyaReportsNamespace[typeof endpoint]>[0]) =>
                     gigyaRequestHandler({
                         ...initParams,
                         namespace: 'reports',
@@ -178,7 +178,7 @@ export function Gigya<
          */
         socialize: new Proxy({} as GigyaSocializeNamespace, {
             get: (_target: GigyaSocializeNamespace, endpoint: keyof GigyaSocializeNamespace) =>
-                async (requestParams: ParamsOf<GigyaSocializeNamespace[typeof endpoint]>[0]) =>
+                (requestParams: ParamsOf<GigyaSocializeNamespace[typeof endpoint]>[0]) =>
                     gigyaRequestHandler({
                         ...initParams,
                         namespace: 'socialize',
