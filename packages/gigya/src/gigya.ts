@@ -323,7 +323,7 @@ async function addCredentialsToGigyaRequest(request: GigyaRequestHeadersAndBody)
             request.headers.Authorization = `Bearer ${jwt}`;
             break;
         }
-        case undefined:
+        case 'none':
             break;
     }
 
