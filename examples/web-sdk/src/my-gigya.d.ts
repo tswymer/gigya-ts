@@ -15,7 +15,7 @@ type MyDataSchema = {
  */
 type MyPreferencesSchema = {
     terms?: {
-        myTermsSchema: GigyaPreference;
+        myTermsSchema?: GigyaPreference;
     };
     myPreferencesSchema?: GigyaPreference;
 };
