@@ -43,7 +43,7 @@ describe('gigya authentication: user key + secret', async () => {
         apiKey: process.env.GIGYA_API_KEY as string,
         dataCenter: process.env.GIGYA_DATA_CENTER as GigyaDataCenter,
         credentials: {
-            type: 'user-key-secret',
+            type: 'key-secret',
             userKey: process.env.GIGYA_USER_KEY as string,
             secret: process.env.GIGYA_USER_SECRET as string,
         },
