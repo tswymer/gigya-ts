@@ -4,7 +4,7 @@ import { Gigya, GigyaDataCenter, GigyaPreference } from '@gigya-ts/gigya';
  * Your custom data schema, as you have it defined in Gigya / SAP Customer Data Cloud.
  */
 type MyDataSchema = {
-    myDataSchemaString: string;
+    myDataSchemaString?: string;
     myDataSchemaObject?: {
         myDataSchemaNumber?: number;
     };
