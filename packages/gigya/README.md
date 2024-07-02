@@ -30,7 +30,7 @@ const gigya = Gigya({
 });
 
 // Call the "accounts.setAccountInfo" API method from the Gigya API
-const getAccountInfoResponse = await gigya.accounts('setAccountInfo', {
+const getAccountInfoResponse = await gigya.accounts.setAccountInfo({
     UID: 'YOUR_UID',
     profile: {
         lastName: 'Doe',
