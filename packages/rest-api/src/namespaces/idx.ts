@@ -13,5 +13,5 @@ export type IDXDeleteDataflowRequest = GigyaRequest<{}>;
 export type IDXDeleteDataflowResponse = GigyaResponse<{}>;
 
 export type GigyaIDXNamespace = {
-    deleteDataflow: (params: IDXDeleteDataflowRequest) => IDXDeleteDataflowResponse;
+    deleteDataflow: (params: IDXDeleteDataflowRequest) => Promise<IDXDeleteDataflowResponse>;
 };
