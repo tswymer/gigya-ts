@@ -46,5 +46,5 @@ export type AuditSearchResponse = GigyaResponse<{
 }>;
 
 export type GigyaAuditNamespace = {
-    search: (params: AuditSearchRequest) => AuditSearchResponse;
+    search: (params: AuditSearchRequest) => Promise<AuditSearchResponse>;
 };

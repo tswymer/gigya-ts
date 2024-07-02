@@ -81,5 +81,5 @@ export type SocializeGetTokenResponse = GigyaResponse<{
 }>;
 
 export type GigyaSocializeNamespace = {
-    getToken: (params: SocializeGetTokenRequest) => SocializeGetTokenResponse;
+    getToken: (params: SocializeGetTokenRequest) => Promise<SocializeGetTokenResponse>;
 };

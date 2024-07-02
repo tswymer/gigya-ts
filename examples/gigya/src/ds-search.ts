@@ -1,6 +1,6 @@
 import { MyGigya } from './my-gigya';
 
-type DSPhotoAlbumSchema = {
+type MyDSPhotoAlbumSchema = {
     albumName: string;
     albumDescription?: string;
     albumPhotos?: {
@@ -12,8 +12,8 @@ type DSPhotoAlbumSchema = {
 
 export async function dsSearchPhotoAlbumsExample(gigya: MyGigya, albumName: string) {
     // Execute the "ds.search" API method
-    const dsSearchResponse = await gigya.ds<DSPhotoAlbumSchema, 'search'>('search', {
-        query: `SELECT * FROM photoAlubms WHERE albumName CONTAINS "${albumName}"`,
+    const dsSearchResponse = await gigya.ds.search<MyDSPhotoAlbumSchema>({
+        query: `SELECT * FROM myPhotoAlbums WHERE albumName CONTAINS "${albumName}"`,
     });
 
     // Check for a successful response

@@ -2,7 +2,7 @@ import { MyGigya } from './my-gigya';
 
 export async function getAccountInfoExample(gigya: MyGigya, UID: string) {
     // Execute the "accounts.getAccountInfo" API method
-    const getAccountInfoResponse = await gigya.accounts('getAccountInfo', {
+    const getAccountInfoResponse = await gigya.accounts.getAccountInfo({
         UID,
         include: 'profile,data,preferences,loginIDs,isLockedOut',
         extraProfileFields: 'locale',

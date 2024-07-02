@@ -2,7 +2,7 @@ import { MyGigya } from './my-gigya';
 
 export async function accountsSearchLastNamesExample(gigya: MyGigya, lastName: string) {
     // Execute the "ds.search" API method
-    const accountsSearchResponse = await gigya.accounts('search', {
+    const accountsSearchResponse = await gigya.accounts.search({
         query: `SELECT * FROM accounts WHERE profile.lastName CONTAINS "${lastName}"`,
     });
 

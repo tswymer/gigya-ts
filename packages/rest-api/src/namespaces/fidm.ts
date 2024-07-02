@@ -18,5 +18,5 @@ export type FIdMSAMLIDPDelSPRequest = GigyaRequest<{
 export type FIdMSAMLIDPDelSPResponse = GigyaResponse<{}>;
 
 export type GigyaFIdMNamespace = {
-    'saml-idp.delSP': (params: FIdMSAMLIDPDelSPRequest) => FIdMSAMLIDPDelSPResponse;
+    'saml-idp.delSP': (params: FIdMSAMLIDPDelSPRequest) => Promise<FIdMSAMLIDPDelSPResponse>;
 };

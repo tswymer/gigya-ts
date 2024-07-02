@@ -243,10 +243,10 @@ export type DSStoreResponse = GigyaResponse<{
     oid?: string;
 }>;
 
-export type GigyaDSNamespace<DSObjectSchema> = {
-    delete: (params: DSDeleteRequest) => DSDeleteResponse;
-    get: (params: DSGetRequest) => DSGetResponse<DSObjectSchema>;
-    getSchema: (params: DSGetSchemaRequest) => DSGetSchemaResponse;
-    search: (params: DSSearchRequest) => DSSearchResponse<DSObjectSchema>;
-    store: (params: DSStoreRequest<DSObjectSchema>) => DSStoreResponse;
+export type GigyaDSNamespace = {
+    delete: (params: DSDeleteRequest) => Promise<DSDeleteResponse>;
+    get: <DSObjectSchema>(params: DSGetRequest) => Promise<DSGetResponse<DSObjectSchema>>;
+    getSchema: (params: DSGetSchemaRequest) => Promise<DSGetSchemaResponse>;
+    search: <DSObjectSchema>(params: DSSearchRequest) => Promise<DSSearchResponse<DSObjectSchema>>;
+    store: <DSObjectSchema>(params: DSStoreRequest<DSObjectSchema>) => Promise<DSStoreResponse>;
 };
