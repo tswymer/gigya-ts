@@ -64,5 +64,5 @@ export type GetAccountsStatsResponse = GigyaResponse<{
 }>;
 
 export type GigyaReportsNamespace = {
-    getAccountsStats: (params: GetAccountsStatsRequest) => GetAccountsStatsResponse;
+    getAccountsStats: (params: GetAccountsStatsRequest) => Promise<GetAccountsStatsResponse>;
 };
