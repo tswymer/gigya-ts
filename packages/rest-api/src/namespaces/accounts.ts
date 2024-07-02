@@ -2096,7 +2096,9 @@ export type GigyaAccountsNamespace<
         params: AccountsAuthMagiclinkEmailSendRequest,
     ) => Promise<AccountsAuthMagiclinkEmailSendResponse>;
 
-    'auth.magiclink.getlink': (params: AccountsAuthMagiclinkGetLinkRequest) => Promise<AccountsAuthMagiclinkGetLinkResponse>;
+    'auth.magiclink.getlink': (
+        params: AccountsAuthMagiclinkGetLinkRequest,
+    ) => Promise<AccountsAuthMagiclinkGetLinkResponse>;
 
     deleteAccount: (params: AccountsDeleteRequest) => Promise<AccountsDeleteResponse>;
 
@@ -2136,7 +2138,9 @@ export type GigyaAccountsNamespace<
         params: AccountsRegisterRequest<DataSchema, PreferencesSchema, SubscriptionsSchema>,
     ) => Promise<AccountsRegisterResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>>;
 
-    resendVerificationCode: (params: AccountsResendVerificationCodeRequest) => Promise<AccountsResendVerificationCodeResponse>;
+    resendVerificationCode: (
+        params: AccountsResendVerificationCodeRequest,
+    ) => Promise<AccountsResendVerificationCodeResponse>;
 
     resetPassword: (params: AccountsResetPasswordRequest) => Promise<AccountsResetPasswordResponse>;
 
@@ -2152,5 +2156,7 @@ export type GigyaAccountsNamespace<
 
     'tfa.resetTFA': (params: AccountsTFAResetTFARequest) => Promise<AccountsTFAResetTFAResponse>;
 
-    'tfa.unregisterDevice': (params: AccountsTFAUnregisterDeviceRequest) => Promise<AccountsTFAUnregisterDeviceResponse>;
+    'tfa.unregisterDevice': (
+        params: AccountsTFAUnregisterDeviceRequest,
+    ) => Promise<AccountsTFAUnregisterDeviceResponse>;
 };
