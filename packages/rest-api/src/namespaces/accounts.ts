@@ -3,9 +3,7 @@ import { GigyaSubscriptions, UpdateSubscriptions } from '../types/gigya-subscrip
 import { GigyaData, GigyaIdentity, GigyaPreferences, GigyaProfile, GigyaValidationError } from './gigya';
 
 /**
- * This API retrieves the authentication methods associated to a specific user when using a custom identifier with an aToken or identifier.
- *
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/b92c0c7ffc954155ac5a2d5509ceada4.html
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/b92c0c7ffc954155ac5a2d5509ceada4.html#parameters
  */
 export type AccountsAuthGetMethodsRequest = GigyaRequest<{
     /**
@@ -2079,6 +2077,11 @@ export type GigyaAccountsNamespace<
     PreferencesSchema extends GigyaPreferences,
     SubscriptionsSchema extends GigyaSubscriptions,
 > = {
+    /**
+     * This API retrieves the authentication methods associated to a specific user when using a custom identifier with an aToken or identifier.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/b92c0c7ffc954155ac5a2d5509ceada4.html
+     */
     'auth.getMethods': (params: AccountsAuthGetMethodsRequest) => AccountsAuthGetMethodsResponse;
 
     'auth.magiclink.email.getConfig': (
