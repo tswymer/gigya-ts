@@ -2080,48 +2080,74 @@ export type GigyaAccountsNamespace<
     SubscriptionsSchema extends GigyaSubscriptions,
 > = {
     'auth.getMethods': (params: AccountsAuthGetMethodsRequest) => AccountsAuthGetMethodsResponse;
+
     'auth.magiclink.email.getConfig': (
         params: AccountsAuthMagicLinkEmailGetConfigRequest,
-    ) => AccountsAuthMagicLinkEmailGetConfigResponse;
+    ) => Promise<AccountsAuthMagicLinkEmailGetConfigResponse>;
+
     'auth.magiclink.email.login': (
         params: AccountsAuthMagiclinkEmailLoginRequest,
-    ) => AccountsAuthMagiclinkEmailLoginResponse;
+    ) => Promise<AccountsAuthMagiclinkEmailLoginResponse>;
+
     'auth.magiclink.email.send': (
         params: AccountsAuthMagiclinkEmailSendRequest,
-    ) => AccountsAuthMagiclinkEmailSendResponse;
-    'auth.magiclink.getlink': (params: AccountsAuthMagiclinkGetLinkRequest) => AccountsAuthMagiclinkGetLinkResponse;
-    deleteAccount: (params: AccountsDeleteRequest) => AccountsDeleteResponse;
+    ) => Promise<AccountsAuthMagiclinkEmailSendResponse>;
+
+    'auth.magiclink.getlink': (params: AccountsAuthMagiclinkGetLinkRequest) => Promise<AccountsAuthMagiclinkGetLinkResponse>;
+
+    deleteAccount: (params: AccountsDeleteRequest) => Promise<AccountsDeleteResponse>;
+
     finalizeRegistration: (
         params: AccountsFinalizeRegistrationRequest,
-    ) => AccountsFinalizeRegistrationResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>;
+    ) => Promise<AccountsFinalizeRegistrationResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>>;
+
     getAccountInfo: (
         params: AccountsGetAccountInfoRequest,
-    ) => AccountsGetAccountInfoResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>;
+    ) => Promise<AccountsGetAccountInfoResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>>;
+
     getConsentStatements: (
         params: AccountsGetConsentStatementsRequest,
-    ) => AccountsGetConsentStatementsResponse<PreferencesSchema>;
-    getJWT: (params: AccountsGetJWTRequest) => AccountsGetJWTResponse;
-    getPolicies: (params: AccountsGetPoliciesRequest) => AccountsGetPoliciesResponse;
-    getSchema: (params: AccountsGetSchemaRequest) => AccountsGetSchemaResponse;
-    initRegistration: (params: AccountsInitRegistrationRequest) => AccountsInitRegistrationResponse;
-    login: (params: AccountsLoginRequest) => AccountsLoginResponse;
-    logout: (params: AccountsLogoutRequest) => AccountsLogoutResponse;
-    'otp.sendCode': (params: AccountsOTPSendCodeRequest) => AccountsOTPSendCodeResponse;
-    'otp.update': (params: AccountsOTPUpdateRequest) => AccountsOTPUpdateResponse;
-    'otp.delete': (params: AccountsOTPDeleteRequest) => AccountsOTPDeleteResponse;
-    'rba.unlock': (params: AccountsRBAUnlockRequest) => AccountsRBAUnlockResponse;
+    ) => Promise<AccountsGetConsentStatementsResponse<PreferencesSchema>>;
+
+    getJWT: (params: AccountsGetJWTRequest) => Promise<AccountsGetJWTResponse>;
+
+    getPolicies: (params: AccountsGetPoliciesRequest) => Promise<AccountsGetPoliciesResponse>;
+
+    getSchema: (params: AccountsGetSchemaRequest) => Promise<AccountsGetSchemaResponse>;
+
+    initRegistration: (params: AccountsInitRegistrationRequest) => Promise<AccountsInitRegistrationResponse>;
+
+    login: (params: AccountsLoginRequest) => Promise<AccountsLoginResponse>;
+
+    logout: (params: AccountsLogoutRequest) => Promise<AccountsLogoutResponse>;
+
+    'otp.sendCode': (params: AccountsOTPSendCodeRequest) => Promise<AccountsOTPSendCodeResponse>;
+
+    'otp.update': (params: AccountsOTPUpdateRequest) => Promise<AccountsOTPUpdateResponse>;
+
+    'otp.delete': (params: AccountsOTPDeleteRequest) => Promise<AccountsOTPDeleteResponse>;
+
+    'rba.unlock': (params: AccountsRBAUnlockRequest) => Promise<AccountsRBAUnlockResponse>;
+
     register: (
         params: AccountsRegisterRequest<DataSchema, PreferencesSchema, SubscriptionsSchema>,
-    ) => AccountsRegisterResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>;
-    resendVerificationCode: (params: AccountsResendVerificationCodeRequest) => AccountsResendVerificationCodeResponse;
-    resetPassword: (params: AccountsResetPasswordRequest) => AccountsResetPasswordResponse;
+    ) => Promise<AccountsRegisterResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>>;
+
+    resendVerificationCode: (params: AccountsResendVerificationCodeRequest) => Promise<AccountsResendVerificationCodeResponse>;
+
+    resetPassword: (params: AccountsResetPasswordRequest) => Promise<AccountsResetPasswordResponse>;
+
     search: (
         params: AccountsSearchRequest,
-    ) => AccountsSearchResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>;
+    ) => Promise<AccountsSearchResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>>;
+
     setAccountInfo: (
         params: AccountsSetAccountInfoRequest<DataSchema, PreferencesSchema, SubscriptionsSchema>,
-    ) => AccountsSetAccountInfoResponse;
-    setProfilePhoto: (params: AccountsSetProfilePhotoRequest) => AccountsSetProfilePhotoResponse;
-    'tfa.resetTFA': (params: AccountsTFAResetTFARequest) => AccountsTFAResetTFAResponse;
-    'tfa.unregisterDevice': (params: AccountsTFAUnregisterDeviceRequest) => AccountsTFAUnregisterDeviceResponse;
+    ) => Promise<AccountsSetAccountInfoResponse>;
+
+    setProfilePhoto: (params: AccountsSetProfilePhotoRequest) => Promise<AccountsSetProfilePhotoResponse>;
+
+    'tfa.resetTFA': (params: AccountsTFAResetTFARequest) => Promise<AccountsTFAResetTFAResponse>;
+
+    'tfa.unregisterDevice': (params: AccountsTFAUnregisterDeviceRequest) => Promise<AccountsTFAUnregisterDeviceResponse>;
 };
