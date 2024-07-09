@@ -1044,7 +1044,7 @@ export type AccountsSetAccountInfoRequest<
      *
      * Passing this as an array is not supported.
      */
-    prefereces?: PreferencesSchema;
+    preferences?: PreferencesSchema;
     /**
      * The user's profile information as described in the Profile object. You may add data to the predefined Gigya fields. To add your own custom profile fields, use the data object.
      */

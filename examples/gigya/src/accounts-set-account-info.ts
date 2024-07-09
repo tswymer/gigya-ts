@@ -20,7 +20,7 @@ export async function setAccountInfoExample(
             },
         },
         // And your custom preferences schema
-        prefereces: {
+        preferences: {
             myPreferencesSchema: {
                 isConsentGranted: grantedMyPreferencesSchema,
             },
