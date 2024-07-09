@@ -1044,7 +1044,7 @@ export type AccountsSetAccountInfoRequest<
      *
      * Passing this as an array is not supported.
      */
-    prefereces?: PreferencesSchema;
+    preferences?: PreferencesSchema;
     /**
      * The user's profile information as described in the Profile object. You may add data to the predefined Gigya fields. To add your own custom profile fields, use the data object.
      */
@@ -1939,7 +1939,7 @@ export type AccountsOTPUpdateRequest = GigyaRequest<{
      *
      * The length of the code may change, so we recommend that your implementation will not expect a fixed number of digits.
      */
-    code: number;
+    code: string;
     /**
      * The unique identifier of the user whose login information is being updated.
      *
