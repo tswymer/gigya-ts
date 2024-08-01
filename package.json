@@ -2,17 +2,18 @@
     "name": "gigya-ts",
     "author": "tobi.wymer@googlemail.com",
     "scripts": {
-        "build": "pnpm -r lint && pnpm -r run build",
-        "publish-packages": "pnpm -r build && pnpm publish -r --filter \"./packages/**\" --dry-run",
+        "build": "pnpm -r lint && pnpm -r build",
+        "test": "pnpm -r test",
+        "publish-packages": "pnpm -r build && pnpm publish -r --filter \"./packages/**\"",
         "prettier": "prettier --write \"**/*.ts\""
     },
     "devDependencies": {
-        "@types/node": "^20.9.0",
+        "@types/node": "^20.14.9",
         "@typescript-eslint/eslint-plugin": "^6.10.0",
         "@typescript-eslint/parser": "^6.10.0",
-        "eslint-config-prettier": "^9.0.0",
+        "eslint-config-prettier": "^9.1.0",
         "eslint": "^8.53.0",
-        "prettier": "^3.0.3",
-        "typescript": "^5.2.2"
+        "prettier": "^3.3.2",
+        "typescript": "^5.5.2"
     }
 }

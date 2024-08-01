@@ -3,9 +3,7 @@ import { GigyaSubscriptions, UpdateSubscriptions } from '../types/gigya-subscrip
 import { GigyaData, GigyaIdentity, GigyaPreferences, GigyaProfile, GigyaValidationError } from './gigya';
 
 /**
- * This API retrieves the authentication methods associated to a specific user when using a custom identifier with an aToken or identifier.
- *
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/b92c0c7ffc954155ac5a2d5509ceada4.html
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/b92c0c7ffc954155ac5a2d5509ceada4.html#parameters
  */
 export type AccountsAuthGetMethodsRequest = GigyaRequest<{
     /**
@@ -211,7 +209,29 @@ export type AccountsGetAccountInfoRequest = GigyaRequest<{
      */
     regToken?: string;
     /**
-     * A comma-separated list of fields to include in the response. The possible values are: identities-active , identities-all , identities-global , loginIDs , emails, profile, data, memberships, password, isLockedOut, lastLoginLocation, regSource, irank, rba, subscriptions, userInfo, preferences,groups,internal, customIdentifiers. The default value is "profile,data, subscriptions" so if this parameter is not used, the response returns the Profile and data objects, and subscriptions, if any are associated with the user.
+     * A comma-separated list of fields to include in the response. The possible values are:
+     * - identities-active
+     * - identities-all
+     * - identities-global
+     * - loginIDs
+     * - emails
+     * - profile
+     * - data
+     * - memberships
+     * - password
+     * - isLockedOut
+     * - lastLoginLocation
+     * - regSource
+     * - irank
+     * - rba
+     * - subscriptions
+     * - userInfo
+     * - preferences
+     * - groups
+     * - internal
+     * - customIdentifiers
+     *
+     * The default value is "profile,data,subscriptions" so if this parameter is not used, the response returns the Profile and data objects, and subscriptions, if any are associated with the user.
      *
      * @note Make sure the parameter does not contain spaces between the values.
      */
@@ -473,6 +493,82 @@ export type AccountsGetJWTResponse = GigyaResponse<{
      * If any fields that were passed do not exist for the requested apiKey, they will be ignored and listed here.
      */
     missingFields?: string;
+}>;
+
+/**
+ * This method retrieves account policies. Refer to the accounts.setPolicies method parameters for a detailed specification of the policies.
+ *
+ * @TODO: Type out the specific policies
+ *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41359a2970b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsGetPoliciesRequest = GigyaRequest<{
+    /**
+     * A comma-separated list specifying which sections of the policies to include in the response. The available policies are:
+     * - registration
+     * - gigyaPlugins
+     * - accountOptions
+     * - passwordComplexity
+     * - emailVerification
+     * - emailNotifications
+     * - passwordReset
+     * - profilePhoto
+     * - security
+     * - twoFactorAuth
+     * - federation
+     *
+     * @note Non-privileged requests (not signed with the application secret) may only request the following policies: registration, gigyaPlugins, passwordComplexity, and security.
+     */
+    sections?: string;
+}>;
+
+export type AccountsGetPoliciesResponse = GigyaResponse<{
+    /**
+     * The registration policy.
+     */
+    registration?: unknown;
+    /**
+     * The Gigya plugins policy.
+     */
+    gigyaPlugins?: unknown;
+    /**
+     * The account options policy.
+     */
+    accountOptions?: unknown;
+    /**
+     * The password complexity policy.
+     */
+    passwordComplexity?: unknown;
+    /**
+     * The email verification policy.
+     */
+    emailVerification?: unknown;
+    /**
+     * The email notifications policy.
+     *
+     * @note: This is not part of the official documentation currently.
+     */
+    emailNotifications?: unknown;
+    /**
+     * The password reset policy.
+     */
+    passwordReset?: unknown;
+    /**
+     * The profile photo policy.
+     */
+    profilePhoto?: unknown;
+    /**
+     * The security policy.
+     */
+    security?: unknown;
+    /**
+     * The two-factor authentication policy.
+     */
+    twoFactorAuth?: unknown;
+    /**
+     * The federation policy.
+     */
+    federation?: unknown;
 }>;
 
 /**
@@ -948,7 +1044,7 @@ export type AccountsSetAccountInfoRequest<
      *
      * Passing this as an array is not supported.
      */
-    prefereces?: PreferencesSchema;
+    preferences?: PreferencesSchema;
     /**
      * The user's profile information as described in the Profile object. You may add data to the predefined Gigya fields. To add your own custom profile fields, use the data object.
      */
@@ -1960,6 +2056,23 @@ export type AccountsTFAUnregisterDeviceRequest = GigyaRequest<{
 export type AccountsTFAUnregisterDeviceResponse = GigyaResponse<{}>;
 
 /**
+ * This API removes the phone number from the specified account.
+ *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/8f313cc471f549d49fcc8ab3a430aea9.html#parameters
+ */
+export type AccountsOTPDeleteRequest = GigyaRequest<{
+    /**
+     * The UID of the user whose TFA you want to reset.
+     */
+    UID: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/8f313cc471f549d49fcc8ab3a430aea9.html#response-data
+ */
+export type AccountsOTPDeleteResponse = GigyaResponse<{}>;
+
+/**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c069e70b21014bbc5a10ce4041860.html#parameters
  */
 export type AccountsTFAPhoneSendVerificationCodeRequest = GigyaRequest<{
@@ -2052,45 +2165,88 @@ export type GigyaAccountsNamespace<
     PreferencesSchema extends GigyaPreferences,
     SubscriptionsSchema extends GigyaSubscriptions,
 > = {
+    /**
+     * This API retrieves the authentication methods associated to a specific user when using a custom identifier with an aToken or identifier.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/b92c0c7ffc954155ac5a2d5509ceada4.html
+     */
     'auth.getMethods': (params: AccountsAuthGetMethodsRequest) => AccountsAuthGetMethodsResponse;
+
     'auth.magiclink.email.getConfig': (
         params: AccountsAuthMagicLinkEmailGetConfigRequest,
-    ) => AccountsAuthMagicLinkEmailGetConfigResponse;
+    ) => Promise<AccountsAuthMagicLinkEmailGetConfigResponse>;
+
     'auth.magiclink.email.login': (
         params: AccountsAuthMagiclinkEmailLoginRequest,
-    ) => AccountsAuthMagiclinkEmailLoginResponse;
+    ) => Promise<AccountsAuthMagiclinkEmailLoginResponse>;
+
     'auth.magiclink.email.send': (
         params: AccountsAuthMagiclinkEmailSendRequest,
-    ) => AccountsAuthMagiclinkEmailSendResponse;
-    'auth.magiclink.getlink': (params: AccountsAuthMagiclinkGetLinkRequest) => AccountsAuthMagiclinkGetLinkResponse;
-    deleteAccount: (params: AccountsDeleteRequest) => AccountsDeleteResponse;
+    ) => Promise<AccountsAuthMagiclinkEmailSendResponse>;
+
+    'auth.magiclink.getlink': (
+        params: AccountsAuthMagiclinkGetLinkRequest,
+    ) => Promise<AccountsAuthMagiclinkGetLinkResponse>;
+
+    deleteAccount: (params: AccountsDeleteRequest) => Promise<AccountsDeleteResponse>;
+
     finalizeRegistration: (
         params: AccountsFinalizeRegistrationRequest,
-    ) => AccountsFinalizeRegistrationResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>;
+    ) => Promise<AccountsFinalizeRegistrationResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>>;
+
     getAccountInfo: (
         params: AccountsGetAccountInfoRequest,
-    ) => AccountsGetAccountInfoResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>;
+    ) => Promise<AccountsGetAccountInfoResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>>;
+
     getConsentStatements: (
         params: AccountsGetConsentStatementsRequest,
-    ) => AccountsGetConsentStatementsResponse<PreferencesSchema>;
-    getJWT: (params: AccountsGetJWTRequest) => AccountsGetJWTResponse;
-    getSchema: (params: AccountsGetSchemaRequest) => AccountsGetSchemaResponse;
-    initRegistration: (params: AccountsInitRegistrationRequest) => AccountsInitRegistrationResponse;
-    login: (params: AccountsLoginRequest) => AccountsLoginResponse;
-    logout: (params: AccountsLogoutRequest) => AccountsLogoutResponse;
-    'otp.sendCode': (params: AccountsOTPSendCodeRequest) => AccountsOTPSendCodeResponse;
-    'otp.update': (params: AccountsOTPUpdateRequest) => AccountsOTPUpdateResponse;
-    'rba.unlock': (params: AccountsRBAUnlockRequest) => AccountsRBAUnlockResponse;
+    ) => Promise<AccountsGetConsentStatementsResponse<PreferencesSchema>>;
+
+    getJWT: (params: AccountsGetJWTRequest) => Promise<AccountsGetJWTResponse>;
+
+    getPolicies: (params: AccountsGetPoliciesRequest) => Promise<AccountsGetPoliciesResponse>;
+
+    getSchema: (params: AccountsGetSchemaRequest) => Promise<AccountsGetSchemaResponse>;
+
+    initRegistration: (params: AccountsInitRegistrationRequest) => Promise<AccountsInitRegistrationResponse>;
+
+    login: (params: AccountsLoginRequest) => Promise<AccountsLoginResponse>;
+
+    logout: (params: AccountsLogoutRequest) => Promise<AccountsLogoutResponse>;
+
+    'otp.sendCode': (params: AccountsOTPSendCodeRequest) => Promise<AccountsOTPSendCodeResponse>;
+
+    'otp.update': (params: AccountsOTPUpdateRequest) => Promise<AccountsOTPUpdateResponse>;
+
+    'otp.delete': (params: AccountsOTPDeleteRequest) => Promise<AccountsOTPDeleteResponse>;
+
+    'rba.unlock': (params: AccountsRBAUnlockRequest) => Promise<AccountsRBAUnlockResponse>;
+
     register: (
         params: AccountsRegisterRequest<DataSchema, PreferencesSchema, SubscriptionsSchema>,
-    ) => AccountsRegisterResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>;
-    resendVerificationCode: (params: AccountsResendVerificationCodeRequest) => AccountsResendVerificationCodeResponse;
-    resetPassword: (params: AccountsResetPasswordRequest) => AccountsResetPasswordResponse;
+    ) => Promise<AccountsRegisterResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>>;
+
+    resendVerificationCode: (
+        params: AccountsResendVerificationCodeRequest,
+    ) => Promise<AccountsResendVerificationCodeResponse>;
+
+    resetPassword: (params: AccountsResetPasswordRequest) => Promise<AccountsResetPasswordResponse>;
+
     search: (
         params: AccountsSearchRequest,
-    ) => AccountsSearchResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>;
+    ) => Promise<AccountsSearchResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>>;
+
     setAccountInfo: (
         params: AccountsSetAccountInfoRequest<DataSchema, PreferencesSchema, SubscriptionsSchema>,
+    ) => Promise<AccountsSetAccountInfoResponse>;
+
+    setProfilePhoto: (params: AccountsSetProfilePhotoRequest) => Promise<AccountsSetProfilePhotoResponse>;
+
+    'tfa.resetTFA': (params: AccountsTFAResetTFARequest) => Promise<AccountsTFAResetTFAResponse>;
+
+    'tfa.unregisterDevice': (
+        params: AccountsTFAUnregisterDeviceRequest,
+    ) => Promise<AccountsTFAUnregisterDeviceResponse>;
     ) => AccountsSetAccountInfoResponse;
     setProfilePhoto: (params: AccountsSetProfilePhotoRequest) => AccountsSetProfilePhotoResponse;
     'tfa.resetTFA': (params: AccountsTFAResetTFARequest) => AccountsTFAResetTFAResponse;

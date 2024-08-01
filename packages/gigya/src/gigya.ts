@@ -1,181 +1,406 @@
 import {
     GigyaAccountsNamespace,
     GigyaAuditNamespace,
+    GigyaDSNamespace,
     GigyaData,
     GigyaDataCenter,
-    GigyaDSNamespace,
+    GigyaFIdMNamespace,
+    GigyaIDXNamespace,
     GigyaPreferences,
+    GigyaReportsNamespace,
     GigyaSocializeNamespace,
     GigyaSubscriptions,
 } from '@gigya-ts/rest-api';
 
-export type GigyaServerCredentials = {
-    userKey: string;
-    secret: string;
-};
+/**
+ * The different types of credentials that can be used to authenticate Gigya requests.
+ */
+type GigyaCrendentials =
+    | {
+        type: 'key-secret';
+        /**
+         * The application or user key to use for the request.
+         */
+        userKey: string;
+        /**
+         * The secret to use for the request.
+         */
+        secret: string;
+    }
+    | {
+        type: 'bearer-token';
+        /**
+         * The bearer token to use for the request.
+         */
+        token: string;
+    }
+    | {
+        type: 'asymmetric-key';
+        /**
+         * The application or user key to use for the request.
+         */
+        userKey: string;
+        /**
+         * The private key to use for the request.
+         */
+        privateKey: string;
+    }
+    | {
+        type: 'none';
+    };
 
-export type GigyaClientCredentials = {
-    accessToken: string;
-};
+/**
+ * Helper type to extract the parameters of a function, useful for getting the input type of a gigya request.
+ */
+type ParamsOf<T extends (...args: any[]) => any> = T extends (...args: infer P) => any ? P : never;
 
-export type GigyaInitParams = {
+/**
+ * The parameters to initialize the Gigya client.
+ */
+type GigyaInitParams = {
     dataCenter: GigyaDataCenter;
     apiKey: string;
-    credentials?: GigyaClientCredentials | GigyaServerCredentials;
+    credentials: GigyaCrendentials;
     debug?: boolean;
 };
 
-type ParamsOf<T extends (...args: any[]) => any> = T extends (...args: infer P) => any ? P : never;
-
-export const Gigya = <
+/**
+ * Wrapper client for the Gigya REST API.
+ */
+export function Gigya<
     DataSchema extends GigyaData,
     PreferencesSchema extends GigyaPreferences,
     SubscriptionsSchema extends GigyaSubscriptions,
->(
-    initParams: GigyaInitParams,
-) => {
-    type PersonalAccountsNamespace = GigyaAccountsNamespace<DataSchema, PreferencesSchema, SubscriptionsSchema>;
-
-    const accounts = <Endpoint extends keyof PersonalAccountsNamespace>(
-        accountsEndpoint: Endpoint,
-        endpointParams: ParamsOf<PersonalAccountsNamespace[Endpoint]>[0],
-    ) =>
-        gigyaRequestFactory<ReturnType<PersonalAccountsNamespace[Endpoint]>>({
-            ...initParams,
-            namespace: 'accounts',
-            endpoint: accountsEndpoint,
-            requestParams: endpointParams,
-        });
-
-    // @TODO: This isn't super elegant, because you now need to pass the name of the DS endpoint as a string, which
-    // is annoying and doesn't look great. Here's an example, see how I need specify 'search' twice:
-    //
-    // gigya.ds<MyDSObjectSchema, 'search'>('search', {
-    //     query: 'SELECT * FROM myObject',
-    // }),
-    const ds = <DSObjectSchema, Endpoint extends keyof GigyaDSNamespace<DSObjectSchema>>(
-        dsEndpoint: Endpoint,
-        endpointParams: ParamsOf<GigyaDSNamespace<DSObjectSchema>[Endpoint]>[0],
-    ) =>
-        gigyaRequestFactory<ReturnType<GigyaDSNamespace<DSObjectSchema>[Endpoint]>>({
-            ...initParams,
-            namespace: 'ds',
-            endpoint: dsEndpoint,
-            requestParams: endpointParams,
-        });
-
-    const socialize = <Endpoint extends keyof GigyaSocializeNamespace>(
-        socializeEndpoint: Endpoint,
-        endpointParams: ParamsOf<GigyaSocializeNamespace[Endpoint]>[0],
-    ) =>
-        gigyaRequestFactory<ReturnType<GigyaSocializeNamespace[Endpoint]>>({
-            ...initParams,
-            namespace: 'socialize',
-            endpoint: socializeEndpoint,
-            requestParams: endpointParams,
-        });
-
-    const audit = <Endpoint extends keyof GigyaAuditNamespace>(
-        socializeEndpoint: Endpoint,
-        endpointParams: ParamsOf<GigyaAuditNamespace[Endpoint]>[0],
-    ) =>
-        gigyaRequestFactory<ReturnType<GigyaAuditNamespace[Endpoint]>>({
-            ...initParams,
-            namespace: 'audit',
-            endpoint: socializeEndpoint,
-            requestParams: endpointParams,
-        });
+>(initParams: GigyaInitParams) {
+    type MyAccountsNamespace = GigyaAccountsNamespace<DataSchema, PreferencesSchema, SubscriptionsSchema>;
 
     return {
-        accounts,
-        ds,
-        socialize,
-        audit,
+        /**
+         * The "gigya.accounts" namespace.
+         *
+         * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413128b070b21014bbc5a10ce4041860.html
+         */
+        accounts: new Proxy({} as MyAccountsNamespace, {
+            get:
+                (_namespace, endpoint: keyof MyAccountsNamespace) =>
+                    (endpointParams: ParamsOf<MyAccountsNamespace[typeof endpoint]>[0]) =>
+                        gigyaRequestHandler({
+                            ...initParams,
+                            namespace: 'accounts',
+                            endpoint,
+                            endpointParams,
+                        }),
+        }),
+
+        /**
+         * The "gigya.audit" namespace.
+         *
+         * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41436e2b70b21014bbc5a10ce4041860.html
+         */
+        audit: new Proxy({} as GigyaAuditNamespace, {
+            get:
+                (_namespace, endpoint: keyof GigyaAuditNamespace) =>
+                    (endpointParams: ParamsOf<GigyaAuditNamespace[typeof endpoint]>[0]) =>
+                        gigyaRequestHandler({
+                            ...initParams,
+                            namespace: 'audit',
+                            endpoint,
+                            endpointParams,
+                        }),
+        }),
+
+        /**
+         * The "gigya.ds" namespace.
+         *
+         * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/415026de70b21014bbc5a10ce4041860.html
+         */
+        ds: new Proxy({} as GigyaDSNamespace, {
+            get:
+                (_namespace, endpoint: keyof GigyaDSNamespace) =>
+                    (endpointParams: ParamsOf<GigyaDSNamespace[typeof endpoint]>[0]) =>
+                        gigyaRequestHandler({
+                            ...initParams,
+                            namespace: 'ds',
+                            endpoint,
+                            endpointParams,
+                        }),
+        }),
+
+        /**
+         * The "gigya.fidm" namespace.
+         *
+         * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/813ddca3a4aa45f79fc35c1c72661668.html
+         */
+        fidm: new Proxy({} as GigyaFIdMNamespace, {
+            get:
+                (_namespace, endpoint: keyof GigyaFIdMNamespace) =>
+                    (endpointParams: ParamsOf<GigyaFIdMNamespace[typeof endpoint]>[0]) =>
+                        gigyaRequestHandler({
+                            ...initParams,
+                            namespace: 'fidm',
+                            endpoint,
+                            endpointParams,
+                        }),
+        }),
+
+        /**
+         * The "gigya.idx" namespace.
+         *
+         * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/813ddca3a4aa45f79fc35c1c72661668.html
+         */
+        idx: new Proxy({} as GigyaIDXNamespace, {
+            get:
+                (_namespace, endpoint: keyof GigyaIDXNamespace) =>
+                    (endpointParams: ParamsOf<GigyaIDXNamespace[typeof endpoint]>[0]) =>
+                        gigyaRequestHandler({
+                            ...initParams,
+                            namespace: 'idx',
+                            endpoint,
+                            endpointParams,
+                        }),
+        }),
+
+        /**
+         * The "gigya.reports" namespace.
+         *
+         * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/416c2bdc70b21014bbc5a10ce4041860.html
+         */
+        reports: new Proxy({} as GigyaReportsNamespace, {
+            get:
+                (_namespace, endpoint: keyof GigyaReportsNamespace) =>
+                    (endpointParams: ParamsOf<GigyaReportsNamespace[typeof endpoint]>[0]) =>
+                        gigyaRequestHandler({
+                            ...initParams,
+                            namespace: 'reports',
+                            endpoint,
+                            endpointParams,
+                        }),
+        }),
+
+        /**
+         * The "gigya.socialize" namespace.
+         *
+         * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41735f5270b21014bbc5a10ce4041860.html
+         */
+        socialize: new Proxy({} as GigyaSocializeNamespace, {
+            get:
+                (_namespace, endpoint: keyof GigyaSocializeNamespace) =>
+                    (endpointParams: ParamsOf<GigyaSocializeNamespace[typeof endpoint]>[0]) =>
+                        gigyaRequestHandler({
+                            ...initParams,
+                            namespace: 'socialize',
+                            endpoint,
+                            endpointParams,
+                        }),
+        }),
     };
-};
+}
 
-type GigyaRequestHeaders = {
-    'Content-Type': 'application/x-www-form-urlencoded';
-    Authorization?: string;
-};
-
-type GigyaRequestFactoryParams = {
-    namespace: 'accounts' | 'ds' | 'socialize' | 'audit';
-    endpoint: string;
-    requestParams: Record<string, unknown>;
-} & GigyaInitParams;
-
-const gigyaRequestFactory = async <T>(params: GigyaRequestFactoryParams): Promise<T> => {
+/**
+ * Helper function to execute a Gigya request.
+ *
+ * This function constructs the request URL, adds the necessary headers and body, and executes the request.
+ */
+async function gigyaRequestHandler(
+    params: {
+        namespace: 'accounts' | 'audit' | 'ds' | 'fidm' | 'idx' | 'reports' | 'socialize';
+        endpoint: string;
+        endpointParams: Record<string, unknown>;
+    } & GigyaInitParams,
+) {
+    // Create the URL for the request
     const gigyaRequestURL = `https://accounts.${params.dataCenter}/${params.namespace}.${params.endpoint}`;
 
-    const headers: GigyaRequestHeaders = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        ...(params.credentials && 'accessToken' in params.credentials
-            ? { Authorization: `Bearer ${params.credentials.accessToken}` }
-            : {}),
-    };
+    // Add all attributes to the request body
+    const initialBody = new URLSearchParams();
 
-    const body = new URLSearchParams();
+    // Append the API key to the request body
+    initialBody.append('apiKey', params.apiKey);
 
-    body.append('apiKey', params.apiKey);
+    // Add each of the request parameters to the request body
+    for (const paramName in params.endpointParams) {
+        const requestParam = params.endpointParams[paramName];
 
-    if (params.credentials && 'userKey' in params.credentials && 'secret' in params.credentials) {
-        body.append('userKey', params.credentials.userKey);
-        body.append('secret', params.credentials.secret);
-    }
-
-    for (const name in params.requestParams) {
-        const param = params.requestParams[name];
-
+        // Depending on the type of the parameter, add it to the request body in the appropriate way
         switch (true) {
-            case typeof param === 'undefined':
+            // Don't add undefined parameters to the request body
+            case typeof requestParam === 'undefined':
                 break;
-            case typeof param === 'object':
-                body.append(name, JSON.stringify(param));
+            // Stringify objects
+            case typeof requestParam === 'object':
+                initialBody.append(paramName, JSON.stringify(requestParam));
                 break;
+            // Add all other parameters as strings
             default:
-                body.append(name, String(param));
+                initialBody.append(paramName, String(requestParam));
         }
     }
 
+    // Create the headers and body of the request, adding the provided credentials
+    const { headers, body } = await addCredentialsToGigyaRequest({
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: initialBody,
+        credentials: params.credentials,
+    });
+
     if (params.debug) logGigyaRequest(gigyaRequestURL, headers, body);
 
+    // Execute the request
     const gigyaResponse = await fetch(gigyaRequestURL, {
         method: 'POST',
         headers,
         body,
     });
 
+    // @TODO: Anyone using the "httpStatusCodes" param on a Gigya API will cause this to fail currently :)
     if (!gigyaResponse.ok) {
-        let textResponse = 'Unanble to parse gigya response as text';
-
+        let textResponse: string;
         try {
             textResponse = await gigyaResponse.text();
         } catch {
-            // Do nothing
+            textResponse = 'Unanble to parse gigya response as text.';
         }
-
         throw new Error(`Gigya request failed with status ${gigyaResponse.status}. Full response:\n${textResponse}`);
     }
+
     const parsedGigyaResponse = await gigyaResponse.json();
 
     if (params.debug) logGigyaResponse(parsedGigyaResponse);
 
     return parsedGigyaResponse;
+}
+
+/**
+ * Helper type to represent the headers and body of a Gigya request.
+ */
+type GigyaRequestHeadersAndBody = {
+    headers: { 'Content-Type': string; Authorization?: string };
+    body: URLSearchParams;
+    credentials: GigyaInitParams['credentials'];
 };
 
-const logGigyaRequest = (requestURL: string, requestHeaders: GigyaRequestHeaders, requestBody: URLSearchParams) => {
-    console.log('Gigya Request:');
+/**
+ * Handles the different authentication methods for Gigya requests.
+ */
+async function addCredentialsToGigyaRequest(request: GigyaRequestHeadersAndBody): Promise<GigyaRequestHeadersAndBody> {
+    // Handle different types of credentials
+    switch (request.credentials?.type) {
+        case 'key-secret': {
+            // Add the user key and secret to the request body
+            request.body.append('userKey', request.credentials.userKey);
+            request.body.append('secret', request.credentials.secret);
+            break;
+        }
+        case 'bearer-token': {
+            // Add the bearer token to the request headers
+            request.headers.Authorization = `Bearer ${request.credentials.token}`;
+            break;
+        }
+        case 'asymmetric-key': {
+            // Construct the JWT header and body
+            const header = toBase64URL(
+                JSON.stringify({
+                    alg: 'RS256',
+                    typ: 'JWT',
+                    kid: request.credentials.userKey,
+                }),
+            );
+            const body = toBase64URL(
+                JSON.stringify({
+                    iat: Math.floor(Date.now() / 1000),
+                    jti: crypto.randomUUID(),
+                }),
+            );
 
-    console.log({
+            // Import the private key to sign the request
+            const signingKey = await importGigyaPrivateKey(request.credentials.privateKey);
+
+            // Sign the JWT
+            const signatureBuffer = await crypto.subtle.sign(
+                signingKey.algorithm.name,
+                signingKey,
+                Buffer.from(`${header}.${body}`),
+            );
+            const signature = toBase64URL(Buffer.from(signatureBuffer));
+
+            // Construct the JWT
+            const jwt = `${header}.${body}.${signature}`;
+
+            // Add the JWT to the request headers
+            request.headers.Authorization = `Bearer ${jwt}`;
+            break;
+        }
+        case 'none':
+            break;
+    }
+
+    return request;
+}
+
+/**
+ * Converts a string or buffer to a base64 URL-safe string, used in JWTs.
+ */
+function toBase64URL(input: string | Buffer) {
+    return Buffer.from(input).toString('base64').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+}
+
+/**
+ * Imports a private key from Gigya to use to sign requests.
+ */
+async function importGigyaPrivateKey(privateKey: string) {
+    // Gigya provides PKCS#1 keys, so we need to check that they were converted to PKCS#8 first
+    // openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in gigya-pkcs1.key -out gigya-pkcs8.key
+    if (
+        privateKey.includes('-----BEGIN RSA PRIVATE KEY-----') ||
+        privateKey.includes('-----END RSA PRIVATE KEY-----')
+    ) {
+        throw new Error(
+            'You have provided a PKCS#1 key, but this function requires a PKCS#8 key. Please convert your key to PKCS#8.',
+        );
+    }
+
+    // Fetch the key from between the header and footer
+    const pemContents = privateKey
+        .replace('-----BEGIN PRIVATE KEY-----', '')
+        .replace('-----END PRIVATE KEY-----', '')
+        .replace(/\\n/g, '')
+        .replace(/\n/g, '')
+        .replace(/\r/g, '');
+
+    // Base64 decode the key and convert it to a buffer
+    const keyContents = Buffer.from(pemContents, 'base64');
+
+    // Create a CryptoKey from the binary DER
+    return crypto.subtle.importKey(
+        'pkcs8',
+        keyContents,
+        {
+            name: 'RSASSA-PKCS1-v1_5',
+            hash: 'SHA-256',
+        },
+        false,
+        ['sign'],
+    );
+}
+
+/**
+ * Helper function to log a Gigya request to the console.
+ */
+function logGigyaRequest(
+    requestURL: string,
+    headers: GigyaRequestHeadersAndBody['headers'],
+    requestBody: URLSearchParams,
+) {
+    console.log('Gigya Request:', {
         requestURL,
-        requestHeaders,
+        headers,
         requestBody,
     });
-};
+}
 
-const logGigyaResponse = (response: unknown) => {
-    console.log('Gigya Response:');
-
-    console.log(response);
-};
+/**
+ * Helper function to log a Gigya response to the console.
+ */
+function logGigyaResponse(response: unknown) {
+    console.log('Gigya Response:', response);
+}
