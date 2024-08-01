@@ -1959,6 +1959,67 @@ export type AccountsTFAUnregisterDeviceRequest = GigyaRequest<{
  */
 export type AccountsTFAUnregisterDeviceResponse = GigyaResponse<{}>;
 
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c069e70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAPhoneSendVerificationCodeRequest = GigyaRequest<{
+    /**
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature.
+     */
+    gigyaAssertion: string;
+    /**
+     * The unique identifier of the phone. If this parameter is provided, there is no need for the phone parameter.
+     */
+    phoneID?: string;
+    /**
+     * The phone number. If this parameter is provided, there is no need for the phoneID parameter.
+     */
+    phone?: string;
+    /**
+     * Can be either "sms" or "voice".
+     */
+    method: 'sms' | 'voice';
+    /**
+     * The language of the text or voice message.
+     */
+    lang: string;
+}>;
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c069e70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAPhoneSendVerificationCodeResponse = GigyaResponse<{
+    /**
+     * A secure ticket that includes the method, phone, code, and gigyaAssertion.jti.
+     */
+    phvToken: string;
+}>;
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413bb9ee70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAPhoneCompleteVerificationRequest = GigyaRequest<{
+    /**
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature.
+     */
+    gigyaAssertion: string;
+    /**
+     * A secure ticket that includes the method, phone, code, and gigyaAssertion.jti.
+     */
+    phvToken: string;
+    /**
+     * The verification code.
+     */
+    code: string;
+}>;
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413bb9ee70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAPhoneCompleteVerificationResponse = GigyaResponse<{
+    /**
+     * The JWT token from the TFA provider. The It is made up of a header object, a body object and a signature.
+     */
+    providerAssertion: string;
+}>;
+
 export type GigyaAccountsNamespace<
     DataSchema extends GigyaData,
     PreferencesSchema extends GigyaPreferences,
@@ -2007,4 +2068,10 @@ export type GigyaAccountsNamespace<
     setProfilePhoto: (params: AccountsSetProfilePhotoRequest) => AccountsSetProfilePhotoResponse;
     'tfa.resetTFA': (params: AccountsTFAResetTFARequest) => AccountsTFAResetTFAResponse;
     'tfa.unregisterDevice': (params: AccountsTFAUnregisterDeviceRequest) => AccountsTFAUnregisterDeviceResponse;
+    'tfa.phone.sendVerificationCode': (
+        params: AccountsTFAPhoneSendVerificationCodeRequest,
+    ) => Promise<AccountsTFAPhoneSendVerificationCodeResponse>;
+    'tfa.phone.completeVerification': (
+        params: AccountsTFAPhoneCompleteVerificationRequest,
+    ) => Promise<AccountsTFAPhoneCompleteVerificationResponse>;
 };

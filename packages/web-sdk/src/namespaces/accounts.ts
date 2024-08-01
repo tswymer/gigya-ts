@@ -341,6 +341,33 @@ export type AccountsOTPSendCodeRequestJS = AccountsOTPSendCodeRequest & {
  */
 export type AccountsOTPSendCodeResponseJS = Omit<AccountsOTPSendCodeResponse, 'code'>;
 
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b93e570b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsInitTFARequestJS = GigyaRequest<{
+    /**
+     * The name of the TFA provider for which the token mode is set.
+     */
+    provider: string;
+    /**
+     * The token mode. The possible values for the mode are:
+     * - register (default)
+     * - verify
+     * - add
+     * - edit
+     */
+    mode: 'register' | 'verify' | 'add' | 'edit';
+}>;
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b93e570b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsInitTFAResponseJS = GigyaResponse<{
+    /**
+     * A secure ticket that includes the method, phone, code, and gigyaAssertion.jti.
+     */
+    phvToken: string;
+}>;
+
 export type GigyaAccountsNamespaceJS<
     DataSchema extends GigyaData,
     PreferencesSchema extends GigyaPreferences,
@@ -462,4 +489,11 @@ export type GigyaAccountsNamespaceJS<
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a5b7170b21014bbc5a10ce4041860.html
      */
     showScreenSet: GigyaJSFunction<AccountsShowScreenSetRequestJS, AccountsShowScreenSetResponseJS>;
+
+    /**
+     * This method initializes two-factor authentication (TFA).
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b93e570b21014bbc5a10ce4041860.html
+     */
+    'tfa.initTFA': GigyaJSFunction<AccountsInitTFARequestJS, AccountsInitTFAResponseJS>;
 };
