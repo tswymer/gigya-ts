@@ -24,6 +24,8 @@ import {
     GigyaRequest,
     GigyaResponse,
     GigyaSubscriptions,
+    AccountsInitTFARequest,
+    AccountsInitTFAResponse,
 } from '@gigya-ts/rest-api';
 
 import {
@@ -341,6 +343,15 @@ export type AccountsOTPSendCodeRequestJS = AccountsOTPSendCodeRequest & {
  */
 export type AccountsOTPSendCodeResponseJS = Omit<AccountsOTPSendCodeResponse, 'code'>;
 
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b93e570b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsInitTFARequestJS = AccountsInitTFARequest;
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b93e570b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsInitTFAResponseJS = AccountsInitTFAResponse;
+
 export type GigyaAccountsNamespaceJS<
     DataSchema extends GigyaData,
     PreferencesSchema extends GigyaPreferences,
@@ -462,4 +473,11 @@ export type GigyaAccountsNamespaceJS<
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a5b7170b21014bbc5a10ce4041860.html
      */
     showScreenSet: GigyaJSFunction<AccountsShowScreenSetRequestJS, AccountsShowScreenSetResponseJS>;
+
+    /**
+     * This method initializes two-factor authentication (TFA).
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b93e570b21014bbc5a10ce4041860.html
+     */
+    'tfa.initTFA': GigyaJSFunction<AccountsInitTFARequestJS, AccountsInitTFAResponseJS>;
 };

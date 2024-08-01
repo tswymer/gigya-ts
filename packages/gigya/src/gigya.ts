@@ -17,37 +17,37 @@ import {
  */
 type GigyaCrendentials =
     | {
-        type: 'key-secret';
-        /**
-         * The application or user key to use for the request.
-         */
-        userKey: string;
-        /**
-         * The secret to use for the request.
-         */
-        secret: string;
-    }
+          type: 'key-secret';
+          /**
+           * The application or user key to use for the request.
+           */
+          userKey: string;
+          /**
+           * The secret to use for the request.
+           */
+          secret: string;
+      }
     | {
-        type: 'bearer-token';
-        /**
-         * The bearer token to use for the request.
-         */
-        token: string;
-    }
+          type: 'bearer-token';
+          /**
+           * The bearer token to use for the request.
+           */
+          token: string;
+      }
     | {
-        type: 'asymmetric-key';
-        /**
-         * The application or user key to use for the request.
-         */
-        userKey: string;
-        /**
-         * The private key to use for the request.
-         */
-        privateKey: string;
-    }
+          type: 'asymmetric-key';
+          /**
+           * The application or user key to use for the request.
+           */
+          userKey: string;
+          /**
+           * The private key to use for the request.
+           */
+          privateKey: string;
+      }
     | {
-        type: 'none';
-    };
+          type: 'none';
+      };
 
 /**
  * Helper type to extract the parameters of a function, useful for getting the input type of a gigya request.
@@ -83,13 +83,13 @@ export function Gigya<
         accounts: new Proxy({} as MyAccountsNamespace, {
             get:
                 (_namespace, endpoint: keyof MyAccountsNamespace) =>
-                    (endpointParams: ParamsOf<MyAccountsNamespace[typeof endpoint]>[0]) =>
-                        gigyaRequestHandler({
-                            ...initParams,
-                            namespace: 'accounts',
-                            endpoint,
-                            endpointParams,
-                        }),
+                (endpointParams: ParamsOf<MyAccountsNamespace[typeof endpoint]>[0]) =>
+                    gigyaRequestHandler({
+                        ...initParams,
+                        namespace: 'accounts',
+                        endpoint,
+                        endpointParams,
+                    }),
         }),
 
         /**
@@ -100,13 +100,13 @@ export function Gigya<
         audit: new Proxy({} as GigyaAuditNamespace, {
             get:
                 (_namespace, endpoint: keyof GigyaAuditNamespace) =>
-                    (endpointParams: ParamsOf<GigyaAuditNamespace[typeof endpoint]>[0]) =>
-                        gigyaRequestHandler({
-                            ...initParams,
-                            namespace: 'audit',
-                            endpoint,
-                            endpointParams,
-                        }),
+                (endpointParams: ParamsOf<GigyaAuditNamespace[typeof endpoint]>[0]) =>
+                    gigyaRequestHandler({
+                        ...initParams,
+                        namespace: 'audit',
+                        endpoint,
+                        endpointParams,
+                    }),
         }),
 
         /**
@@ -117,13 +117,13 @@ export function Gigya<
         ds: new Proxy({} as GigyaDSNamespace, {
             get:
                 (_namespace, endpoint: keyof GigyaDSNamespace) =>
-                    (endpointParams: ParamsOf<GigyaDSNamespace[typeof endpoint]>[0]) =>
-                        gigyaRequestHandler({
-                            ...initParams,
-                            namespace: 'ds',
-                            endpoint,
-                            endpointParams,
-                        }),
+                (endpointParams: ParamsOf<GigyaDSNamespace[typeof endpoint]>[0]) =>
+                    gigyaRequestHandler({
+                        ...initParams,
+                        namespace: 'ds',
+                        endpoint,
+                        endpointParams,
+                    }),
         }),
 
         /**
@@ -134,13 +134,13 @@ export function Gigya<
         fidm: new Proxy({} as GigyaFIdMNamespace, {
             get:
                 (_namespace, endpoint: keyof GigyaFIdMNamespace) =>
-                    (endpointParams: ParamsOf<GigyaFIdMNamespace[typeof endpoint]>[0]) =>
-                        gigyaRequestHandler({
-                            ...initParams,
-                            namespace: 'fidm',
-                            endpoint,
-                            endpointParams,
-                        }),
+                (endpointParams: ParamsOf<GigyaFIdMNamespace[typeof endpoint]>[0]) =>
+                    gigyaRequestHandler({
+                        ...initParams,
+                        namespace: 'fidm',
+                        endpoint,
+                        endpointParams,
+                    }),
         }),
 
         /**
@@ -151,13 +151,13 @@ export function Gigya<
         idx: new Proxy({} as GigyaIDXNamespace, {
             get:
                 (_namespace, endpoint: keyof GigyaIDXNamespace) =>
-                    (endpointParams: ParamsOf<GigyaIDXNamespace[typeof endpoint]>[0]) =>
-                        gigyaRequestHandler({
-                            ...initParams,
-                            namespace: 'idx',
-                            endpoint,
-                            endpointParams,
-                        }),
+                (endpointParams: ParamsOf<GigyaIDXNamespace[typeof endpoint]>[0]) =>
+                    gigyaRequestHandler({
+                        ...initParams,
+                        namespace: 'idx',
+                        endpoint,
+                        endpointParams,
+                    }),
         }),
 
         /**
@@ -168,13 +168,13 @@ export function Gigya<
         reports: new Proxy({} as GigyaReportsNamespace, {
             get:
                 (_namespace, endpoint: keyof GigyaReportsNamespace) =>
-                    (endpointParams: ParamsOf<GigyaReportsNamespace[typeof endpoint]>[0]) =>
-                        gigyaRequestHandler({
-                            ...initParams,
-                            namespace: 'reports',
-                            endpoint,
-                            endpointParams,
-                        }),
+                (endpointParams: ParamsOf<GigyaReportsNamespace[typeof endpoint]>[0]) =>
+                    gigyaRequestHandler({
+                        ...initParams,
+                        namespace: 'reports',
+                        endpoint,
+                        endpointParams,
+                    }),
         }),
 
         /**
@@ -185,13 +185,13 @@ export function Gigya<
         socialize: new Proxy({} as GigyaSocializeNamespace, {
             get:
                 (_namespace, endpoint: keyof GigyaSocializeNamespace) =>
-                    (endpointParams: ParamsOf<GigyaSocializeNamespace[typeof endpoint]>[0]) =>
-                        gigyaRequestHandler({
-                            ...initParams,
-                            namespace: 'socialize',
-                            endpoint,
-                            endpointParams,
-                        }),
+                (endpointParams: ParamsOf<GigyaSocializeNamespace[typeof endpoint]>[0]) =>
+                    gigyaRequestHandler({
+                        ...initParams,
+                        namespace: 'socialize',
+                        endpoint,
+                        endpointParams,
+                    }),
         }),
     };
 }
