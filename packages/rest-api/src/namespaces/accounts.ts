@@ -2247,15 +2247,14 @@ export type GigyaAccountsNamespace<
     'tfa.unregisterDevice': (
         params: AccountsTFAUnregisterDeviceRequest,
     ) => Promise<AccountsTFAUnregisterDeviceResponse>;
-    ) => AccountsSetAccountInfoResponse;
-    setProfilePhoto: (params: AccountsSetProfilePhotoRequest) => AccountsSetProfilePhotoResponse;
-    'tfa.resetTFA': (params: AccountsTFAResetTFARequest) => AccountsTFAResetTFAResponse;
-    'tfa.unregisterDevice': (params: AccountsTFAUnregisterDeviceRequest) => AccountsTFAUnregisterDeviceResponse;
+
     'tfa.phone.sendVerificationCode': (
         params: AccountsTFAPhoneSendVerificationCodeRequest,
     ) => Promise<AccountsTFAPhoneSendVerificationCodeResponse>;
+
     'tfa.phone.completeVerification': (
         params: AccountsTFAPhoneCompleteVerificationRequest,
     ) => Promise<AccountsTFAPhoneCompleteVerificationResponse>;
+
     'tfa.initTFA': (params: AccountsInitTFARequest) => Promise<AccountsInitTFAResponse>;
 };
