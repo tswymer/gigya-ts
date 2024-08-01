@@ -2020,6 +2020,33 @@ export type AccountsTFAPhoneCompleteVerificationResponse = GigyaResponse<{
     providerAssertion: string;
 }>;
 
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b93e570b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsInitTFARequest = GigyaRequest<{
+    /**
+     * The name of the TFA provider for which the token mode is set.
+     */
+    provider: 'gigyaPhone' | 'gigyaTotp' | 'gigyaPush' | 'gigyaEmail';
+    /**
+     * The token mode. The possible values for the mode are:
+     * - register (default)
+     * - verify
+     * - add
+     * - edit
+     */
+    mode: 'register' | 'verify' | 'add' | 'edit';
+}>;
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b93e570b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsInitTFAResponse = GigyaResponse<{
+    /**
+     * The JWT token, which is made up of a header object, a body object and a signature.
+     */
+    gigyaAssertion: string;
+}>;
+
 export type GigyaAccountsNamespace<
     DataSchema extends GigyaData,
     PreferencesSchema extends GigyaPreferences,
@@ -2074,4 +2101,5 @@ export type GigyaAccountsNamespace<
     'tfa.phone.completeVerification': (
         params: AccountsTFAPhoneCompleteVerificationRequest,
     ) => Promise<AccountsTFAPhoneCompleteVerificationResponse>;
+    'tfa.initTFA': (params: AccountsInitTFARequest) => Promise<AccountsInitTFAResponse>;
 };
