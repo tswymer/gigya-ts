@@ -4,6 +4,17 @@ export type GigyaValidationError = {
     fieldName: string;
 };
 
+export type GigyaUserInfo = {
+    nickname?: string;
+    photoURL?: string;
+    thumbnailURL?: string;
+    firstName?: string;
+    lastName?: string;
+    gender?: string;
+    age?: number;
+    email?: string;
+};
+
 export type GigyaProfile = {
     firstName?: string;
     lastName?: string;
@@ -163,7 +174,7 @@ export type GigyaLike = {
      */
     id?: string;
     /**
-     * The time the like was created in UTC standard {@link https://en.wikipedia.org/wiki/ISO_8601 ISO 8601} Information published on non-SAP site format (i.e., yyyy.mm.dd.Thh.MM.ss.SSSZ).
+     * The time the like was created in UTC standard {@link https://en.wikipedia.org/wiki/ISO_8601 ISO 8601}  format (i.e., yyyy.mm.dd.Thh.MM.ss.SSSZ).
      */
     time?: string;
     /**
@@ -528,7 +539,7 @@ export type GigyaIdentity = {
      */
     timezone?: number;
     /**
-     * A comma-separated string that lists the differences between the general capabilities of Facebook and the requested capabilities. The requested capabilities are the ones checked in the console permissionsInformation published on non-SAP site, e.g., "missingPermissions": "Actions, Status, Photos".
+     * A comma-separated string that lists the differences between the general capabilities of Facebook and the requested capabilities. The requested capabilities are the ones checked in the console permissions, e.g., "missingPermissions": "Actions, Status, Photos".
      */
     missingPermissions?: string;
     /**
