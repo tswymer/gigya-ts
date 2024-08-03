@@ -1,5 +1,5 @@
 import { AuditLogObject } from '../types/gigya-audit';
-import { GigyaRequest, GigyaResponse } from '../types/gigya-helpers';
+import { GigyaRequest, GigyaResponse } from '../types/gigya-requests';
 
 /**
  * The method enables you to search your site's audit log using an SQL-like query. A short delay is possible between the writing of audit log data and its availability in queries.

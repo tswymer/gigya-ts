@@ -1,4 +1,4 @@
-import { GigyaRequest, GigyaResponse } from '../types/gigya-helpers';
+import { GigyaRequest, GigyaResponse } from '../types/gigya-requests';
 
 /**
  * This API retrieves Gigya's Accounts statistics when Customer Identity is enabled.

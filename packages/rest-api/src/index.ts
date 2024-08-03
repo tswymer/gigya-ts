@@ -8,5 +8,5 @@ export * from './namespaces/reports';
 export * from './namespaces/socialize';
 
 export * from './types/gigya-audit';
-export * from './types/gigya-helpers';
+export * from './types/gigya-requests';
 export * from './types/gigya-subscriptions';

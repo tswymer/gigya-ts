@@ -1,4 +1,4 @@
-import { GigyaCaptchaType, GigyaRegion, GigyaRequest, GigyaResponse } from '../types/gigya-helpers';
+import { GigyaCaptchaType, GigyaRegion, GigyaRequest, GigyaResponse } from '../types/gigya-requests';
 import { GigyaSubscriptions, UpdateSubscriptions } from '../types/gigya-subscriptions';
 import { GigyaData, GigyaIdentity, GigyaPreferences, GigyaProfile, GigyaValidationError } from './gigya';
 

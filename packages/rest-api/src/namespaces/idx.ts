@@ -1,4 +1,4 @@
-import { GigyaRequest, GigyaResponse } from '../types/gigya-helpers';
+import { GigyaRequest, GigyaResponse } from '../types/gigya-requests';
 
 /**
  * The method deletes a Dataflow by ID and deletes also all the drafts related to the dataflow.

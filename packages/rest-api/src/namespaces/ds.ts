@@ -1,4 +1,4 @@
-import { GigyaRequest, GigyaResponse } from '../types/gigya-helpers';
+import { GigyaRequest, GigyaResponse } from '../types/gigya-requests';
 
 /**
  * A Gigya Data Store object.
