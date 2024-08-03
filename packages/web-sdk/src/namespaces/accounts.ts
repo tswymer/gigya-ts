@@ -214,7 +214,7 @@ export type AccountsShowScreenSetRequestJS = GigyaRequest<{
      */
     enabledProviders?: string;
     /**
-     * The objective of this parameter is to support Over The Air app installsInformation published on non-SAP site for Android devices during Google+ login. Set this parameter with the package nameInformation published on non-SAP site of your Android app (for example: "com.yourdomain.app"). As a result, after signing in with Google+, users have the option to send your Android app to their device instantly, without leaving your website. As a preliminary step you'll need to Utilize Google+ Native Android Sign-on on your Android app. The package nameInformation published on non-SAP site passed to this parameter is the same one you enter when enabling the Google+ APIInformation published on non-SAP site.
+     * The objective of this parameter is to support Over The Air app installs for Android devices during Google+ login. Set this parameter with the package name of your Android app (for example: "com.yourdomain.app"). As a result, after signing in with Google+, users have the option to send your Android app to their device instantly, without leaving your website. As a preliminary step you'll need to Utilize Google+ Native Android Sign-on on your Android app. The package name passed to this parameter is the same one you enter when enabling the Google+ API.
      */
     googlePlayAppID?: string;
     /**
