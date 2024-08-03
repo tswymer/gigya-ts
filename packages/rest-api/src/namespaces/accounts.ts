@@ -604,7 +604,7 @@ export type AccountsGetSchemaRequest = GigyaRequest<{
  */
 export type AccountsGetSchemaResponse = GigyaResponse<{
     /**
-     * A JSON object defining the schema of the {@link https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41698a3870b21014bbc5a10ce4041860.html?locale=en-US Profile} object.
+     * A JSON object defining the schema of the {@link https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41698a3870b21014bbc5a10ce4041860.html Profile} object.
      */
     profileSchema?: {
         fields: {
@@ -620,7 +620,7 @@ export type AccountsGetSchemaResponse = GigyaResponse<{
         };
     };
     /**
-     * A JSON object defining the schema of the {@link https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4130c64b70b21014bbc5a10ce4041860.html?locale=en-US Data} object (the site specific custom data object).
+     * A JSON object defining the schema of the {@link https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4130c64b70b21014bbc5a10ce4041860.html Data} object (the site specific custom data object).
      */
     dataSchema?: {
         fields: {
@@ -636,7 +636,7 @@ export type AccountsGetSchemaResponse = GigyaResponse<{
         };
     };
     /**
-     * A JSON object defining the schema of the {@link https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/417a3ebd70b21014bbc5a10ce4041860.html?locale=en-US Subscriptions} object.
+     * A JSON object defining the schema of the {@link https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/417a3ebd70b21014bbc5a10ce4041860.html Subscriptions} object.
      */
     subscriptionsSchema?: {
         fields: {
@@ -653,7 +653,7 @@ export type AccountsGetSchemaResponse = GigyaResponse<{
     };
     /**
      * @TODO: Fix this
-     * A JSON object defining the schema of the Internal Fields object. See the format details in the Internal Fields object section on the {@link https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a0faa70b21014bbc5a10ce4041860.html?locale=en-US accounts.setSchema REST} page.
+     * A JSON object defining the schema of the Internal Fields object. See the format details in the Internal Fields object section on the {@link https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a0faa70b21014bbc5a10ce4041860.html accounts.setSchema REST} page.
      */
     internalSchema?: {
         fields: unknown;
