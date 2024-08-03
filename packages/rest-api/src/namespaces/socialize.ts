@@ -1,5 +1,5 @@
 import { GigyaRequest, GigyaResponse } from '../types/gigya-requests';
-import { GigyaIdentity, GigyaUserInfo } from './gigya';
+import { GigyaIdentity, GigyaUserInfo } from '../types/gigya-types';
 
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41738a6470b21014bbc5a10ce4041860.htmlparameters

@@ -1,6 +1,6 @@
 import { GigyaCaptchaType, GigyaRegion, GigyaRequest, GigyaResponse } from '../types/gigya-requests';
 import { GigyaSubscriptions, UpdateSubscriptions } from '../types/gigya-subscriptions';
-import { GigyaData, GigyaIdentity, GigyaPreferences, GigyaProfile, GigyaValidationError } from './gigya';
+import { GigyaData, GigyaIdentity, GigyaPreferences, GigyaProfile, GigyaValidationError } from '../types/gigya-types';
 
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/b92c0c7ffc954155ac5a2d5509ceada4.html#parameters

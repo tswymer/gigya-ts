@@ -2,7 +2,7 @@ export * from './namespaces/accounts';
 export * from './namespaces/audit';
 export * from './namespaces/ds';
 export * from './namespaces/fidm';
-export * from './namespaces/gigya';
+export * from './types/gigya-types';
 export * from './namespaces/idx';
 export * from './namespaces/reports';
 export * from './namespaces/socialize';
