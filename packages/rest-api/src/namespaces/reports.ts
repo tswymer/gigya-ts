@@ -1,8 +1,6 @@
 import { GigyaRequest, GigyaResponse } from '../types/gigya-requests';
 
 /**
- * This API retrieves Gigya's Accounts statistics when Customer Identity is enabled.
- *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/416c3f1470b21014bbc5a10ce4041860.html#parameters
  */
 export type GetAccountsStatsRequest = GigyaRequest<{
@@ -34,7 +32,7 @@ export type GetAccountsStatsRequest = GigyaRequest<{
     /**
      * Determines the format of the data field of the response. The options are either 'csv' (default) or 'json'.
      */
-    format?: 'csv' | 'json';
+    dataFormat?: 'csv' | 'json';
 }>;
 
 /**
@@ -44,7 +42,7 @@ export type GetAccountsStatsResponse = GigyaResponse<{
     /**
      * The headers of the response data.
      */
-    headers: Array<
+    headers?: Array<
         | 'date'
         | 'cid'
         | 'initRegistrations'
@@ -60,9 +58,14 @@ export type GetAccountsStatsResponse = GigyaResponse<{
     /**
      * The data of the response. The format of the data field is determined by the 'format' parameter of the request.
      */
-    data: Array<Array<string | number>> | string;
+    data?: Array<Array<string | number>> | string;
 }>;
 
 export type GigyaReportsNamespace = {
+    /**
+     * This API retrieves Gigya's Accounts statistics when Customer Identity is enabled.
+     * 
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/416c3f1470b21014bbc5a10ce4041860.html
+     */
     getAccountsStats: (params: GetAccountsStatsRequest) => Promise<GetAccountsStatsResponse>;
 };
