@@ -1,39 +1,5 @@
+import { DSObject, DSSchemaObject } from '../types/gigya-ds';
 import { GigyaRequest, GigyaResponse } from '../types/gigya-requests';
-
-/**
- * A Gigya Data Store object.
- * @TODO: This isn't officially documented anywhere, find some official documentation and link it.
- */
-export type DSObject<DSObjectSchema> = {
-    /**
-     * The ID of the object
-     */
-    oid: string;
-    /**
-     * If the object is associate with a user, then the ID of the user.
-     */
-    UID?: string;
-    /**
-     * The data of the data store object.
-     */
-    data: DSObjectSchema;
-    /**
-     * The time of the latest change in this object, in Java time (number of milliseconds since Jan. 1st 1970).
-     */
-    lastUpdated: number;
-    /**
-     * The time of the latest change in this object, in ISO 8601 format.
-     */
-    lastUpdatedTime: string;
-    /**
-     * The time of this object's creation, in Java time (number of milliseconds since Jan. 1st 1970).
-     */
-    created: number;
-    /**
-     * The time of this object's creation, in ISO 8601 format.
-     */
-    createdTime: string;
-};
 
 /**
  * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41515b5770b21014bbc5a10ce4041860.html#parameters
@@ -61,12 +27,12 @@ export type DSDeleteRequest = GigyaRequest<{
 }>;
 
 /**
- * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41515b5770b21014bbc5a10ce4041860.html?locale=en-US#response-data
+ * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41515b5770b21014bbc5a10ce4041860.html#response-data
  */
 export type DSDeleteResponse = GigyaResponse<{}>;
 
 /**
- * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41516e7f70b21014bbc5a10ce4041860.html?locale=en-US#parameters
+ * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41516e7f70b21014bbc5a10ce4041860.html#parameters
  */
 export type DSDeleteSchemaFieldsRequest = GigyaRequest<{
     /**
@@ -136,12 +102,18 @@ export type DSGetSchemaRequest = GigyaRequest<{
 
 /**
  * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4151baad70b21014bbc5a10ce4041860.html#response-data
- *
- * @todo: Implement
  */
 export type DSGetSchemaResponse = GigyaResponse<{
-    NOT_IMPLEMENTED: 'NOT_IMPLEMENTED';
+    /**
+     * A JSON object that details the schema structure.
+     */
+    schema?: DSSchemaObject;
 }>;
+
+/**
+ * This request is empty and not documented.
+ */
+export type DSGetTypesRequest = GigyaRequest<{}>;
 
 /**
  * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4151cda070b21014bbc5a10ce4041860.html#response-data
@@ -154,8 +126,6 @@ export type DSGetTypesResponse = GigyaRequest<{
 }>;
 
 /**
- * Searches and retrieves data from Gigya's Data Store (DS) using an SQL-like query. For security reasons this method is not available for client side SDKs, only for server side SDKs. SQL queries are converted into Gigya's proprietary query language. SQL injection attacks are not possible because queries are both created by the customer and then converted by Gigya.
- *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/415206b370b21014bbc5a10ce4041860.html#parameters
  */
 export type DSSearchRequest = GigyaRequest<{
@@ -204,6 +174,26 @@ export type DSSearchResponse<DSObjectSchema> = GigyaResponse<{
 }>;
 
 /**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/415219aa70b21014bbc5a10ce4041860.html#parameters
+ */
+export type DSSetSchemaRequest = GigyaRequest<{
+    /**
+     * A string indicating the type of the object, equivalent to a schema name. The objective of this field is to classify objects as sharing the same schema.
+     */
+    type: string;
+    /**
+     * A JSON object defining the schema to be set.
+     */
+    dataSchema: DSSchemaObject;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/415219aa70b21014bbc5a10ce4041860.html#response-data
+ */
+export type DSSetSchemaResponse = GigyaResponse<{}>;
+
+
+/**
  * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41523fa270b21014bbc5a10ce4041860.html?#parameters
  */
 export type DSStoreRequest<DSObjectSchema> = GigyaRequest<{
@@ -244,9 +234,67 @@ export type DSStoreResponse = GigyaResponse<{
 }>;
 
 export type GigyaDSNamespace = {
+    /**
+     * Deletes object data or an entire object from Gigya's Data Store.
+     * 
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41515b5770b21014bbc5a10ce4041860.html
+     */
     delete: (params: DSDeleteRequest) => Promise<DSDeleteResponse>;
+
+    /**
+     * Deletes a field from a specified Gigya Data Store schema type.
+     * 
+     * Once a field is deleted:
+     * - You cannot save data to that field, nor retrieve data that was saved to that field.
+     * - You cannot recreate a field of the same name in the schema.
+     * 
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41516e7f70b21014bbc5a10ce4041860.html 
+     */
+    deleteSchemaFields: (params: DSDeleteSchemaFieldsRequest) => Promise<DSDeleteSchemaFieldsResponse>;
+
+    /**
+     * Retrieves an object's or the specified datum from Gigya's Data Store.
+     * 
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4151948570b21014bbc5a10ce4041860.html
+     */
     get: <DSObjectSchema>(params: DSGetRequest) => Promise<DSGetResponse<DSObjectSchema>>;
+
+    /**
+     * This method retrieves the schema of a specified data type in Gigya's Data Store (DS).
+     * 
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4151baad70b21014bbc5a10ce4041860.html
+     */
     getSchema: (params: DSGetSchemaRequest) => Promise<DSGetSchemaResponse>;
+
+    /**
+     * This method retrieves the schema data types defined in Gigya's Data Store (DS).
+     * 
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4151cda070b21014bbc5a10ce4041860.html
+     */
+    getTypes: (params: DSGetTypesRequest) => Promise<DSGetTypesResponse>;
+
+    /**
+     * Searches and retrieves data from Gigya's Data Store (DS) using an SQL-like query. For security reasons this method is not available for client side SDKs, only for server side SDKs. SQL queries are converted into Gigya's proprietary query language. SQL injection attacks are not possible because queries are both created by the customer and then converted by Gigya.
+     * 
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/415206b370b21014bbc5a10ce4041860.html
+     */
     search: <DSObjectSchema>(params: DSSearchRequest) => Promise<DSSearchResponse<DSObjectSchema>>;
+
+    /**
+     * This method allows specifying a schema for a data type in Gigya's Data Store (DS). The schema sets field names, data types, formatting and encryption as well as client side access restrictions. Data object schemas act as meta-data, guiding Gigya how to handle the data in the specified fields.
+     * - Depending on schema setting, other fields can be added to the storage outside the schema, Gigya will add them as is without special treatment.
+     * - Field deletion: a field in the Data object schema is eligible for deletion if no data has been saved to it. To delete a field in the schema call ds.deleteSchemaFields.
+     * - Changes to schema are incremental, when setting the schema for part of the fields, the properties of the omitted fields remain unchanged.
+     * - Unless specified otherwise, schema defined fields are only accessible from the server.
+     * 
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/415219aa70b21014bbc5a10ce4041860.html
+     */
+    setSchema: (params: DSSetSchemaRequest) => Promise<DSSetSchemaResponse>;
+
+    /**
+     * Stores an object data in SAP Customer Data Cloud's Data Store (DS). The Data Store is only available for use with fully registered accounts.
+     * 
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41523fa270b21014bbc5a10ce4041860.html
+     */
     store: <DSObjectSchema>(params: DSStoreRequest<DSObjectSchema>) => Promise<DSStoreResponse>;
 };
