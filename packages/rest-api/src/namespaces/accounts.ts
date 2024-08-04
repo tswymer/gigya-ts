@@ -3,6 +3,143 @@ import { GigyaSubscriptions, UpdateSubscriptions } from '../types/gigya-subscrip
 import { GigyaData, GigyaIdentity, GigyaPreferences, GigyaProfile, GigyaValidationError } from '../types/gigya-types';
 
 /**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/23e5e21ad35f4c85b98ce39e895e5f24.html#parameters
+ */
+export type AccountsAddEmailsRequest = GigyaRequest<{
+    /**
+     * The unique ID of the user for which to add user account emails.
+     */
+    uid: string;
+    /**
+     * A string holding a comma-separated list of email addresses. The email addresses are added to the account's verifiedEmail list. If an email address in this list exists in the unverifiedEmail list on the account object, the email address is removed from the unverifiedEmail list on the account object.
+     */
+    verifiedEmails?: string;
+    /**
+     * A string holding a comma-separated list of email addresses. The email addresses are added to the account's unverifiedEmail list. If an email address in this list exists in the verifiedEmail list on the account object, the email address is removed from the verifiedEmail list on the account object.
+     */
+    unverifiedEmails?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/23e5e21ad35f4c85b98ce39e895e5f24.html#response-data
+ */
+export type AccountsAddEmailsResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/40e8d65874d4480eb1ed7ff105351cbd.html#parameters
+ */
+export type AccountsAddressCountriesGetRequest = GigyaRequest<{
+    /**
+     * The ID of the partner for which you have set up DQM credentials.
+     */
+    partnerId: string;
+    /**
+     * The code of the language in which to display content to this user. You can find the supported language codes in Advanced Customizations and Localization.
+     *
+     * If you don't specify a language, SAP Customer Data Cloud provides the results in English by default.
+     */
+    language?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/40e8d65874d4480eb1ed7ff105351cbd.html#response-data
+ */
+export type AccountsAddressCountriesGetResponse = GigyaResponse<{
+    /**
+     * The list of countries returned from the microservices for location data (containing up to 20 address suggestions) with their corresponding ISO codes and numeric code.
+     */
+    countries?: Array<{
+        /**
+         * The name of the country.
+         */
+        name: string;
+        /**
+         * The 2-letter ISO code of the country.
+         */
+        isoCode2: string;
+        /**
+         * The 3-letter ISO code of the country.
+         */
+        isoCode3: string;
+        /**
+         * The numeric code of the country.
+         */
+        numericCode: number;
+    }>;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/6fa4e911e0f245bbb185cb662d1132a4.html#parameters
+ */
+export type AccountsAddressSuggestionsGetRequest = GigyaRequest<{
+    /**
+     * The id of the address suggestion that a user selects from the list of suggestions.
+     */
+    suggestionReply?: string;
+    /**
+     * - The address that a user enters into the address field.
+     * - Can be left blank if the address field is not required.
+     */
+    address?: string;
+    /**
+     * Country data in the form of a 3-character country code or a spelled-out country name. Country data can be localized.
+     *
+     * For example, DEU, Germany, or Deutschland.
+     */
+    country?: string;
+    /**
+     * Include latitude only when type-ahead suggestions are enabled and you want the distance to the point to be used to determine the type ahead suggestions returned and the order that they are returned.
+     *
+     * Latitude is provided by browser geolocation if a user has opted in.
+     */
+    latitude?: number;
+    /**
+     * Include longitude only when type-ahead suggestions are enabled and you want the distance to the point to be used to determine the type ahead suggestions returned and the order that they are returned.
+     *
+     * Longitude is provided by browser geolocation if a user has opted in.
+     */
+    longitude?: number;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/6fa4e911e0f245bbb185cb662d1132a4.html#response-data
+ */
+export type AccountsAddressSuggestionsGetResponse = GigyaResponse<{
+    /**
+     * The list of suggestions returned from the microservices for location data that contains up to 20 address suggestions, each with its own id. After a user has selected an option from the address suggestions, this list will be empty.
+     */
+    suggestions?: Array<{
+        /**
+         * The id of the address suggestion.
+         */
+        id: string;
+        /**
+         * The address suggestion.
+         */
+        address: string;
+    }>;
+    /**
+     * The address returned from the microservices for location data after a user has selected one option from the address suggestions. If a user has not selected an option from the address suggestions, the address will be empty.
+     */
+    address?: {
+        metadataToken?: string;
+        country?: string;
+        countryISOCode2?: string;
+        countryISOCode3?: string;
+        zipCode?: string;
+        city?: string;
+        street?: string;
+        houseNumber?: string;
+        neighborhood?: string;
+        building?: string;
+        entrance?: string;
+        floor?: string;
+        apartment?: string;
+        postOfficeBox?: string;
+    };
+}>;
+
+/**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/b92c0c7ffc954155ac5a2d5509ceada4.html#parameters
  */
 export type AccountsAuthGetMethodsRequest = GigyaRequest<{
@@ -41,14 +178,22 @@ export type AccountsAuthGetMethodsResponse = GigyaResponse<{
      *   - magicLink
      */
     methods?: Array<'password' | 'push' | 'emailOtp' | 'magicLink'>;
+    /**
+     * An array of all of the available identifiers for the account. Possible combinations may include one or more of the following:
+     * - email
+     * - phone
+     */
+    identifiers?: Array<{
+        id: string;
+        display: string;
+        type: 'email' | 'phone';
+    }>;
 }>;
 
 /**
- * This API returns the current Magic Link configuration for the site.
- *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/a330ee71b4f84843a393c1935667e39a.html
  */
-export type AccountsAuthMagicLinkEmailGetConfigRequest = GigyaRequest<Record<string, never>>;
+export type AccountsAuthMagicLinkEmailGetConfigRequest = GigyaRequest<{}>;
 
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/a330ee71b4f84843a393c1935667e39a.html#response-data
@@ -69,11 +214,9 @@ export type AccountsAuthMagicLinkEmailGetConfigResponse = GigyaResponse<{
 }>;
 
 /**
- * This API is designed for use with campaign marketing emails. It returns a Magic Link for the user that can have an expiration of up to 60 days which allows it to be inserted into marketing emails, allowing the user a single-click login experience.
- *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/71880e97f2d54fe596d506662818f0a1.html
  */
-export type AccountsAuthMagiclinkGetLinkRequest = GigyaRequest<{
+export type AccountsAuthMagicLinkGetLinkRequest = GigyaRequest<{
     /**
      * 	The email address of the recipient of the Magic Link.
      */
@@ -91,19 +234,19 @@ export type AccountsAuthMagiclinkGetLinkRequest = GigyaRequest<{
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/71880e97f2d54fe596d506662818f0a1.html#response-data
  */
-export type AccountsAuthMagiclinkGetLinkResponse = GigyaResponse<{
+export type AccountsAuthMagicLinkGetLinkResponse = GigyaResponse<{
     /**
      * The Magic Link to send to the user.
+     *
+     * The link includes both the vToken and code needed to log the user into the specified site and should never be modified and must only be sent to the user it was created for.
      */
     magicLink?: string;
 }>;
 
 /**
- * This API logs the user in when using magiclink (after using accounts.auth.magiclink.email.send).
- *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/465e0de25d684993a481515ff707d86f.html
  */
-export type AccountsAuthMagiclinkEmailLoginRequest = GigyaRequest<{
+export type AccountsAuthMagicLinkEmailLoginRequest = GigyaRequest<{
     /**
      * The code returned from accounts.auth.magiclink.email.send API when it was called with admin credentials.
      */
@@ -121,7 +264,7 @@ export type AccountsAuthMagiclinkEmailLoginRequest = GigyaRequest<{
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/465e0de25d684993a481515ff707d86f.html#response-data
  */
-export type AccountsAuthMagiclinkEmailLoginResponse = GigyaResponse<{
+export type AccountsAuthMagicLinkEmailLoginResponse = GigyaResponse<{
     /**
      * The UID of the user's account.
      */
@@ -153,11 +296,9 @@ export type AccountsAuthMagiclinkEmailLoginResponse = GigyaResponse<{
 }>;
 
 /**
- * This API initiates Magic Link login by sending an email to the specified email address.
- *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/47006b8cd6ec4292b8fa6321a90328b7.html
  */
-export type AccountsAuthMagiclinkEmailSendRequest = GigyaRequest<{
+export type AccountsAuthMagicLinkEmailSendRequest = GigyaRequest<{
     /**
      * The email address to send the magic link.
      */
@@ -167,7 +308,7 @@ export type AccountsAuthMagiclinkEmailSendRequest = GigyaRequest<{
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/47006b8cd6ec4292b8fa6321a90328b7.html#response-data
  */
-export type AccountsAuthMagiclinkEmailSendResponse = GigyaResponse<{
+export type AccountsAuthMagicLinkEmailSendResponse = GigyaResponse<{
     /**
      * The vToken which must be passed to the accounts.auth.magiclink.email.login endpoint.
      */
@@ -179,11 +320,272 @@ export type AccountsAuthMagiclinkEmailSendResponse = GigyaResponse<{
 }>;
 
 /**
- * This method deletes the specified user's account from SAP Customer Data Cloud's database.
- *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/216a91f008db4ac2bb1dafd66848631f.html#parameters
+ */
+export type AccountsAuthMagicLinkEmailSetConfigRequest = GigyaRequest<{
+    /**
+     * If the Magic Link is enabled or disabled for the site.
+     */
+    isEnabled: boolean;
+    /**
+     * The URI of the page to redirect the user which has the WebSDK loaded.
+     */
+    landingPageUrl: string;
+    /**
+     * The length of time until the magic link expires and can no longer be used. This must be between 60-600.
+     */
+    expiration?: number;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/216a91f008db4ac2bb1dafd66848631f.html#response-data
+ */
+export type AccountsAuthMagicLinkEmailSetConfigResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/3e22c136de714dee858e4fc3fcc07e6e.html#parameters
+ */
+export type AccountsAuthOTPAuthenticateRequest = GigyaRequest<{
+    /**
+     * The OTP verification code received from the user.
+     */
+    code: string;
+    /**
+     * The vToken returned from the OTP Llogin request.
+     */
+    vToken: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/3e22c136de714dee858e4fc3fcc07e6e.html#response-data
+ */
+export type AccountsAuthOTPAuthenticateResponse = GigyaResponse<{
+    /**
+     * A token that can be used as a parameter when calling accounts.resetPassword REST.
+     */
+    access_token?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/b43af07811fd47d192082b3fcf29e82c.html#parameters
+ */
+export type AccountsAuthOTPEmailGetConfigRequest = GigyaRequest<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/b43af07811fd47d192082b3fcf29e82c.html#response-data
+ */
+export type AccountsAuthOTPEmailGetConfigResponse = GigyaResponse<{
+    /**
+     * Whether Email OTP is enabled for the queried API key.
+     */
+    isEnabled?: boolean;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/c64edbe9973c4cbdb9bc623ba363f73c.html#parameters
+ */
+export type AccountsAuthOTPEmailLoginRequest = GigyaRequest<{
+    /**
+     * Secure token obtained from the sendCode API.
+     */
+    vToken: string;
+    /**
+     * The 6-digit code received in the SMS.
+     *
+     * The length of the code may change, so we recommend that your implementation will not expect a fixed number of digits.
+     */
+    code: number;
+    /**
+     * A comma separated list of fields to include in the response.
+     */
+    include?: string;
+    /**
+     * Records the source of the registration. The default value is the URL of the current page but it can be any string value. regSource is stored in the account and can be used by verification emails to determine which page should be opened (see accounts.set Policies). Can also be set via the Global Conf object.
+     *
+     * A user's regSource can only be updated on the initial registration of the user. It can not be updated or overwritten, even if empty.
+     */
+    regSource?: string;
+    /**
+     * This parameter defines the length of time that Gigya should keep the user's login session valid. It can be configured via WebSDK Configuration, via an individual API call, or left empty. If no value is specified, the default values are 0 or -2, depending on whether your site uses RaaS or not (see below); Global configuration overrides the default, and setting the value via individual API calls override the global configuration.
+     *
+     * The expected values are:
+     * - 0 - Session expires when the browser closes. This is the default behavior when RaaS is enabled in your site. This behavior is dependent upon the browser's cookie handling procedures, i.e., Chrome keeps processes running in the background even after the browser is technically closed, this keeps the cookies valid until the background processes are terminated. This value is not supported when using our Mobile SDKs, and the session will behave as if set to -2.
+     * - -1 - Session ends after a 60 second period; Gigya gives you the option of creating a cookie that is stored on the site visitor's client (browser), allowing the site to control the session length within this 60 second window, after which the session is terminated if no cookie is found. A typical use case is when the session could include sensitive data (such as credit card details), and the session should be short, with the option of restarting the duration when users perform actions. Useful if you always set the session expiration via individual API methods or with each request, such as when the site session is controlled by a CMS (e.g., Drupal). For additional information, see how to define a session expiration cookie.
+     * - -2 - Session is valid forever. This is the default behavior when RaaS is not enabled in your site.
+     * - Any custom integer - Defines the number of seconds the session is active, e.g., 3600 (one hour).
+     */
+    sessionExpiration?: number;
+    /**
+     * Defines the client-side environment. Options are:
+     * - mobile
+     * - browser
+     */
+    targetEnv?: 'mobile' | 'browser';
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/c64edbe9973c4cbdb9bc623ba363f73c.html#response-data
+ */
+export type AccountsAuthOTPEmailLoginResponse = GigyaResponse<{
+    /**
+     * The UID of the user's account.
+     */
+    UID?: string;
+    /**
+     * This returns true if the account created is new.
+     */
+    isNewUser?: boolean;
+    /**
+     * An object containing session information.
+     *
+     * @TODO: What is this?
+     */
+    sessionInfo?: unknown;
+    /**
+     * A token that is used to complete the registration process.
+     */
+    regToken?: string;
+    /**
+     * @TODO: The rest of a normal "accounts.login" response (profile, data, etc) is also returned here, but not documented well. This still needs to be added here.
+     */
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/f067d24087f84174abae20c20a46f827.html
+ */
+export type AccountsAuthOTPEmailSendCodeRequest = GigyaRequest<{
+    /**
+     * When in a Global site group, you must pass the UID of the user being updated. Only send UID when using REST and there is no current user session. This property is required only when doing a server-side global access implementation so that additional requests, i.e., accounts.otp.update, can resolve the user's residency datacenter from the vToken.
+     */
+    UID?: string;
+    /**
+     * The code of the language in which to send the SMS or email.
+     */
+    lang: string;
+    /**
+     * The email to which the verification code is sent. This parameter is required for email code verification flows.
+     *
+     * @note This cannot be used for one time password flows.
+     */
+    email?: string;
+    /**
+     * Whether or not to send the code for the email update flow. This may be set to "false" if you choose to send an SMS via your application, instead of using the SAP Customer Data Cloud capability.
+     */
+    sendCode?: boolean;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/f067d24087f84174abae20c20a46f827.html#response-data
+ */
+export type AccountsAuthOTPEmailSendCodeResponse = GigyaResponse<{
+    /**
+     * A secured token that holds the phone data and expires after 5 minutes. It contains the following fields:
+     * - apiKey - The API key of the site.
+     * - phoneNumber - The phone number associated with the user's account to send the SMS code.
+     * - code - The 6 digit code.
+     * - gmid - Only necessary if the method call was originated from the client-side.
+     */
+    vToken?: string;
+    /**
+     * The code used for logging the user in. This may be returned only when making the call with admin credentials.
+     */
+    code?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/2992c8277a72467caa31988bfc7cd57f.html
+ */
+export type AccountsAuthOTPEmailSetConfigRequest = GigyaRequest<{
+    /**
+     * Defines whether Email OTP is active for the apiKey.
+     */
+    isEnabled: boolean;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/2992c8277a72467caa31988bfc7cd57f.html#response-data
+ */
+export type AccountsAuthOTPEmailSetConfigResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/523e76306db34a19be9199fab59b31df.html#parameters
+ */
+export type AccountsAuthOTPVerifyRequest = GigyaRequest<{
+    /**
+     * The code used for logging the user in. This is received from the accounts.otp.sendCode REST endpoint.
+     */
+    code: string;
+    /**
+     * A secured token that holds the phone data and expires after 10 minutes. This is received from the accounts.otp.sendCode REST endpoint.
+     */
+    vToken: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/523e76306db34a19be9199fab59b31df.html#response-data
+ */
+export type AccountsAuthOTPVerifyResponse = GigyaResponse<{
+    /**
+     * An id_token in JWT format.
+     */
+    id_token?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4131785a70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsAuthPushConfigGetRequest = GigyaRequest<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4131785a70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsAuthPushConfigGetResponse = GigyaResponse<{
+    /**
+     * The vendor configuration for this site, including the Firebase Cloud Messaging server key or HTTP v1 API Service Account JSON.
+     *
+     * @TODO: Not really sure that this config looks like.
+     */
+    vendors?: Record<string, unknown>;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41318c2170b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsAuthPushConfigSetRequest = GigyaRequest<{
+    /**
+     * The vendor configured for the current site. Currently accepts only one of either:
+     * - fcm - which must be the deprecated server key for Firebase Cloud Messaging.
+     * - fcmHttpV1 - which must be the HTTP v1 API Firebase Service Account JSON.
+     *
+     * @TODO: Not really sure what this config looks like, there is an example provided in the documentation.
+     */
+    vendors: Record<string, unknown>;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41318c2170b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsAuthPushConfigSetResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4131cb2570b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsAuthPushVerifyRequest = GigyaRequest<{
+    /**
+     * A verification token that represents the authentication request.
+     */
+    vToken: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4131cb2570b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsAuthPushVerifyResponse = GigyaResponse<{}>;
+
+/**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4133a29470b21014bbc5a10ce4041860.html#parameters
  */
-export type AccountsDeleteRequest = GigyaRequest<{
+export type AccountsDeleteAccountRequest = GigyaRequest<{
     /**
      * The unique ID of the user, for whom to delete the account.
      */
@@ -193,7 +595,636 @@ export type AccountsDeleteRequest = GigyaRequest<{
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4133a29470b21014bbc5a10ce4041860.html#response-data
  */
-export type AccountsDeleteResponse = GigyaResponse<Record<string, never>>;
+export type AccountsDeleteAccountResponse = GigyaResponse<{}>;
+
+/**
+ * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/2782415067b047b7bf10a1439d3e67ce.html#parameters
+ */
+export type AccountsDeleteConsentStatementRequest = GigyaRequest<{
+    /**
+     * The id (name) of the consent statement you want to delete. For example: “terms.statement”.
+     */
+    consentId: string;
+}>;
+
+/**
+ * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/2782415067b047b7bf10a1439d3e67ce.html#response-data
+ */
+export type AccountsDeleteConsentStatementResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/2b289e32fa544c76850afb7e78b5d92f.html#parameters
+ */
+export type AccountsDeleteLegalStatementsRequest = GigyaRequest<{
+    /**
+     * The language of the legal statement to delete.
+     */
+    lang: string;
+    /**
+     * The unique identifier of the consent statement to delete.
+     */
+    consentId: string;
+    /**
+     * The version date of the legal statement to delete, in ISO 8601 format (i.e., yyyy-mm-dd-Thh:MM:ssZ, where the hours, minutes and seconds should be set to 0).
+     *
+     * Either docDate or docVersion are required.
+     */
+    docDate?: string;
+    /**
+     * The version number of the legal statement to delete.
+     *
+     * Either docDate or docVersion are required.
+     */
+    docVersion?: number;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/2b289e32fa544c76850afb7e78b5d92f.html#response-data
+ */
+export type AccountsDeleteLegalStatementsResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4133b5e170b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsDeleteLiteAccountRequest = GigyaRequest<{
+    /**
+     * The token of the email account for deletion. This can be received from the response of accounts.search.
+     */
+    emailAccountToken: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4133b5e170b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsDeleteLiteAccountResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/baaff4ff759d42f48464341ae167dd98.html#parameters
+ */
+export type AccountsDeleteNativeScreenSetRequest = GigyaRequest<{
+    /**
+     * The ID of the screen-set to delete.
+     */
+    screenSetID: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/baaff4ff759d42f48464341ae167dd98.html#response-data
+ */
+export type AccountsDeleteNativeScreenSetResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4133c8e670b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsDeleteSchemaFieldsRequest = GigyaRequest<{
+    /**
+     * The data fields to delete.
+     */
+    dataSchema: Array<string>;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4133c8e670b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsDeleteSchemaFieldsResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4133dbe070b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsDeleteScreenSetRequest = GigyaRequest<{
+    /**
+     * An identifier of the screen-set to delete. Make sure that screenSetID is not one of the default screenSetIDs and is not linked to the policy, as defined in the Screen-Sets in Gigya's site.
+     */
+    screenSetID: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4133dbe070b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsDeleteScreenSetResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4133eee870b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsDevicesRegisterRequest = GigyaRequest<{
+    /**
+     * Information about the device being registered.
+     */
+    deviceInfo: {
+        /**
+         * Acceptable values are android or ios.
+         */
+        platform: 'android' | 'ios';
+        /**
+         * Information about the manufacturer, e.g., galaxy, apple etc.
+         */
+        man: string;
+        /**
+         * The unique fcm-registration-id, as generated by Firebase for this user.
+         */
+        pushToken: string;
+        /**
+         * The version number of the operating system.
+         */
+        os: string;
+    };
+}>;
+
+/**
+ * @note This is not officially documented.
+ */
+export type AccountsDevicesRegisterResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4134062c70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsDevicesUnregisterRequest = GigyaRequest<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4134062c70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsDevicesUnregisterResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4134192b70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsDevicesUpdateRequest = GigyaRequest<{
+    /**
+     * Information about the device being registered.
+     */
+    deviceInfo: {
+        /**
+         * Acceptable values are android or ios.
+         */
+        platform: 'android' | 'ios';
+        /**
+         * Information about the manufacturer, e.g., galaxy, apple etc.
+         */
+        man: string;
+        /**
+         * The unique fcm-registration-id, as generated by Firebase for this user.
+         */
+        pushToken: string;
+        /**
+         * The version number of the operating system.
+         */
+        os: string;
+    };
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4134192b70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsDevicesUpdateResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/d3eed592164c4b5f9ae2e8f8a8f14214.html#parameters
+ */
+export type AccountsDuplicateLegalStatementRequest = GigyaRequest<{
+    /**
+     * The language of the legal statement to retrieve.
+     */
+    lang: string;
+    /**
+     * The unique identifier of the consent statement to retrieve.
+     */
+    consentId: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/d3eed592164c4b5f9ae2e8f8a8f14214.html#response-data
+ */
+export type AccountsDuplicateLegalStatementResponse = GigyaResponse<{
+    /**
+     *
+     */
+    legalStatements?: {
+        /**
+         *
+         */
+        customData?: Array<{
+            key: string;
+            value: string;
+        }>;
+        /**
+         * An array of version number objects for the current language.
+         */
+        versions?: {
+            [key: string]: {
+                purpose: string;
+                documentUrl: string;
+                legalStatementStatus: string;
+            };
+        };
+        /**
+         * An array of version date objects for the current language.
+         */
+        dates?: {
+            [key: string]: {
+                purpose: string;
+                documentUrl: string;
+                legalStatementStatus: string;
+            };
+        };
+    };
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/78e703f2aee64dc99e883378cea0a148.html#parameters
+ */
+export type AccountsEmailAccountChangeEmailRequest = GigyaRequest<{
+    /**
+     * The UID of the emailAccount.
+     */
+    UID: string;
+    /**
+     * The current email associated to the emailAccount.
+     */
+    oldEmail: string;
+    /**
+     * The new email to associate to the emailAccount.
+     */
+    newEmail: string;
+    /**
+     * The email/channel token of the emailAccount.
+     */
+    emailToken: string;
+    /**
+     * Whether the syncUID is committed. Default value is false.
+     */
+    fixEnabled?: boolean;
+    /**
+     * A job identifier to trace all requests associated to the run of a given job.
+     */
+    jobId?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/78e703f2aee64dc99e883378cea0a148.html#response-data
+ */
+export type AccountsEmailAccountChangeEmailResponse = GigyaResponse<{
+    /**
+     * The email associated to the emailAccount prior synchronisation.
+     */
+    oldEmail?: string;
+    /**
+     * The email associated to the emailAccount after synchronisation.
+     */
+    newEmail?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/486489efe27c46deab810c0f15e81afb.html#parameters
+ */
+export type AccountsEmailAccountSyncMultipleAccountsRequest = GigyaRequest<{
+    /**
+     * The UID of the emailAccount to be synchronised.
+     */
+    UID: string;
+    /**
+     * The email of the emailAccount.
+     */
+    email: string;
+    /**
+     * The email/channel token of the emailAccount.
+     */
+    emailToken: string;
+    /**
+     * Whether the synchronisation is committed.
+     */
+    fixEnabled?: boolean;
+    /**
+     * A job identifier to trace all requests associated to the run of a given job.
+     */
+    jobId?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3e6a/486489efe27c46deab810c0f15e81afb.html#response-data
+ */
+export type AccountsEmailAccountSyncMultipleAccountsResponse = GigyaResponse<{
+    /**
+     * The UID associated to the emailAccount prior to synchronisation (may be the same as the new one).
+     */
+    uid?: string;
+    /**
+     * The email associated to the emailAccount prior to synchronisation (may be the same as the new one).
+     */
+    email?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/a5585b0870144adfb1f043726fc6dc98.html#parameters
+ */
+export type AccountsEmailAccountSyncUIDRequest = GigyaRequest<{
+    /**
+     * The UID of the full account that needs to be associated to the emailAccount. The emailAccount UID is set to this value upon execution.
+     */
+    UID: string;
+    /**
+     * The current UID of the emailAccount.
+     */
+    oldUid: string;
+    /**
+     * The email of the full account and emailAccount.
+     */
+    email: string;
+    /**
+     * The email/channel token of the emailAccount.
+     */
+    emailToken: string;
+    /**
+     * Whether the syncUID is committed. Default value is false.
+     */
+    fixEnabled?: boolean;
+    /**
+     * A job identifier to trace all requests associated to the run of a given job.
+     */
+    jobId?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/a5585b0870144adfb1f043726fc6dc98.html#response-data
+ */
+export type AccountsEmailAccountSyncUIDResponse = GigyaResponse<{
+    /**
+     * The new emailAccount UID (matching the full account UID).
+     */
+    accountUid?: string;
+    /**
+     * The UID associated to the emailAccount prior synchronisation (may be the same as the new one).
+     */
+    emailAccountUid?: string;
+    /**
+     * The email associated to the emailAccount prior synchronisation (may be the same as the new one).
+     */
+    email?: string;
+    /**
+     * Whether the account is a lite account.
+     */
+    isLiteAccount?: boolean;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41342c3970b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsExchangeUIDSignatureRequest = GigyaRequest<{
+    /**
+     * The UID of the logged in user.
+     */
+    UID: string;
+    /**
+     * The original signature received from the client side login operation.
+     */
+    UIDSignature: string;
+    /**
+     * The original timestamp received from the client side login operation. (Must be within 60 seconds of the exchangeUIDSignature request).
+     */
+    signatureTimestamp: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41342c3970b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsExchangeUIDSignatureResponse = GigyaResponse<{
+    /**
+     * The original UID passed when the method was called.
+     */
+    UID?: string;
+    /**
+     * A new signature based on the new timestamp and the secret key associated with the specified userKey.
+     */
+    UIDSignature?: string;
+    /**
+     * A new timestamp generated by the server.
+     */
+    signatureTimestamp?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41343f7b70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsExtensionsCreateRequest = GigyaRequest<{
+    /**
+     * The URL where the code data file of the Extension is located.
+     */
+    extensionFuncUrl: string;
+    /**
+     * The custom friendly name that will define this Extension.
+     */
+    friendlyName: string;
+    /**
+     * The event that this Extension is connected to. This must be a single one of the following supported Extension Points:
+     * - OnBeforeAccountsRegister
+     * - OnBeforeAccountsLogin
+     * - OnBeforeSetAccountInfo
+     * - OnBeforeSocialLogin
+     */
+    extensionPoint:
+        | 'OnBeforeAccountsRegister'
+        | 'OnBeforeAccountsLogin'
+        | 'OnBeforeSetAccountInfo'
+        | 'OnBeforeSocialLogin';
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3e6a/41343f7b70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsExtensionsCreateResponse = GigyaResponse<{
+    /**
+     * A JSON object including the details for the requested Extension.
+     */
+    result?: Array<{
+        /**
+         * The Gigya defined ID of the Extension.
+         */
+        extensionId: string;
+        /**
+         * The friendly name of the Extension.
+         */
+        friendlyName: string;
+        /**
+         * The current status of the Extension.
+         */
+        enabled: boolean;
+    }>;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4134526e70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsExtensionsDeleteRequest = GigyaRequest<{
+    /**
+     * The Gigya defined id of the requested Extension as it is returned in the accounts.extensions.list response.
+     */
+    extensionId: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3e6a/4134526e70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsExtensionsDeleteResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4134656770b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsExtensionsGetRequest = GigyaRequest<{
+    /**
+     * The Gigya defined id of the requested Extension as it is returned in the accounts.extensions.list response.
+     */
+    extensionId: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4134656770b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsExtensionsGetResponse = GigyaResponse<{
+    /**
+     * A JSON object including the details for the requested Extension
+     */
+    result?: {
+        /**
+         * The Gigya defined ID of the Extension.
+         */
+        extensionId: string;
+        /**
+         * The friendly name of the Extension.
+         */
+        friendlyName: string;
+        /**
+         * Whether the Extension is currently enabled.
+         */
+        enabled: boolean;
+        /**
+         * The date and time the Extension was created.
+         */
+        created: string;
+        /**
+         * The date and time the Extension was last modified.
+         */
+        modified: string;
+        /**
+         * The event this Extension is connected to.
+         */
+        extensionPoint: string;
+        /**
+         * The URL where the code data file of the Extension is located.
+         */
+        extensionFuncUrl: string;
+        /**
+         * The timeout configured for this extension.
+         */
+        timeout: number;
+        /**
+         * The behavior defined for this extension in case of an error - whether to fail flows or ignore errors.
+         */
+        fallback: 'IgnoreAllErrors' | 'FailOnAnyError';
+    };
+}>;
+
+/**
+ * @note This is not officially documented.
+ */
+export type AccountsExtensionsListRequest = GigyaRequest<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4134785270b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsExtensionsListResponse = GigyaResponse<{
+    /**
+     * An array including all the returned Extensions.
+     */
+    result?: Array<{
+        /**
+         * The Gigya defined ID of the Extension.
+         */
+        extensionId: string;
+        /**
+         * The friendly name of the Extension.
+         */
+        friendlyName: string;
+        /**
+         * Whether the Extension is currently enabled.
+         */
+        enabled: boolean;
+        /**
+         * The dateTime the extension was created.
+         */
+        created: string;
+        /**
+         * The dateTime the extension was last modified.
+         */
+        modified: string;
+        /**
+         * The URL where the code data file of the Extension is located.
+         */
+        extensionFuncUrl: string;
+        /**
+         * The Description of the extension.
+         */
+        description: string;
+        /**
+         * The extension point this extension is connected to.
+         */
+        extensionPoint:
+            | 'OnBeforeAccountsRegister'
+            | 'OnBeforeAccountsLogin'
+            | 'OnBeforeSetAccountInfo'
+            | 'OnBeforeSocialLogin';
+        /**
+         * The timeout configured for this extension.
+         */
+        timeout: number;
+        /**
+         * The behavior defined for this extension in case of an error - whether to fail flows or ignore errors.
+         */
+        fallback: 'IgnoreAllErrors' | 'FailOnAnyError';
+    }>;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41348b7a70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsExtensionsModifyRequest = GigyaRequest<{
+    /**
+     * The Gigya defined id of the requested Extension as it is returned in the accounts.extensions.list response.
+     */
+    extensionId: string;
+    /**
+     * The status of this extension.
+     */
+    enabled?: boolean;
+    /**
+     * The URL where your extension code resides.
+     *
+     * @note If you update this value for an extension on a child site, then any subsequent changes to this value on the parent site will not cascade to the child.
+     */
+    extensionFuncUrl?: string;
+    /**
+     * The custom friendly name that will define this Extension.
+     */
+    friendlyName?: string;
+    /**
+     * The event that this Extension is connected to. This must be any single one of the following supported Extension Points:
+     * - 'OnPasswordComplexityCheck'
+     */
+    extensionPoint?: 'OnPasswordComplexityCheck';
+    /**
+     * The length of time (in miliseconds) that Gigya is to wait for the Extension's response. Accepts values between 10 and 5000. The default is 1000 (i.e. 1 second).
+     */
+    timeout?: number;
+    /**
+     * The action to take in case of a technical error in the Extension execution - whether to ignore errors, or fail the flow. Acceptable values:
+     * - IgnoreAllErrors (default)
+     * - FailOnAnyError
+     */
+    fallback?: 'IgnoreAllErrors' | 'FailOnAnyError';
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41348b7a70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsExtensionsModifyResponse = GigyaResponse<{}>;
 
 export type AccountsGetAccountInfoRequest = GigyaRequest<{
     /**
@@ -1152,7 +2183,7 @@ export type AccountsSetProfilePhotoRequest = GigyaRequest<{
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4139fc6970b21014bbc5a10ce4041860.html#response-data
  */
-export type AccountsSetProfilePhotoResponse = GigyaResponse<Record<string, never>>;
+export type AccountsSetProfilePhotoResponse = GigyaResponse<{}>;
 
 /**
  * Searches and retrieves data from SAP Customer Data Cloud's Accounts Storage.
@@ -1226,7 +2257,6 @@ export type AccountsSearchResponse<
 
 /**
  *  This method initializes a registration process at a site. To fully register a user to your site requires three API calls:
- *
  *      1. accounts.initRegistration
  *      2. accounts.register
  *      3. accounts.finalizeRegistration
@@ -1240,7 +2270,6 @@ export type AccountsInitRegistrationRequest = GigyaRequest<{
      *  *Early Adopters parameter - supported only with Global Access*
      *
      *  The data center in which the registering user's data will be stored. Acceptable values:
-     *
      *   - us1
      *   - eu1
      *   - au1
@@ -1593,8 +2622,6 @@ export type AccountsRegisterResponse<
 }>;
 
 /**
- * This method completes on-site user registration.
- *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/228cd8bc68dc477094b3e0e9fe108e23.html
  */
 export type AccountsFinalizeRegistrationRequest = GigyaRequest<{
@@ -1635,21 +2662,12 @@ export type AccountsFinalizeRegistrationResponse<
      *
      * Alternatively, if the targetEnv parameter is set to "mobile" (your client runs on a mobile), the sessionInfo object contains the the following string fields: sessionToken and sessionSecret. Please send these fields to your mobile client. On your client side, call GSAPI.setSession (using the Mobile SDK) to save them on the app's storage.
      */
-    /**
-     * An object containing session information. The content of this object depends on the targetEnv parameter passed in the accounts.register method.
-     *
-     * By default, if the targetEnv parameter is not set (your client environment is web), the sessionInfo object contains the the following string fields: cookieName and cookieValue.
-     *
-     * Alternatively, if the targetEnv parameter is set to "mobile" (your client runs on a mobile), the sessionInfo object contains the the following string fields: sessionToken and sessionSecret. Please send these fields to your mobile client. On your client side, call GSAPI.setSession (using the Mobile SDK) to save them on the app's storage.
-     *
-     * If the login_token field is present, it indicates that the user has been logged in via a social network and the login_token can be used to authenticate future requests.
-     */
     sessionInfo?: {
-        cookieName?: never;
-        cookieValue?: never;
+        cookieName?: string;
+        cookieValue?: string;
 
-        sessionToken?: never;
-        sessionSecret?: never;
+        sessionToken?: string;
+        sessionSecret?: string;
 
         login_token?: string;
         expires_in?: number;
@@ -1957,7 +2975,7 @@ export type AccountsOTPUpdateRequest = GigyaRequest<{
 /**
  * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413807a270b21014bbc5a10ce4041860.html#response-data
  */
-export type AccountsOTPUpdateResponse = GigyaResponse<Record<string, never>>;
+export type AccountsOTPUpdateResponse = GigyaResponse<{}>;
 
 /**
  * This API unlocks either the specified user's account or the specified IP, depending upon which parameters are passed.
@@ -2166,30 +3184,344 @@ export type GigyaAccountsNamespace<
     SubscriptionsSchema extends GigyaSubscriptions,
 > = {
     /**
+     * This API adds emails to a user's account.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/23e5e21ad35f4c85b98ce39e895e5f24.html
+     */
+    addEmails: (params: AccountsAddEmailsRequest) => Promise<AccountsAddEmailsResponse>;
+
+    /**
+     * This API communicates with SAP Data Quality Management, microservices for location data. SAP Customer Data Cloud calls this API to receive a list of countries including their ISO codes and numeric codes.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/40e8d65874d4480eb1ed7ff105351cbd.html
+     */
+    'address.countries.get': (
+        params: AccountsAddressCountriesGetRequest,
+    ) => Promise<AccountsAddressCountriesGetResponse>;
+
+    /**
+     * This API communicates with SAP Data Quality Management, microservices for location data.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/6fa4e911e0f245bbb185cb662d1132a4.html
+     */
+    'address.suggestions.get': (
+        params: AccountsAddressSuggestionsGetRequest,
+    ) => Promise<AccountsAddressSuggestionsGetResponse>;
+
+    /**
      * This API retrieves the authentication methods associated to a specific user when using a custom identifier with an aToken or identifier.
      *
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/b92c0c7ffc954155ac5a2d5509ceada4.html
      */
-    'auth.getMethods': (params: AccountsAuthGetMethodsRequest) => AccountsAuthGetMethodsResponse;
+    'auth.getMethods': (params: AccountsAuthGetMethodsRequest) => Promise<AccountsAuthGetMethodsResponse>;
 
+    /**
+     * This API returns the current Magic Link configuration for the site.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/a330ee71b4f84843a393c1935667e39a.html
+     */
     'auth.magiclink.email.getConfig': (
         params: AccountsAuthMagicLinkEmailGetConfigRequest,
     ) => Promise<AccountsAuthMagicLinkEmailGetConfigResponse>;
 
+    /**
+     * This API is designed for use with campaign marketing emails. It returns a Magic Link for the user that can have an expiration of up to 60 days which allows it to be inserted into marketing emails, allowing the user a single-click login experience.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/71880e97f2d54fe596d506662818f0a1.html
+     */
+    'accounts.auth.magiclink.getlink': (
+        params: AccountsAuthMagicLinkGetLinkRequest,
+    ) => Promise<AccountsAuthMagicLinkGetLinkResponse>;
+
+    /**
+     * This API logs the user in when using magiclink (after using accounts.auth.magiclink.email.send).
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/465e0de25d684993a481515ff707d86f.html
+     */
     'auth.magiclink.email.login': (
-        params: AccountsAuthMagiclinkEmailLoginRequest,
-    ) => Promise<AccountsAuthMagiclinkEmailLoginResponse>;
+        params: AccountsAuthMagicLinkEmailLoginRequest,
+    ) => Promise<AccountsAuthMagicLinkEmailLoginResponse>;
 
+    /**
+     * This API initiates Magic Link login by sending an email to the specified email address.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/47006b8cd6ec4292b8fa6321a90328b7.html
+     */
     'auth.magiclink.email.send': (
-        params: AccountsAuthMagiclinkEmailSendRequest,
-    ) => Promise<AccountsAuthMagiclinkEmailSendResponse>;
+        params: AccountsAuthMagicLinkEmailSendRequest,
+    ) => Promise<AccountsAuthMagicLinkEmailSendResponse>;
 
-    'auth.magiclink.getlink': (
-        params: AccountsAuthMagiclinkGetLinkRequest,
-    ) => Promise<AccountsAuthMagiclinkGetLinkResponse>;
+    /**
+     * This API enables or disables magic Link for a site and defines the configuration.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/216a91f008db4ac2bb1dafd66848631f.html
+     */
+    'auth.magiclink.email.setConfig': (
+        params: AccountsAuthMagicLinkEmailSetConfigRequest,
+    ) => Promise<AccountsAuthMagicLinkEmailSetConfigResponse>;
 
-    deleteAccount: (params: AccountsDeleteRequest) => Promise<AccountsDeleteResponse>;
+    /**
+     * This API creates an access token after the user validates an OTP code. This access token is used to support a reset password flow.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/3e22c136de714dee858e4fc3fcc07e6e.html
+     */
+    'auth.otp.authenticate': (
+        params: AccountsAuthOTPAuthenticateRequest,
+    ) => Promise<AccountsAuthOTPAuthenticateResponse>;
 
+    /**
+     * This API retrieves the current configuration of Email OTP from the apiKey.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/b43af07811fd47d192082b3fcf29e82c.html
+     */
+    'auth.otp.email.getConfig': (
+        params: AccountsAuthOTPEmailGetConfigRequest,
+    ) => Promise<AccountsAuthOTPEmailGetConfigResponse>;
+
+    /**
+     * This method is used to log in users via OTP (one-time password).
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/c64edbe9973c4cbdb9bc623ba363f73c.html
+     */
+    'auth.otp.email.login': (params: AccountsAuthOTPEmailLoginRequest) => Promise<AccountsAuthOTPEmailLoginResponse>;
+
+    /**
+     * This method is used to trigger an OTP Login flow. It accepts the user's email, returns a vToken, and sends an authentication code to the user.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/f067d24087f84174abae20c20a46f827.html
+     */
+    'auth.otp.email.sendCode': (
+        params: AccountsAuthOTPEmailSendCodeRequest,
+    ) => Promise<AccountsAuthOTPEmailSendCodeResponse>;
+
+    /**
+     * This API enables or disables Email One-Time Password for the site
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/2992c8277a72467caa31988bfc7cd57f.html
+     */
+    'auth.otp.email.setConfig': (
+        params: AccountsAuthOTPEmailSetConfigRequest,
+    ) => Promise<AccountsAuthOTPEmailSetConfigResponse>;
+
+    /**
+     * This API verifies that an end-user has possession of the email account or phone number that a one-time password (code) was sent to and marks the device as verified in their account.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/523e76306db34a19be9199fab59b31df.html
+     */
+    'auth.otp.verify': (params: AccountsAuthOTPVerifyRequest) => Promise<AccountsAuthOTPVerifyResponse>;
+
+    /**
+     * This method is used to get the configuration of vendors for Push Authentication.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4131785a70b21014bbc5a10ce4041860.html
+     */
+    'auth.push.config.get': (params: AccountsAuthPushConfigGetRequest) => Promise<AccountsAuthPushConfigGetResponse>;
+
+    /**
+     * This method is used to configure the vendors for Push Authentication.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41318c2170b21014bbc5a10ce4041860.html
+     */
+    'auth.push.config.set': (params: AccountsAuthPushConfigSetRequest) => Promise<AccountsAuthPushConfigSetResponse>;
+
+    /**
+     * This API is used by a mobile app in a push authentication scenario, to notify SAP Customer Data Cloud that the user has authenticated successfully. The API may only be called for an authenticated user with an active session.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4131cb2570b21014bbc5a10ce4041860.html
+     */
+    'auth.push.verify': (params: AccountsAuthPushVerifyRequest) => Promise<AccountsAuthPushVerifyResponse>;
+
+    /**
+     * accounts.B2B.xxx
+     *
+     * @TODO: Add the accounts.B2B.xxx API methods
+     */
+
+    /**
+     * accounts.communication.xxx
+     *
+     * @TODO: Add the accounts.communication.xxx API methods
+     */
+
+    /**
+     * This method deletes the specified user's account from SAP Customer Data Cloud's database.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4133a29470b21014bbc5a10ce4041860.html
+     */
+    deleteAccount: (params: AccountsDeleteAccountRequest) => Promise<AccountsDeleteAccountResponse>;
+
+    /**
+     * This API deletes a consent statement that exists in SAP Customer Data Cloud. This deletes the consent statement across all locations inSAP Customer Data Cloud where it is listed (Audit Log, User Profile, etc.), and including all the APIs.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/2782415067b047b7bf10a1439d3e67ce.html
+     */
+    deleteConsentStatement: (
+        params: AccountsDeleteConsentStatementRequest,
+    ) => Promise<AccountsDeleteConsentStatementResponse>;
+
+    /**
+     * This method deletes a version of a legal statement associated with a consent statement. Only versions in draft status may be deleted.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/2b289e32fa544c76850afb7e78b5d92f.html
+     */
+    deleteLegalStatements: (
+        params: AccountsDeleteLegalStatementsRequest,
+    ) => Promise<AccountsDeleteLegalStatementsResponse>;
+
+    /**
+     * This method deletes a lite account from SAP Customer Data Cloud's database.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4133b5e170b21014bbc5a10ce4041860.html
+     */
+    deleteLiteAccount: (params: AccountsDeleteLiteAccountRequest) => Promise<AccountsDeleteLiteAccountResponse>;
+
+    /**
+     * This method deletes a Native Screen-Sets (NSS) hosted by SAP Customer Data Cloud. Native screen-sets are used to quickly integrate SAP Customer Data Cloud CIAM capabilities to your mobile apps.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/baaff4ff759d42f48464341ae167dd98.html
+     */
+    deleteNativeScreenSet: (
+        params: AccountsDeleteNativeScreenSetRequest,
+    ) => Promise<AccountsDeleteNativeScreenSetResponse>;
+
+    /**
+     * This method deletes a custom data field from the schema. Once a field is deleted:
+     * - You cannot save data to that field, nor retrieve data that was saved to that field.
+     * - You cannot recreate a field of the same name in the schema.
+     * - If you have reached your schema field limit, you may delete an unused field to create a new one.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4133c8e670b21014bbc5a10ce4041860.html
+     */
+    deleteSchemaFields: (params: AccountsDeleteSchemaFieldsRequest) => Promise<AccountsDeleteSchemaFieldsResponse>;
+
+    /**
+     * This method deletes a screen-set hosted by Gigya.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4133dbe070b21014bbc5a10ce4041860.html
+     */
+    deleteScreenSet: (params: AccountsDeleteScreenSetRequest) => Promise<AccountsDeleteScreenSetResponse>;
+
+    /**
+     * This method is used by a mobile app to register a user's device on SAP Customer Data Cloud in a passwordless authentication flow, such as Push Authentication. The method may only be called for an authenticated user with an active session.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4133eee870b21014bbc5a10ce4041860.html
+     */
+    'devices.register': (params: AccountsDevicesRegisterRequest) => Promise<AccountsDevicesRegisterResponse>;
+
+    /**
+     * This method is used by a mobile app to unregister a user's device on SAP Customer Data Cloud in a passwordless authentication flow, such as Push Authentication. The method may only be called for an authenticated user with an active session.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4134062c70b21014bbc5a10ce4041860.html
+     */
+    'devices.unregister': (params: AccountsDevicesUnregisterRequest) => Promise<AccountsDevicesUnregisterResponse>;
+
+    /**
+     * This method is used by a mobile app to update a user's device on SAP Customer Data Cloud in a passwordless authentication flow, such as Push Authentication. The method may only be called for an authenticated user with an active session.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4134192b70b21014bbc5a10ce4041860.html
+     */
+    'devices.update': (params: AccountsDevicesUpdateRequest) => Promise<AccountsDevicesUpdateResponse>;
+
+    /**
+     * This method returns a partial copy of existing legal statement from SAP Customer Data Cloud. It returns only custom data and versions or dates fields. You can use the response to create a new statement version by calling accounts.setLegalStatement.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/d3eed592164c4b5f9ae2e8f8a8f14214.html
+     */
+    duplicateLegalStatement: (
+        params: AccountsDuplicateLegalStatementRequest,
+    ) => Promise<AccountsDuplicateLegalStatementResponse>;
+
+    /**
+     * This method is used to update the email associated to the emailAccount to the email of an existing full account. This API is part of the Accounts and Email Accounts Sync flow.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/78e703f2aee64dc99e883378cea0a148.html
+     */
+    'emailAccount.changeEmail': (
+        params: AccountsEmailAccountChangeEmailRequest,
+    ) => Promise<AccountsEmailAccountChangeEmailResponse>;
+
+    /**
+     * This method is used to update the UID or email associated to the emailAccount based on the following rules:
+     * - Search existing full accounts with the same email address as the emailAccount. If there is a match by email then:
+     *      - If this is a single match then set emailAccount UID to the matching full account UID
+     *      - If there are multiple matches then:
+     *          - If only one full account is registered then set emailAccount UID to the matching full account UID.
+     *          - If multiple full accounts are registered then set emailAccount UID to the last updated registered full account UID.
+     *          - If all match unregistered full accounts then set emailAccount UID to the last updated unregistered full account UID.
+     * - Else, search existing full accounts with the same UID. If there is a match then set the emailAccount email to the full account profile.email
+     * - Else, if isLite flag is false then delete emailAccount
+     * - Else do nothing
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/486489efe27c46deab810c0f15e81afb.html
+     */
+    'emailAccount.syncMultipleAccounts': (
+        params: AccountsEmailAccountSyncMultipleAccountsRequest,
+    ) => Promise<AccountsEmailAccountSyncMultipleAccountsResponse>;
+
+    /**
+     * This method is used to update the UID associated to the emailAccount to the UID of an existing full account.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/a5585b0870144adfb1f043726fc6dc98.html
+     */
+    'emailAccount.syncUid': (
+        params: AccountsEmailAccountSyncUIDRequest,
+    ) => Promise<AccountsEmailAccountSyncUIDResponse>;
+
+    /**
+     * This method allows sites integrating 3rd party plugins to validate the UID of a logged-in user. More specifically, it provides a means for 3rd party plugins to authenticate a user when the plugin does not have access to the site secret.
+     *
+     * When using signatures with a Gigya user key or Gigya Application key, you must use this API to exchange the received signature, default signature validation always uses the Partner secret, not a user or application key secret.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41342c3970b21014bbc5a10ce4041860.html
+     */
+    exchangeUIDSignature: (
+        params: AccountsExchangeUIDSignatureRequest,
+    ) => Promise<AccountsExchangeUIDSignatureResponse>;
+
+    /**
+     * This API creates a new empty and disabled Identity Extensibility Extension. You can only have a single Extension for any available Extension Point. Attempting to use this API when an extension already exists will return an error; you must first use extensions.delete to remove the existing endpoint.
+     *
+     * @note This API call cannot be made on a child site.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41343f7b70b21014bbc5a10ce4041860.html
+     */
+    'extensions.create': (params: AccountsExtensionsCreateRequest) => Promise<AccountsExtensionsCreateResponse>;
+
+    /**
+     * When called on an existing extension of a standalone site or parent site, this call deletes the extension.
+     *
+     * When called on the extension of a child site, this call reverts the extension's configuration for that site to that of the corresponding extension on the parent site, and any further changes to the extension's configuration on the parent site will be automatically inherited by the child site.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4134526e70b21014bbc5a10ce4041860.html
+     */
+    'extensions.delete': (params: AccountsExtensionsDeleteRequest) => Promise<AccountsExtensionsDeleteResponse>;
+
+    /**
+     * This API returns a specific Identity Extensibility Extension by it's id.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4134656770b21014bbc5a10ce4041860.html
+     */
+    'extensions.get': (params: AccountsExtensionsGetRequest) => Promise<AccountsExtensionsGetResponse>;
+
+    /**
+     * This API returns a list of all Identity Extensibility Extensions currently defined for a site.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4134785270b21014bbc5a10ce4041860.html
+     */
+    'extensions.list': (params: AccountsExtensionsListRequest) => Promise<AccountsExtensionsListResponse>;
+
+    /**
+     * This API modifies an existing extension. Any parameters not updated will remain unchanged.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41348b7a70b21014bbc5a10ce4041860.html
+     */
+    'extensions.modify': (params: AccountsExtensionsModifyRequest) => Promise<AccountsExtensionsModifyResponse>;
+
+    /**
+     * This method completes on-site user registration. For registration through a social network, see accounts.socialLogin.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/228cd8bc68dc477094b3e0e9fe108e23.html
+     */
     finalizeRegistration: (
         params: AccountsFinalizeRegistrationRequest,
     ) => Promise<AccountsFinalizeRegistrationResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>>;
