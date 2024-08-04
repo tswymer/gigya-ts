@@ -52,7 +52,7 @@ export type AccountsAddEventsHandlersRequestJS<DataSchema extends GigyaData> = G
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41313c7e70b21014bbc5a10ce4041860.html#response-object-data-members
  */
-export type AccountsAddEventsHandlersResponseJS = GigyaResponse<Record<string, never>>;
+export type AccountsAddEventsHandlersResponseJS = GigyaResponse<{}>;
 
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/eb93d538b9ae45bfadd9a8aaa8806753.html#parameters
@@ -84,7 +84,7 @@ export type AccountsLogoutRequestJS = GigyaRequest<{
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4137589670b21014bbc5a10ce4041860.html#response-object-data-members
  */
-export type AccountsLogoutResponseJS = GigyaResponse<Record<string, never>>;
+export type AccountsLogoutResponseJS = GigyaResponse<{}>;
 
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/04d7b87fe17c4091839cae8c6a887efd.html#parameters
@@ -274,7 +274,7 @@ export type AccountsShowScreenSetRequestJS = GigyaRequest<{
 /**
  * This doesn't seem to be documented?
  */
-export type AccountsShowScreenSetResponseJS = GigyaResponse<Record<string, never>>;
+export type AccountsShowScreenSetResponseJS = GigyaResponse<{}>;
 
 /**
  * @TODO: This is not documented in the Gigya WebSDK docs.
