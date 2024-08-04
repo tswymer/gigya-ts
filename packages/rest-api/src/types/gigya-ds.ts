@@ -52,9 +52,9 @@ export type DSSchemaObject = {
              * - long
              * - text
              * - binary
-             * 
+             *
              * When the 'type' property is not specified the type will be deduced from the field name extension or automatically according to the content of the first item. When defining a 'binary' field type, it is not inferred from the data must be declared explicitly through the 'type' parameter.
-             * 
+             *
              * Please note that field's type cannot be changed after it contains data.
              */
             type?: 'integer' | 'float' | 'boolean' | 'string' | 'date' | 'long' | 'text' | 'binary';
@@ -71,20 +71,20 @@ export type DSSchemaObject = {
             format?: string;
             /**
              * An array of strings containing languages with which a text field is compatible, in addition to the default languages. A maximum of four such languages are supported. The values passed in this property are added to the existing languages in the field, and if the total number exceeds four languages, the operation fails.
-             * 
+             *
              * @note The only language currently supported for this functionality is Japanese.
              */
             languages?: string[];
             /**
              * May be applied to string, basic-string. Passing a value of 'AES' (the encryption standard applied) sets the field to encrypted. When string fields are encrypted, you may use them in a search (e.g. using accounts.search) only by passing an exact match (such as x = "ABCDE"), and not partial matches (x CONTAINS "ABC"). String search values are case sensitive.
-             * 
+             *
              * - If you set the encrypt property on a field that already contains data, the existing data will remain un-encrypted. Only new data will be encrypted.
              * - Once a field is set to encrypt, it cannot be undone.
              * - To encrypt a field that is not string or basic-string, use the encryptedNonSearchable parameter instead.
              */
             encrypt?: 'AES';
-        }
-    }
+        };
+    };
     /**
      * Specifies whether the schema is strict or dynamic. The default value of this parameter is true i.e. dynamic schema. In a dynamic schema you may add new fields that are not defined in the schema to the DS. The new fields are automatically added to the dynamic schema. In a strict schema you can only write into fields that are already defined in the schema.
      */

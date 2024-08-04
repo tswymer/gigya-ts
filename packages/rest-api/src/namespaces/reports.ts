@@ -64,7 +64,7 @@ export type GetAccountsStatsResponse = GigyaResponse<{
 export type GigyaReportsNamespace = {
     /**
      * This API retrieves Gigya's Accounts statistics when Customer Identity is enabled.
-     * 
+     *
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/416c3f1470b21014bbc5a10ce4041860.html
      */
     getAccountsStats: (params: GetAccountsStatsRequest) => Promise<GetAccountsStatsResponse>;
