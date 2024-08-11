@@ -9,23 +9,23 @@ import {
     AccountsGetSchemaResponse,
     AccountsInitRegistrationRequest,
     AccountsInitRegistrationResponse,
+    AccountsInitTFARequest,
+    AccountsInitTFAResponse,
     AccountsLoginRequest,
     AccountsLoginResponse,
+    AccountsOTPSendCodeRequest,
+    AccountsOTPSendCodeResponse,
     AccountsRegisterRequest,
     AccountsRegisterResponse,
     AccountsResetPasswordRequest,
     AccountsResetPasswordResponse,
     AccountsSetAccountInfoRequest,
     AccountsSetAccountInfoResponse,
-    AccountsOTPSendCodeRequest,
-    AccountsOTPSendCodeResponse,
     GigyaData,
     GigyaPreferences,
     GigyaRequest,
     GigyaResponse,
     GigyaSubscriptions,
-    AccountsInitTFARequest,
-    AccountsInitTFAResponse,
 } from '@gigya-ts/rest-api';
 
 import {
@@ -67,7 +67,11 @@ export type AccountsLoginRequestJS = Omit<AccountsLoginRequest, 'clientContext'>
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/eb93d538b9ae45bfadd9a8aaa8806753.html?#response-data
  */
-export type AccountsLoginResponseJS = AccountsLoginResponse & GigyaJSUIDSignature;
+export type AccountsLoginResponseJS<
+    DataSchema extends GigyaData,
+    PreferencesSchema extends GigyaPreferences,
+    SubscriptionsSchema extends GigyaSubscriptions,
+> = AccountsLoginResponse<DataSchema, PreferencesSchema, SubscriptionsSchema> & GigyaJSUIDSignature;
 
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4137589670b21014bbc5a10ce4041860.html#parameters
@@ -424,7 +428,7 @@ export type GigyaAccountsNamespaceJS<
      *
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/eb93d538b9ae45bfadd9a8aaa8806753.html
      */
-    login: GigyaJSFunction<AccountsLoginRequestJS, AccountsLoginResponseJS>;
+    login: GigyaJSFunction<AccountsLoginRequestJS, AccountsLoginResponseJS<DataSchema, PreferencesSchema, SubscriptionsSchema>>;
 
     /**
      * This method Logs out the current user of your site.

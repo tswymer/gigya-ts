@@ -1021,10 +1021,10 @@ export type AccountsExtensionsCreateRequest = GigyaRequest<{
      * - OnBeforeSocialLogin
      */
     extensionPoint:
-        | 'OnBeforeAccountsRegister'
-        | 'OnBeforeAccountsLogin'
-        | 'OnBeforeSetAccountInfo'
-        | 'OnBeforeSocialLogin';
+    | 'OnBeforeAccountsRegister'
+    | 'OnBeforeAccountsLogin'
+    | 'OnBeforeSetAccountInfo'
+    | 'OnBeforeSocialLogin';
 }>;
 
 /**
@@ -1167,10 +1167,10 @@ export type AccountsExtensionsListResponse = GigyaResponse<{
          * The extension point this extension is connected to.
          */
         extensionPoint:
-            | 'OnBeforeAccountsRegister'
-            | 'OnBeforeAccountsLogin'
-            | 'OnBeforeSetAccountInfo'
-            | 'OnBeforeSocialLogin';
+        | 'OnBeforeAccountsRegister'
+        | 'OnBeforeAccountsLogin'
+        | 'OnBeforeSetAccountInfo'
+        | 'OnBeforeSocialLogin';
         /**
          * The timeout configured for this extension.
          */
@@ -2435,10 +2435,10 @@ export type AccountsIdentifiersFindResponse = GigyaResponse<{
      */
     identifiers?: {
         [identifier in
-            | 'gigya.com/identifiers/UID'
-            | 'gigya.com/identifiers/email'
-            | 'gigya.com/identifiers/username'
-            | 'gigya.com/identifiers/phone']?: Array<string>;
+        | 'gigya.com/identifiers/UID'
+        | 'gigya.com/identifiers/email'
+        | 'gigya.com/identifiers/username'
+        | 'gigya.com/identifiers/phone']?: Array<string>;
     };
 }>;
 
@@ -2558,21 +2558,21 @@ export type AccountsImportFullAccountRequest<
              * @note For the sap_abap password algorithm, only the hashedPassword is required.
              */
             hashAlgorithm?:
-                | 'md5'
-                | 'sha1'
-                | 'sha1_hashbytes'
-                | 'sha256'
-                | 'sha512'
-                | 'sha512Hexa'
-                | 'md5_double_salted'
-                | 'md5_crypt'
-                | 'bcrypt'
-                | 'pbkdf2'
-                | 'pbkdf2_sha256'
-                | 'pbkdf2_sha512'
-                | 'drupal'
-                | 'symphony2'
-                | 'sap_abap';
+            | 'md5'
+            | 'sha1'
+            | 'sha1_hashbytes'
+            | 'sha256'
+            | 'sha512'
+            | 'sha512Hexa'
+            | 'md5_double_salted'
+            | 'md5_crypt'
+            | 'bcrypt'
+            | 'pbkdf2'
+            | 'pbkdf2_sha256'
+            | 'pbkdf2_sha512'
+            | 'drupal'
+            | 'symphony2'
+            | 'sap_abap';
             /**
              * The BASE64 encoded value of the salt. If HashFormat is specified and it contains "$salt" -> HashSalt is a required parameter and should be clear text, not BASE64-encoded. The max number of salt bits is 1024.
              */
@@ -3074,7 +3074,7 @@ export type AccountsLoginRequest = GigyaRequest<{
      * - reCaptchaEnterpriseScore
      * - FunCaptcha
      */
-    captchaType?: 'reCaptchaV2' | 'invisible' | 'reCaptchaV3' | 'reCaptchaEnterpriseScore' | 'FunCaptcha';
+    captchaType?: GigyaCaptchaType;
     /**
      * The CAPTCHA challenge. This parameter is required only if the CAPTCHA failed login threshold in the site's policy has been reached (security.captcha.failedLoginThreshold).
      */
@@ -3705,6 +3705,185 @@ export type AccountsNotifySocialLoginResponse = GigyaResponse<{
 }>;
 
 /**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/8f313cc471f549d49fcc8ab3a430aea9.html#parameters
+ */
+export type AccountsOTPDeleteRequest = GigyaRequest<{
+    /**
+     * The UID of the user whose TFA you want to reset.
+     */
+    UID: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/8f313cc471f549d49fcc8ab3a430aea9.html#response-data
+ */
+export type AccountsOTPDeleteResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4137bbe870b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsOTPLoginRequest = GigyaRequest<{
+    /**
+     * Secure token obtained from the sendCode API.
+     */
+    vToken: string;
+    /**
+     * The 6-digit code received in the SMS.
+     *
+     * The length of the code may change, so we recommend that your implementation will not expect a fixed number of digits.
+     */
+    code: string;
+    /**
+     * A comma separated list of fields to include in the response.
+     */
+    include?: string;
+    /**
+     * Records the source of the registration. The default value is the URL of the current page but it can be any string value. regSource is stored in the account and can be used by verification emails to determine which page should be opened (see accounts.set Policies). Can also be set via the Global Conf object.
+     *
+     * A user's regSource can only be updated on the initial registration of the user. It can not be updated or overwritten, even if empty.
+     */
+    regSource?: string;
+    /**
+     * This parameter defines the length of time that Gigya should keep the user's login session valid. It can be configured via WebSDK Configuration, via an individual API call, or left empty. If no value is specified, the default values are 0 or -2, depending on whether your site uses RaaS or not (see below); Global configuration overrides the default, and setting the value via individual API calls override the global configuration.
+     *
+     * The expected values are:
+     * - 0 - Session expires when the browser closes. This is the default behavior when RaaS is enabled in your site. This behavior is dependent upon the browser's cookie handling procedures, i.e., Chrome keeps processes running in the background even after the browser is technically closed, this keeps the cookies valid until the background processes are terminated. This value is not supported when using our Mobile SDKs, and the session will behave as if set to -2.
+     * - -1 - Session ends after a 60 second period; Gigya gives you the option of creating a cookie that is stored on the site visitor's client (browser), allowing the site to control the session length within this 60 second window, after which the session is terminated if no cookie is found. A typical use case is when the session could include sensitive data (such as credit card details), and the session should be short, with the option of restarting the duration when users perform actions. Useful if you always set the session expiration via individual API methods or with each request, such as when the site session is controlled by a CMS (e.g., Drupal). For additional information, see how to define a session expiration cookie.
+     * - -2 - Session is valid forever. This is the default behavior when RaaS is not enabled in your site.
+     * - Any custom integer - Defines the number of seconds the session is active, e.g., 3600 (one hour).
+     */
+    sessionExpiration?: number;
+    /**
+     * Defines the client-side environment. Options are:
+     * - mobile
+     * - browser
+     */
+    targetEnv?: 'mobile' | 'browser';
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4137bbe870b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsOTPLoginResponse = GigyaResponse<{
+    /**
+     * The UID of the user's account.
+     */
+    UID?: string;
+    /**
+     * This returns true if the account created is new.
+     */
+    isNewUser?: boolean;
+    /**
+     * An object containing session information.
+     */
+    sessionInfo?: {
+        cookieName?: string;
+        cookieValue?: string;
+        sessionToken?: string;
+        sessionSecret?: string;
+    };
+    /**
+     * A token that is used to complete the registration process.
+     */
+    regToken?: string;
+    /**
+     * @TODO The documentation is all weird for this one, its just a regular login response though. Fix this.
+     */
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4137e1be70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsOTPSendCodeRequest = GigyaRequest<{
+    /**
+     * The code of the language in which to send the SMS or email. For supported codes, see Advanced Customizations and Localization.
+     */
+    lang: string;
+    /**
+     * The phone number to which the verification code is sent. This parameter is required for phone number login or update flows.
+     */
+    phoneNumber?: string;
+    /**
+     * The email to which the verification code is sent. This parameter is required for email code verification flows.
+     *
+     * @note This cannot be used for one time password flows.
+     */
+    email?: string;
+    /**
+     * When in a Global site group, you must pass the UID of the user being updated. Only send UID when using REST and there is no current user session. This property is required only when doing a server-side global access implementation so that additional requests, i.e., accounts.otp.update, can resolve the user's residency datacenter from the vToken.
+     */
+    UID?: string;
+    /**
+     * The CAPTCHA provider configured for the site. Possible values are:
+     * - reCaptchaV2
+     * - invisible
+     * - reCaptchaV3
+     * - reCaptchaEnterpriseScore
+     * - FunCaptcha
+     */
+    captchaType?: GigyaCaptchaType;
+    /**
+     * The token returned from the CAPTCHA provider.
+     */
+    captchaToken?: string;
+    /**
+     * Whether or not to send the code for the phone update flow. This may be set to "false" if you choose to send an SMS via your application, instead of using the SAP Customer Data Cloud capability.
+     */
+    sendCode?: boolean;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4137e1be70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsOTPSendCodeResponse = GigyaResponse<{
+    /**
+     * A secured token that holds the phone data and expires after 10 minutes. It contains the following fields:
+     * - apiKey - The API key of the site.
+     * - phoneNumber - The phone number associated with the user's account to send the SMS code.
+     * - code - The 6 digit code.
+     * - gmid - Only necessary if the method call was originated from the client-side.
+     */
+    vToken?: string;
+    /**
+     * The code used for logging the user in. This may be returned only when making the call with admin credentials.
+     */
+    code?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413807a270b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsOTPUpdateRequest = GigyaRequest<{
+    /**
+     * Secure token obtained from the sendCode API.
+     */
+    vToken: string;
+    /**
+     * The 6-digit code received in the SMS.
+     *
+     * The length of the code may change, so we recommend that your implementation will not expect a fixed number of digits.
+     */
+    code: number;
+    /**
+     * The unique identifier of the user whose login information is being updated.
+     *
+     * You are required to pass only one of the parameters either UID or regToken.
+     */
+    UID?: string;
+    /**
+     * The regToken returned from accounts.initRegistration, accounts.register or accounts.login API calls when the registration process has not been finalized.
+     *
+     * You are required to pass only one of the parameters either UID or regToken.
+     */
+    regToken?: string;
+}>;
+
+/**
+ * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413807a270b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsOTPUpdateResponse = GigyaResponse<{}>;
+
+/**
  * This method resets a user's password, either via email or directly. The email format is according to the templates defined in the site policy.
  *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/559574624b634e5a955e0f7eeba01c07.html
@@ -3758,7 +3937,7 @@ export type AccountsResetPasswordRequest = GigyaRequest<{
      * - reCaptchaEnterpriseScore
      * - FunCaptcha
      */
-    captchaType?: string;
+    captchaType?: GigyaCaptchaType;
     /**
      * The CAPTCHA challenge. This parameter is required only if the CAPTCHA failed login threshold in the site's policy has been reached (security.captcha.failedLoginThreshold).
      */
@@ -4425,125 +4604,6 @@ export type AccountsRegisterResponse<
 }>;
 
 /**
- * This method is the first to call in a Phone Number Login flow, and is used in an email code verification flow.
- *
- * It accepts the user's phone number or email, returns a vToken, and sends an authentication code to the user.
- *
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4137e1be70b21014bbc5a10ce4041860.html#parameters
- */
-export type AccountsOTPSendCodeRequest = GigyaRequest<{
-    /**
-     * The code of the language in which to send the SMS. For supported codes, see {@link https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4141d83470b21014bbc5a10ce4041860.html Advanced Customizations and Localization}.
-     */
-    lang: string;
-    /**
-     *The phone number to which the verification code is sent. This parameter is required for phone number login or update flows.
-     */
-    phoneNumber?: string;
-    /**
-     * The email to which the verification code is sent. This parameter is required for email code verification flows.
-     */
-    email?: string;
-    /**
-     * Whether or not to send the code for the phone update flow. This may be set to "false" if you choose to send an SMS via your application, instead of using the SAP Customer Data Cloud capability.
-     */
-    sendCode?: boolean;
-    /**
-     * The CAPTCHA provider configured for the site. Possible values are:
-     *   - reCaptchaV2
-     *   - invisible
-     *   - reCaptchaV3
-     *   - reCaptchaEnterpriseScore
-     *   - FunCaptcha
-     */
-    captchaType?: GigyaCaptchaType;
-    /**
-     * The token returned from the CAPTCHA provider.
-     */
-    captchaToken?: string;
-}>;
-
-/**
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4137e1be70b21014bbc5a10ce4041860.html#response-data
- */
-export type AccountsOTPSendCodeResponse = GigyaResponse<{
-    /**
-     * A secured token that holds the phone data and expires after 10 minutes. It contains the following fields:
-     *   - apiKey - The API key of the site.
-     *   - phoneNumber - The phone number associated with the user's account to send the SMS code.
-     *   - code - The 4 digit code.
-     *   - gmid - Only necessary if the method call was originated from the client-side.
-     */
-    vToken?: string;
-    /**
-     * The code used for logging the user in. This may be returned only when making the call with admin credentials.
-     */
-    code?: string;
-}>;
-
-/**
- * This method is used to update a user's phone number when using Phone Number Login, or their email in an email code verification flow.
- *
- * It requires the vToken and code returned from accounts.OTP.sendCode.
- *
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413807a270b21014bbc5a10ce4041860.html#parameters
- */
-export type AccountsOTPUpdateRequest = GigyaRequest<{
-    /**
-     * Secure token obtained from the sendCode API.
-     */
-    vToken: string;
-    /**
-     * The 6-digit code received in the SMS.
-     *
-     * The length of the code may change, so we recommend that your implementation will not expect a fixed number of digits.
-     */
-    code: number;
-    /**
-     * The unique identifier of the user whose login information is being updated.
-     *
-     * You are required to pass only one of the parameters either UID or regToken.
-     */
-    UID?: string;
-    /**
-     * The regToken returned from accounts.initRegistration, accounts.register or accounts.login API calls when the registration process has not been finalized.
-     *
-     * You are required to pass only one of the parameters either UID or regToken.
-     */
-    regToken?: string;
-}>;
-
-/**
- * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413807a270b21014bbc5a10ce4041860.html#response-data
- */
-export type AccountsOTPUpdateResponse = GigyaResponse<{}>;
-
-/**
- * This API unlocks either the specified user's account or the specified IP, depending upon which parameters are passed.
- *
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41388cd270b21014bbc5a10ce4041860.html#parameters
- */
-export type AccountsRBAUnlockRequest = GigyaRequest<{
-    /**
-     * The loginID of the user whose account is to be unlocked (email or username; dependent upon schema). You must pass either a loginID, UID or ip.
-     */
-    loginID?: string;
-    /**
-     * The UID of the user whose account is to be unlocked. You must pass either a loginID, UID or ip.
-     */
-    UID?: string;
-    /**
-     * The IP address to unlock. You must pass either a loginID, UID or ip.
-     */
-    ip?: string;
-}>;
-
-/**
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41388cd270b21014bbc5a10ce4041860.html#response-data
- */
-export type AccountsRBAUnlockResponse = GigyaResponse<{}>;
-
-/**
  * This method is used to resend a validation email to unverified addresses associated with the account. The email format is according to the templates defined in the policy. For more information on the email format, refer to account.setPolicies or to the Email Templates section of the User Management Policies guide.
  *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4138f19d70b21014bbc5a10ce4041860.html#parameters
@@ -4613,23 +4673,6 @@ export type AccountsTFAUnregisterDeviceRequest = GigyaRequest<{
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413cc8e070b21014bbc5a10ce4041860.html#response-data
  */
 export type AccountsTFAUnregisterDeviceResponse = GigyaResponse<{}>;
-
-/**
- * This API removes the phone number from the specified account.
- *
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/8f313cc471f549d49fcc8ab3a430aea9.html#parameters
- */
-export type AccountsOTPDeleteRequest = GigyaRequest<{
-    /**
-     * The UID of the user whose TFA you want to reset.
-     */
-    UID: string;
-}>;
-
-/**
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/8f313cc471f549d49fcc8ab3a430aea9.html#response-data
- */
-export type AccountsOTPDeleteResponse = GigyaResponse<{}>;
 
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c069e70b21014bbc5a10ce4041860.html#parameters
@@ -5310,13 +5353,33 @@ export type GigyaAccountsNamespace<
      */
     notifySocialLogin: (params: AccountsNotifySocialLoginRequest) => Promise<AccountsNotifySocialLoginResponse>;
 
-    'otp.sendCode': (params: AccountsOTPSendCodeRequest) => Promise<AccountsOTPSendCodeResponse>;
-
-    'otp.update': (params: AccountsOTPUpdateRequest) => Promise<AccountsOTPUpdateResponse>;
-
+    /**
+     * This API removes the phone number from the specified account.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/8f313cc471f549d49fcc8ab3a430aea9.html
+     */
     'otp.delete': (params: AccountsOTPDeleteRequest) => Promise<AccountsOTPDeleteResponse>;
 
-    'rba.unlock': (params: AccountsRBAUnlockRequest) => Promise<AccountsRBAUnlockResponse>;
+    /**
+     * This method is used to log in users via Phone Number Login. It requires the vToken and code returned from accounts.OTP.sendCode.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4137bbe870b21014bbc5a10ce4041860.html
+     */
+    'otp.login': (params: AccountsOTPLoginRequest) => Promise<AccountsOTPLoginResponse>;
+
+    /**
+     * This method is used to trigger a Phone Number Login flow, or is part of an email code verification flow. It accepts the user's phone number or email, returns a vToken, and sends an authentication code to the user.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4137e1be70b21014bbc5a10ce4041860.html
+     */
+    'otp.sendCode': (params: AccountsOTPSendCodeRequest) => Promise<AccountsOTPSendCodeResponse>;
+
+    /**
+     * This method is used to update a user's phone number when using Phone Number Login, or their email in an email code verification flow. It requires the vToken and code returned from accounts.OTP.sendCode. When using this method client side, an active user session is required. When calling this method server side, it requires the UID param.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413807a270b21014bbc5a10ce4041860.html
+     */
+    'otp.update': (params: AccountsOTPUpdateRequest) => Promise<AccountsOTPUpdateResponse>;
 
     register: (
         params: AccountsRegisterRequest<DataSchema, PreferencesSchema, SubscriptionsSchema>,
