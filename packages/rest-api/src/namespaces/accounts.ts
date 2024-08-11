@@ -2300,6 +2300,427 @@ export type AccountsGetSchemaResponse = GigyaResponse<{
     };
 }>;
 
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41360e5770b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsGetScreenSetsRequest = GigyaRequest<{
+    /**
+     * Either a comma separated list or an array of identifiers of the screen-sets to be retrieved. When not specified returns all the screen-sets associated with the site (apiKey). To return screen-sets outside of the local site, e.g., when in an SSO Group, you must specify the screenSetIDs of the screen-set to return.
+     */
+    screenSetIDs?: string | Array<string>;
+    /**
+     * A comma separated list of top level fields to include in the response. Possible values are:
+     * - screenSetID
+     * - html
+     * - css
+     * - javascript
+     * - translations
+     *
+     * The default response includes all of the above.
+     */
+    include?: string;
+    /**
+     * If translations exist for the screen-set(s), you can specify which language to return. If not provided, lang defaults to NULL and the default localization is used. See Advanced Customizations and Localization for supported values.
+     */
+    lang?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41360e5770b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsGetScreenSetsResponse = GigyaResponse<{
+    /**
+     * An array of screenSet objects that are returned with the top level fields that are defined in the include parameter.
+     */
+    screenSets?: Array<{
+        screenSetID?: string;
+        html?: string;
+        css?: string;
+        javascript?: string;
+        translations?: {
+            [language: string]: {
+                [translationKey: string]: string;
+            };
+        };
+    }>;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/13d09b52ca21463580b418599b46de64.html#parameters
+ */
+export type AccountsGetSiteConsentDetailsRequest = GigyaRequest<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/13d09b52ca21463580b418599b46de64.html#response-data
+ */
+export type AccountsGetSiteConsentDetailsResponse = GigyaResponse<{
+    /**
+     * All effective consents for the site or group.
+     *
+     * @TODO: Type this out.
+     */
+    siteConsentDetails?: unknown;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4136217170b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsGlobalChangeAccountResidencyRequest = GigyaRequest<{
+    /**
+     * The unique ID of the user whose resident data center is being changed.
+     */
+    UID: string;
+    /**
+     * A JWT containing the details of the data center to which the user is transferred.
+     */
+    transferRequest: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4136217170b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsGlobalChangeAccountResidencyResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/bd88023234a143ce8a7a8104b79eab18.html#parameters
+ */
+export type AccountsIdentifiersCreateTokenRequest = GigyaRequest<{
+    /**
+     * Must be one of the following:
+     * - phone
+     * - email
+     * - username
+     */
+    identifierType: 'phone' | 'email' | 'username';
+    /**
+     * The actual identifier, i.e., the email address or phone number associated with the user. If the identifier is phone, it must begin with a + (plus) symbol.
+     */
+    identifier: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/bd88023234a143ce8a7a8104b79eab18.html#response-data
+ */
+export type AccountsIdentifiersCreateTokenResponse = GigyaResponse<{
+    /**
+     * The secure JWT containing the user identification in SAP Customer Data Cloud.
+     */
+    aToken: string;
+}>;
+
+/**
+ * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/c50ab43072964e3ba6ab422436d000bd.html#parameters
+ */
+export type AccountsIdentifiersFindRequest = GigyaRequest<{
+    /**
+     * A comma-separated list specifying which sections of the policies to include in the response. The available policies are:
+     * - gigya.com/identifiers/UID
+     * - gigya.com/identifiers/email
+     * - gigya.com/identifiers/username
+     * - gigya.com/identifiers/phone
+     */
+    identifierSchema?: string;
+    /**
+     * The value for the ID specified in the identifierSchema parameter.
+     */
+    id: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/c50ab43072964e3ba6ab422436d000bd.html#response-data
+ */
+export type AccountsIdentifiersFindResponse = GigyaResponse<{
+    /**
+     * Returns a list of all of the available identifiers for the account.
+     */
+    identifiers?: {
+        [identifier in
+        | 'gigya.com/identifiers/UID'
+        | 'gigya.com/identifiers/email'
+        | 'gigya.com/identifiers/username'
+        | 'gigya.com/identifiers/phone']?: Array<string>;
+    };
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41365a5370b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsImportFullAccountRequest<
+    DataSchema extends GigyaData,
+    PreferencesSchema extends GigyaPreferences,
+    SubscriptionsSchema extends GigyaSubscriptions,
+> = GigyaRequest<{
+    /**
+     * A unique identifier for the imported user. This UID will be the main identifier for the user in SAP Customer Data Cloud.
+     */
+    UID: string;
+    /**
+     * How to handle existing users during the import, based on the UID. Acceptable values:
+     * - insert (default) - Creates a new user. If the user exists, an error is returned.
+     * - upsert -  modifies an existing user or creates a new one. In "upsert" mode, if a value is passed to a field for which data already exists, that value is overritten and not appended.
+     */
+    importPolicy?: 'insert' | 'upsert';
+    /**
+     * The time (in UTC) the account was created in ISO 8601 format, e.g., "2019-07-16T19:20:30Z".
+     */
+    created?: string;
+    /**
+     * Custom data. The purpose of this object is storing any custom data associated to the user, but which is not part of the Profile object. Gigya validates that the data fields meet the requirements that are defined in the Schema.
+     */
+    data?: DataSchema;
+    /**
+     * The data center in which the registering user's data will be stored. Acceptable values:
+     * - us1
+     * - eu1
+     * - au1
+     * - cn1
+     */
+    dataCenter?: GigyaRegion;
+    /**
+     * Verified and unverified emails. Contains the following arrays of strings:
+     * - verified
+     * - unverified
+     *
+     * Required for a user to reset password to the account after import.
+     *
+     * For details regarding the different Email fields in Customer Data Cloud, see Accounts Objects JS.
+     */
+    emails?: {
+        verified?: Array<string>;
+        unverified?: Array<string>;
+    };
+    /**
+     * The phone number login identifier, if the account uses Phone Number Login. The supported phone number formatting is E.164.
+     */
+    phoneNumber?: string;
+    /**
+     * The user's identities information. Contains all the properties of the Identity JS object.
+     *
+     * You can expand a full list of all Identity Properties below the table.
+     */
+    identities?: Array<GigyaIdentity>;
+    /**
+     * Indicates whether the account is active. The default is true.
+     */
+    isActive?: boolean;
+    /**
+     * Details if the account is registered or not (if finalizeRegistration was completed).
+     */
+    isRegistered?: boolean;
+    /**
+     * Indicates whether the account email(s) is verified.
+     */
+    isVerified?: boolean;
+    /**
+     * The UTC time of the last login of the user in ISO 8601 format, e.g., "2019-07-16T19:20:30Z".
+     */
+    lastLogin?: string;
+    /**
+     * The UTC time when the last update of the object occurred (either full or partial update) in ISO 8601 format, e.g., "2019-07-16T19:20:30Z".
+     */
+    lastUpdated?: string;
+    /**
+     * The user's login identifiers. Contains the following properties:
+     * - username
+     * - emails
+     * - unverifiedEmails
+     *
+     * Required for a user to log in to the account after import.
+     */
+    loginIDs?: {
+        username?: string;
+        emails?: Array<string>;
+        unverifiedEmails?: Array<string>;
+    };
+    /**
+     * The user's Site account password details.
+     */
+    password?: {
+        /**
+         * A string in which a user's password hash as well as the hashing algorithm and various algorithm settings are encoded. Such a compound string packs all information that would otherwise need to be passed through the HashAlgorithm, HashSalt and HashRounds parameters. We currently support two formats, to some extent: Modular Crypt Format (MCF) strings typically start with a "$...$" pattern. These strings are typically used by PHP and Python-based user management platforms.
+         */
+        compoundHashedPassword?: string;
+        /**
+         * The user's password, hashed using the algorithm defined by the HashAlgorithm parameter using BASE64 encoding. The max number of hash bits is 512. If compoundHashedPassword is not passed, this parameter is required.
+         *
+         * @note You must avoid double encoding with your hashing. If your hashes are already hex-encoded, you should convert them to BASE64-encoding, not perform an additional BASE64-encoding to the hex-encoded hashes.
+         */
+        hashedPassword?: string;
+        /**
+         * Password settings
+         */
+        passwordSettings?: {
+            /**
+             * The hash algorithm used to encrypt the password. The supported hash algorithms are:"md5", "sha1", "sha1_hashbytes", "sha256", "sha512", "sha512Hexa", "md5_double_salted", "md5_crypt", "bcrypt", "pbkdf2", "pbkdf2_sha256", "pbkdf2_sha512", "drupal", "symphony2", and "sap_abap".
+             *
+             * @note The HashedAlgorithm will not be accepted if a compoundHashedPassword is set. You will typically want to pass md5-crypt, bcrypt and drupal password hashes using their compoundHashedPassword representation. You should specify these algorithms only if your user management system stored the raw form of these password hashes (as byte arrays). Be wary of passing existing base64-encoded hashes to hashedPassword. These algorithms typically string-encode their hashes using non-standard (MIME) base64 encodings.
+             *
+             * @note For the sap_abap password algorithm, only the hashedPassword is required.
+             */
+            hashAlgorithm?:
+            | 'md5'
+            | 'sha1'
+            | 'sha1_hashbytes'
+            | 'sha256'
+            | 'sha512'
+            | 'sha512Hexa'
+            | 'md5_double_salted'
+            | 'md5_crypt'
+            | 'bcrypt'
+            | 'pbkdf2'
+            | 'pbkdf2_sha256'
+            | 'pbkdf2_sha512'
+            | 'drupal'
+            | 'symphony2'
+            | 'sap_abap';
+            /**
+             * The BASE64 encoded value of the salt. If HashFormat is specified and it contains "$salt" -> HashSalt is a required parameter and should be clear text, not BASE64-encoded. The max number of salt bits is 1024.
+             */
+            salt?: string;
+            /**
+             * Specifies the number of iterations to perform the hashing. The default value is 1, i.e., one iteration of hashing. If HashAlgorithm is "bcrypt" then this value must be a power of two.
+             */
+            rounds?: number;
+            /**
+             * A template describing how to merge the clear-text password that is entered by the user with a salt. The string must contain "$password", which will be replaced with the clear-text password. It may also contain "$salt", which will be replaced with whatever value you passed to the HashSalt parameter (or you can pass the salt directly in the template and omit the HashSalt parameter. For example, Wikipedia hashes passwords that include a constant salt ("wikipedia") along with a per-user random salt, as per this template: "wikipedia$salt$password".
+             */
+            format?: string;
+            /**
+             * A template describing how to merge the clear-text password that is entered by the user with an optional salt, and what binary conversion to perform. This parameter is similar to HashFormat , but the difference is that HashFormat works on top of strings and then implicitly converts the result into a bytes array using UTF-8, and HashBinaryFormat , on the other hand, uses whatever encoding is explicitly specified.
+             */
+            binaryFormat?: string;
+            /**
+             * The URL to the remote custom hash algorithm service, used only if the password hash algorithm is custom.
+             */
+            URL?: string;
+        };
+    };
+    secretQuestionAndAnswer?: {
+        /**
+         * The secret question that can be used for verification. This parameter is required if specified so in the site's requireSecurityQuestion Policy.
+         */
+        secretQuestion?: string;
+        /**
+         * The answer to the secret question. This parameter is required if specified so in the site's requireSecurityQuestion Policy.
+         */
+        secretAnswer?: string;
+    };
+    /**
+     * The preferences object that contains all the existing consents for the user.
+     */
+    preferences?: PreferencesSchema;
+    /**
+     * The user's profile information. The object may include site's custom fields in addition to reserved field names (as defined in the Profile object). Gigya validates that the profile fields meet the requirements that are defined in the Schema.
+     */
+    profile?: GigyaProfile;
+    /**
+     * The UTC time when the isRegistered parameter was set to true in ISO 8601 format, e.g., "2019-07-16T19:20:30Z".
+     */
+    registered?: string;
+    /**
+     * A string representing the source (URL) of the registration.
+     */
+    regSource?: string;
+    /**
+     * The user's subscriptions information. The object includes the user's subscriptions. Gigya validates that the subscriptions fields meet the requirements that are defined in the Schema.
+     */
+    subscriptions?: SubscriptionsSchema;
+    /**
+     * The user's communication information. The object includes information on the user's communication topics.
+     *
+     * @TODO: Type this out
+     */
+    communications?: unknown;
+    /**
+     * The UTC time when the isVerified parameter was set to true in ISO 8601 format, e.g., "2019-07-16T19:20:30Z".
+     */
+    verified?: string;
+    /**
+     * The language set for consent, if one is provided.
+     */
+    lang?: string;
+    /**
+     * The user's providerSessions information.
+     *
+     * @TODO: Type this out
+     */
+    providerSessions?: unknown;
+}>;
+
+/**
+ * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41365a5370b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsImportFullAccountResponse = GigyaResponse<{
+    /**
+     * Contain the identities that caused a conflict. This field is only returned if there are conflicts, both when returning an error and when returning success.
+     */
+    identityConflicts?: Array<{
+        provider: string;
+        providerUID: string;
+    }>;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41366d8270b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsImportLiteAccountRequest<
+    DataSchema extends GigyaData,
+    SubscriptionsSchema extends GigyaSubscriptions,
+> = GigyaRequest<{
+    /**
+     * The email address associated with this lite registration.
+     */
+    email: string;
+    /**
+     * The Profile information associated with this lite registration.
+     */
+    profile: GigyaProfile;
+    /**
+     * The Subscriptions information associated with this lite registration. Note that a value can be written to the lastUpdatedSubscriptionState parameter when importing lite registrations. Otherwise, this parameter is read-only.
+     */
+    subscriptions: SubscriptionsSchema;
+    /**
+     * Custom data associated with this lite registration.
+     */
+    data?: DataSchema;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41366d8270b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsImportLiteAccountResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413693b870b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsImportProfilePhotoRequest = GigyaRequest<{
+    /**
+     * The URL of the photo to import.
+     */
+    url: string;
+    /**
+     * The unique ID of the user to which to associate the imported photo.
+     *
+     * @note You are required to pass only one of the parameters either UID or regToken.
+     */
+    UID?: string;
+    /**
+     * The regToken returned from accounts.initRegistration, accounts.register or accounts.login API calls when the registration process has not been finalized. Please note that the regToken you receive from Gigya is valid for only one hour.
+     *
+     * @note You are required to pass only one of the parameters either UID or regToken.
+     */
+    regToken?: string;
+    /**
+     * Indicates whether to publish this photo to the user's profile or treat it as a temporary photo. The default value is 'false', i.e. the photo is temporary. You can later publish a temporary photo using the accounts.publishProfilePhoto API method. If published, the photo is saved in the photoURL field of the user's Profile, in addition the photo is trimmed to the size defined in the site's Policies (64X64 by default) and saved in the thumbnailURL field.
+     */
+    publish?: boolean;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413693b870b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsImportProfilePhotoResponse = GigyaResponse<{}>;
+
 export type AccountsLoginRequest = GigyaRequest<{
     /**
      * The aToken returned for this user from accounts.identifiers.createToken.
@@ -3961,6 +4382,92 @@ export type GigyaAccountsNamespace<
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4135e80970b21014bbc5a10ce4041860.html
      */
     getSchema: (params: AccountsGetSchemaRequest) => Promise<AccountsGetSchemaResponse>;
+
+    /**
+     * This method retrieves one or more screen-sets hosted by Gigya.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41360e5770b21014bbc5a10ce4041860.html
+     */
+    getScreenSets: (params: AccountsGetScreenSetsRequest) => Promise<AccountsGetScreenSetsResponse>;
+
+    /**
+     * This API returns all effective consents (complete) for the specified site/group API key.
+     *
+     * This API is part of the new Consent Update which requires opt-in prior to May 30, 2022.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/13d09b52ca21463580b418599b46de64.html
+     */
+    getSiteConsentDetails: (
+        params: AccountsGetSiteConsentDetailsRequest,
+    ) => Promise<AccountsGetSiteConsentDetailsResponse>;
+
+    /**
+     * This method is used to change the resident data center of a registered user in implementations of Global Access.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4136217170b21014bbc5a10ce4041860.html
+     */
+    'global.changeAccountResidency': (
+        params: AccountsGlobalChangeAccountResidencyRequest,
+    ) => Promise<AccountsGlobalChangeAccountResidencyResponse>;
+
+    /**
+     * @TODO: accounts.groups.xxx
+     *
+     * @TODO: Add the accounts.groups.xxx API methods
+     */
+
+    /**
+     * This API creates the necessary aToken for use with a custom identifier. For instance, when using Phone and Password login.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/bd88023234a143ce8a7a8104b79eab18.html
+     */
+    'identifiers.createToken': (
+        params: AccountsIdentifiersCreateTokenRequest,
+    ) => Promise<AccountsIdentifiersCreateTokenResponse>;
+
+    /**
+     * Provides a method to retrieve an account's UID and associated identifiers by passing any identifier associated with the account, such as:
+     * - UID
+     * - email
+     * - username
+     * - phone
+     *
+     * This is useful for retrieving the UID of newly created accounts that are not yet available via accounts.search REST due to caching issues. You can then use the UID returned from this request and call accounts.getAccountInfo REST.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/c50ab43072964e3ba6ab422436d000bd.html
+     */
+    'identifiers.find': (params: AccountsIdentifiersFindRequest) => Promise<AccountsIdentifiersFindResponse>;
+
+    /**
+     * This method imports user account data into the Accounts Storage.
+     *
+     * @note Imported users are not considered new users for reporting purposes.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41365a5370b21014bbc5a10ce4041860.html
+     */
+    importFullAccounts: (
+        params: AccountsImportFullAccountRequest<DataSchema, PreferencesSchema, SubscriptionsSchema>,
+    ) => Promise<AccountsImportFullAccountResponse>;
+
+    /**
+     * This method imports lite registration data into the Email Accounts storage. This method imports existing lite registrations into a new or additional database. No double opt-in emails are sent when using this method, and any registrations imported via this method are not considered new registrations for reporting purposes.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41366d8270b21014bbc5a10ce4041860.html
+     */
+    importLiteAccounts: (
+        params: AccountsImportLiteAccountRequest<DataSchema, SubscriptionsSchema>,
+    ) => Promise<AccountsImportLiteAccountResponse>;
+
+    /**
+     * This method imports a user's profile photo to Gigya's server.
+     *
+     * By default the imported photo is treated as a temporary photo. You can decide whether to publish the photo into the user's account, using the publish parameter (see below), or you can publish later using the accounts.publishProfilePhoto API method.
+     *
+     * The supported photo file types are: image/gif, image/png, image/jpeg.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413693b870b21014bbc5a10ce4041860.html
+     */
+    importProfilePhoto: (params: AccountsImportProfilePhotoRequest) => Promise<AccountsImportProfilePhotoResponse>;
 
     initRegistration: (params: AccountsInitRegistrationRequest) => Promise<AccountsInitRegistrationResponse>;
 
