@@ -1469,6 +1469,9 @@ export type AccountsFinalizeRegistrationResponse<
     verifiedTimestamp?: number;
 }>;
 
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/cab69a86edae49e2be93fd51b78fc35b.html#parameters
+ */
 export type AccountsGetAccountInfoRequest = GigyaRequest<{
     /**
      * The unique ID of the user for which to retrieve data. Use either this parameter or regToken.
@@ -1522,6 +1525,9 @@ export type AccountsGetAccountInfoRequest = GigyaRequest<{
     includeCommunications?: string | 'all';
 }>;
 
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/cab69a86edae49e2be93fd51b78fc35b.html#response-data
+ */
 export type AccountsGetAccountInfoResponse<
     DataSchema extends GigyaData,
     PreferencesSchema extends GigyaPreferences,
@@ -1725,24 +1731,137 @@ export type AccountsGetAccountInfoResponse<
      * User's internal data.
      * - This section will be returned only by server-side calls.
      * - Internal fields will be returned if the user has permission to view them. For details on how to set up Data Field Access in Permission Groups, see Data Field Access.
+     *
+     * @TODO: Type this out
      */
     internal?: unknown;
 }>;
 
 /**
- * This API is used to obtain an id_token containing an existing user's data in JWS format . This id_token can then be transmitted between servers, enabling a partner to share a user's data among multiple sites/API keys. You can validate the JWT using the originating site's public key returned from accounts.getJWTPublicKey.
- *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4134d7df70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsGetConflictingAccountRequest = GigyaRequest<{
+    /**
+     * The regToken of the account being checked for conflicts. regToken is returned by accounts.initRegistration, accounts.register or accounts.login if the user tried to sign in without completing registration. Please note that the regToken you receive from Gigya is valid for only one hour.
+     */
+    regToken: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4134d7df70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsGetConflictingAccountResponse = GigyaResponse<{
+    /**
+     * Will contain null if no conflicting accounts were found.
+     */
+    conflictingAccount?: {
+        /**
+         * An array listing the social networks connected to the conflicting account, the keyword site will be used to denote a conflicting site account.
+         */
+        loginProviders?: Array<string>;
+        /**
+         * Only returned if the conflictingAccount object includes a site account. Contains either a simple username or an email address, depending on the site's Login Identifier Policy.
+         */
+        loginID?: string;
+    } | null;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/660b99419e294030968610cbb27f42bf.html#parameters
+ */
+export type AccountsGetConsentStatementsRequest = GigyaRequest<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/660b99419e294030968610cbb27f42bf.html#response-data
+ */
+export type AccountsGetConsentStatementsResponse<PreferencesSchema extends GigyaPreferences> = GigyaResponse<{
+    /**
+     * An array of preference objects defined for this site.
+     */
+    preferences?: PreferencesSchema;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41354df770b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsGetJWTPublicKeyRequest = GigyaRequest<{
+    /**
+     * If this property is passed and the value is TRUE the response will contain a keys array containing the public key.
+     */
+    V2?: boolean;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41354df770b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsGetJWTPublicKeyResponse = GigyaResponse<{
+    /**
+     * Specifies the Key type returned (cryptographic family).
+     */
+    kty?: string;
+    /**
+     * 	Specifies the algorithm to be used with this key.
+     */
+    alg?: string;
+    /**
+     * Describes the use of of the public key (to encrypt the data or verify the signature)
+     */
+    use?: string;
+    /**
+     * The key id used to distinguish between multiple keys in a given set or array.
+     */
+    kid?: string;
+    /**
+     * The modulus. A base64url encoding of the returned id_token.
+     */
+    n?: string;
+    /**
+     * The exponent value for the RSA public key, base64url encoded.
+     */
+    e?: string;
+    /**
+     * For V2 requests, this object contains the public keys.
+     */
+    keys?: Array<{
+        /**
+         * Specifies the Key type returned (cryptographic family).
+         */
+        kty?: string;
+        /**
+         * 	Specifies the algorithm to be used with this key.
+         */
+        alg?: string;
+        /**
+         * Describes the use of of the public key (to encrypt the data or verify the signature)
+         */
+        use?: string;
+        /**
+         * The key id used to distinguish between multiple keys in a given set or array.
+         */
+        kid?: string;
+        /**
+         * The modulus. A base64url encoding of the returned id_token.
+         */
+        n?: string;
+        /**
+         * The exponent value for the RSA public key, base64url encoded.
+         */
+        e?: string;
+    }>;
+}>;
+
+/**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41353af770b21014bbc5a10ce4041860.html#parameters
  */
 export type AccountsGetJWTRequest = GigyaRequest<{
     /**
-     * Used to add the 'aud' claim to JWT tokens returned. The 'aud' claim tells the receivers of a JWT token which audience(s) the token is valid for. If a service receives the token but is not in the audience list, the service should reject the token.
-     */
-    audience?: string;
-    /**
      * The UID of the user whose data is being requested. Must be a user for the site of the associated apiKey.
      */
     targetUID: string;
+    /**
+     * Used to add the 'aud' claim to JWT tokens returned. The 'aud' claim tells the receivers of a JWT token which audience(s) the token is valid for. If a service receives the token but is not in the audience list, the service should reject the token.
+     */
+    audience?: string;
     /**
      * Any existing profile and/or data fields in the target site's database you want to explicitly return in the JWT for this targetUID.
      *
@@ -1766,14 +1885,225 @@ export type AccountsGetJWTResponse = GigyaResponse<{
     /**
      * If any fields that were passed do not exist for the requested apiKey, they will be ignored and listed here.
      */
-    missingFields?: string;
+    ignoredFields?: string;
 }>;
 
 /**
- * This method retrieves account policies. Refer to the accounts.setPolicies method parameters for a detailed specification of the policies.
- *
- * @TODO: Type out the specific policies
- *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/ff175775723c4fd0ba4b7be295f6c92f.html#parameters
+ */
+export type AccountsGetLegalStatementsRequest = GigyaRequest<{
+    /**
+     * 	The language of the legal statement to retrieve.
+     */
+    lang: string;
+    /**
+     * The unique identifier of the consent statement to retrieve.
+     */
+    consentId: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/ff175775723c4fd0ba4b7be295f6c92f.html#response-data
+ */
+export type AccountsGetLegalStatementsResponse = GigyaResponse<{
+    /**
+     * The legal statements defined for this language for this consent statement.
+     */
+    legalStatements?: {
+        /**
+         * The active version number of the legal statement.
+         */
+        currentDocVersion?: number;
+        /**
+         * The lowest version number that a user can consent to and still be considered to have a valid consent statement assigned to their account.
+         */
+        minDocVersion?: number;
+        /**
+         * The active version date (in ISO 8601 format) of the legal statement.
+         */
+        currentDocDate?: string;
+        /**
+         * The lowest version date (in ISO 8602 format) that a user can consent to and still be considered to have a valid consent statement assigned to their account.
+         */
+        minDocDate?: string;
+        /**
+         * An array of date objects for the current language, that include the purpose text, the documentURL where the legal statement document is saved for this language and legalStatementStatus.
+         */
+        dates?: Array<{
+            [date: string]: {
+                purpose?: string;
+                documentURL?: string;
+                /**
+                 * @TODO: There might be more status codes, like draft?
+                 */
+                legalStatementStatus?: 'Historical' | 'Published';
+            };
+        }>;
+        /**
+         * An array of version objects for the current language, that include the purpose text, the documentURL where the legal statement document is saved for this language and legalStatementStatus.
+         */
+        versions?: Array<{
+            [version: string]: {
+                purpose?: string;
+                documentURL?: string;
+                /**
+                 * @TODO: There might be more status codes, like draft?
+                 */
+                legalStatementStatus?: 'Historical' | 'Published';
+            };
+        }>;
+        /**
+         * An array of custom data objects that are part of the schema for this consent statement. Each data set is comprised of a key-value pair.
+         */
+        customData?: Array<{
+            [key: string]: string;
+        }>;
+        /**
+         * The purpose text associated with the current legal statement date / version.
+         */
+        purpose?: string;
+        /**
+         * The URL of the document associated with the current legal statement date / version.
+         */
+        documentURL?: string;
+        /**
+         * The status of the current legal statement date / version.
+         */
+        legalStatementStatus?: 'Historical' | 'Published';
+        /**
+         * The version number of this legal statement that is currently published.
+         */
+        publishedDocVersion?: number;
+        /**
+         * The version date (in ISO 8601 format) of this legal statement that is currently published.
+         */
+        publishedDocDate?: string;
+    };
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413560f270b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsGetLiteTokenRequest = GigyaRequest<{
+    /**
+     * The email address associated with the lite account you want to send the invitation.
+     *
+     * @note Only one of either email or emailToken must be supplied; attempting to send both will cause the call to fail.
+     */
+    email?: string;
+    /**
+     * The emailToken associated with the lite account you want to send the invitation.
+     *
+     * @note Only one of either email or emailToken must be supplied; attempting to send both will cause the call to fail.
+     */
+    emailToken?: string;
+    /**
+     * The length of time the user's session will be valid (in seconds) when arriving to your site after clicking the invitation link in the email; the default is 3600 (1 hour).
+     */
+    sessionExpiration?: number;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413560f270b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsGetLiteTokenResponse = GigyaResponse<{
+    /**
+     * The token that is passed in set/getAccountInfo to update or view a lite user's account data.
+     */
+    token?: string;
+}>;
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4135743670b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsGetNativeScreenSetRequest = GigyaRequest<{
+    /**
+     * An identifier of a native Screen-Set to retrieve.
+     */
+    screenSetID: string;
+    /**
+     * A comma separated list of top level fields to include in the response. Possible values are:
+     * - screenSetId
+     * - routing
+     * - screens
+     * - theme
+     * - customThemes
+     * - events
+     * - i18n
+     *
+     * The default response includes all these values.
+     */
+    include?: string;
+    /**
+     * If translations exist for the Screen-Set, you can specify which language to return. If not provided, lang defaults to 'null' and the default localization is used. SeeAdvanced Customizations and Localization for supported values.
+     */
+    lang?: string;
+}>;
+
+/**
+ * https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4135743670b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsGetNativeScreenSetResponse = GigyaResponse<{
+    /**
+     * A native Screen-Set object with the top-level fields specified in the include parameter of the request.
+     *
+     * @TODO: Type this out
+     */
+    screenSet?: unknown;
+    /**
+     * The ID of the Screen-Set.
+     */
+    screenSetId?: string;
+    /**
+     * The version number for this Screen-Set.
+     */
+    version?: number;
+    /**
+     * A comment added to this version of the Screen-Set
+     */
+    comment?: string;
+    /**
+     * A Description of this native Screen-Set.
+     */
+    Description?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/908f6738288644d599d682b11e5eca55.html#parameters
+ */
+export type AccountsGetNativeScreenSetsRequest = GigyaRequest<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/908f6738288644d599d682b11e5eca55.html#response-data
+ */
+export type AccountsGetNativeScreenSetsResponse = GigyaResponse<{
+    /**
+     * An array of native screen-set native metadata objects.
+     */
+    screenSets?: Array<{
+        /**
+         * The ID of the Screen-Set
+         */
+        screenSetId: string;
+        /**
+         * The version number for this Screen-Set.
+         */
+        version: number;
+        /**
+         * A comment added to this version of the Screen-Set.
+         */
+        comment?: string;
+        /**
+         * A Description of this native Screen-Set.
+         */
+        Description?: string;
+        /**
+         * A timestamp of the last time a change was made to this Screen-Set.
+         */
+        lastModified?: string;
+    }>;
+}>;
+
+/**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41359a2970b21014bbc5a10ce4041860.html#parameters
  */
 export type AccountsGetPoliciesRequest = GigyaRequest<{
@@ -1794,63 +2124,90 @@ export type AccountsGetPoliciesRequest = GigyaRequest<{
      * @note Non-privileged requests (not signed with the application secret) may only request the following policies: registration, gigyaPlugins, passwordComplexity, and security.
      */
     sections?: string;
+    /**
+     * Specifies what policies to include, can be one of the following options:
+     * - full (default) - include the effective policy, including all Gigya defaults and inherited (for member sites in a group) policies.
+     * - explicitOnly - include only policies that are explicitly defined by the site.
+     */
+    include?: 'full' | 'explicitOnly';
 }>;
 
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41359a2970b21014bbc5a10ce4041860.html#response-data
+ */
 export type AccountsGetPoliciesResponse = GigyaResponse<{
     /**
      * The registration policy.
+     *
+     * @TODO: Type this out
      */
     registration?: unknown;
     /**
      * The Gigya plugins policy.
+     *
+     * @TODO: Type this out
      */
     gigyaPlugins?: unknown;
     /**
      * The account options policy.
+     *
+     * @TODO: Type this out
      */
     accountOptions?: unknown;
     /**
      * The password complexity policy.
+     *
+     * @TODO: Type this out
      */
     passwordComplexity?: unknown;
     /**
      * The email verification policy.
+     *
+     * @TODO: Type this out
      */
     emailVerification?: unknown;
     /**
      * The email notifications policy.
+     *
+     * @TODO: Type this out
      *
      * @note: This is not part of the official documentation currently.
      */
     emailNotifications?: unknown;
     /**
      * The password reset policy.
+     *
+     * @TODO: Type this out
      */
     passwordReset?: unknown;
     /**
      * The profile photo policy.
+     *
+     * @TODO: Type this out
      */
     profilePhoto?: unknown;
     /**
      * The security policy.
+     *
+     * @TODO: Type this out
      */
     security?: unknown;
     /**
      * The two-factor authentication policy.
+     *
+     * @TODO: Type this out
      */
     twoFactorAuth?: unknown;
     /**
      * The federation policy.
+     *
+     * @TODO: Type this out
      */
     federation?: unknown;
 }>;
 
 /**
- * This method retrieves the schema of the Profile object and the Data object (the site specific custom data object) in Gigya's Accounts Storage. The schema defines a set of properties for static data fields. The properties act as meta-data, guiding Gigya how to handle the data in the specified fields.
- *
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4135e80970b21014bbc5a10ce4041860.html
- *
- * @note While a preferences object may be returned when calling this method, it should be ignored, as it may contain unreliable data relating to consent statement versions.
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4135e80970b21014bbc5a10ce4041860.html#parameters
  */
 export type AccountsGetSchemaRequest = GigyaRequest<{
     /**
@@ -1870,7 +2227,7 @@ export type AccountsGetSchemaRequest = GigyaRequest<{
      * - group - Returns the schema that is set for the entire group.
      * - site - Returns the schema that is set for the site.
      */
-    scope?: string;
+    scope?: 'effective' | 'group' | 'site';
 }>;
 
 /**
@@ -1926,10 +2283,19 @@ export type AccountsGetSchemaResponse = GigyaResponse<{
         };
     };
     /**
-     * @TODO: Fix this
      * A JSON object defining the schema of the Internal Fields object. See the format details in the Internal Fields object section on the {@link https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a0faa70b21014bbc5a10ce4041860.html accounts.setSchema REST} page.
+     *
+     * @TODO: Type this out
      */
     internalSchema?: {
+        fields: unknown;
+    };
+    /**
+     * A JSON object defining the schema of the Addresses object. For more information, see the addresses fields object section on the accounts.setSchema REST page.
+     *
+     * @TODO: Type this out
+     */
+    addressesSchema?: {
         fields: unknown;
     };
 }>;
@@ -2865,25 +3231,6 @@ export type AccountsRegisterResponse<
 }>;
 
 /**
- * In implementations of Consent Management, this method returns all the consent statements defined for a given site.
- *
- * There are no parameters for this API. The statements returned are based on the API key passed in the authorization parameters.
- *
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/660b99419e294030968610cbb27f42bf.html#parameters
- */
-export type AccountsGetConsentStatementsRequest = GigyaRequest<{}>;
-
-/**
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/660b99419e294030968610cbb27f42bf.html#response-data
- */
-export type AccountsGetConsentStatementsResponse<PreferencesSchema extends GigyaPreferences> = GigyaResponse<{
-    /**
-     * An array of preference objects defined for this site.
-     */
-    preferences?: PreferencesSchema;
-}>;
-
-/**
  * This method is the first to call in a Phone Number Login flow, and is used in an email code verification flow.
  *
  * It accepts the user's phone number or email, returns a vToken, and sends an authentication code to the user.
@@ -3526,18 +3873,93 @@ export type GigyaAccountsNamespace<
         params: AccountsFinalizeRegistrationRequest,
     ) => Promise<AccountsFinalizeRegistrationResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>>;
 
+    /**
+     * This method retrieves account data for the specified user.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/cab69a86edae49e2be93fd51b78fc35b.html
+     */
     getAccountInfo: (
         params: AccountsGetAccountInfoRequest,
     ) => Promise<AccountsGetAccountInfoResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>>;
 
+    /**
+     * This method searches for a conflicting account: an account that uses the email associated with a social identity linked to the account currently logging in.
+     *
+     * This method will return an error if account harvesting protection is activated.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4134d7df70b21014bbc5a10ce4041860.html
+     */
+    getConflictingAccount: (
+        params: AccountsGetConflictingAccountRequest,
+    ) => Promise<AccountsGetConflictingAccountResponse>;
+
+    /**
+     * In implementations of Consent Management, this method returns all the consent statements defined for a given site.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/660b99419e294030968610cbb27f42bf.html
+     */
     getConsentStatements: (
         params: AccountsGetConsentStatementsRequest,
     ) => Promise<AccountsGetConsentStatementsResponse<PreferencesSchema>>;
 
+    /**
+     * This API allows retrieval of the public key necessary for validating an id_token returned from the accounts.getJWT API endpoint. As a public endpoint, this API requires no parameters.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41354df770b21014bbc5a10ce4041860.html
+     */
+    getJWTPublicKey: (params: AccountsGetJWTPublicKeyRequest) => Promise<AccountsGetJWTPublicKeyResponse>;
+
+    /**
+     * Obtains an id_token containing an existing user's data in JWS format.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41353af770b21014bbc5a10ce4041860.html
+     */
     getJWT: (params: AccountsGetJWTRequest) => Promise<AccountsGetJWTResponse>;
 
+    /**
+     * This method retrieves the details of a legal statement (associated with a consent statement), including the languages, versions, purpose, custom data.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/ff175775723c4fd0ba4b7be295f6c92f.html
+     */
+    getLegalStatements: (params: AccountsGetLegalStatementsRequest) => Promise<AccountsGetLegalStatementsResponse>;
+
+    /**
+     * When using this API as part of the Lite Preferences Center solution, first activate your Preferences Center by setting the preferencesCenter object of accounts.setPolicies or by entering the redirectURL in the Email Templates section of the Gigya Console. For more information see Lite Preferences Center.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413560f270b21014bbc5a10ce4041860.html
+     */
+    getLiteToken: (params: AccountsGetLiteTokenRequest) => Promise<AccountsGetLiteTokenResponse>;
+
+    /**
+     * This method retrieves a native Screen-Set hosted by SAP Customer Data Cloud. Native screen-sets are used to quickly integrate SAP Customer Data Cloud CIAM capabilities to your mobile apps.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4135743670b21014bbc5a10ce4041860.html
+     */
+    getNativeScreenSet: (params: AccountsGetNativeScreenSetRequest) => Promise<AccountsGetNativeScreenSetResponse>;
+
+    /**
+     * This method retrieves all Native Screen-Sets (NSS) hosted by SAP Customer Data Cloud. Native screen-sets are used to quickly integrate SAP Customer Data Cloud CIAM capabilities to your mobile apps.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/908f6738288644d599d682b11e5eca55.html
+     */
+    getNativeScreenSets: (params: AccountsGetNativeScreenSetsRequest) => Promise<AccountsGetNativeScreenSetsResponse>;
+
+    /**
+     * This method retrieves account policies. Refer to the accounts.setPolicies method parameters for a detailed specification of the policies.
+     *
+     * When using accounts.getPolicies within a Single-Sign-On (SSO) environment, the method will return all policies that are set at the Master level and not overridden by the specific Member site being queried, as well as all the Member policies that are currently overriding the Master policies.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41359a2970b21014bbc5a10ce4041860.html
+     */
     getPolicies: (params: AccountsGetPoliciesRequest) => Promise<AccountsGetPoliciesResponse>;
 
+    /**
+     * This method retrieves the schema of the Profile object and the Data object (the site specific custom data object) in Gigya's Accounts Storage. The schema defines a set of properties for static data fields. The properties act as meta-data, guiding Gigya how to handle the data in the specified fields.
+     *
+     * @note While a preferences object may be returned when calling this method, it should be ignored, as it may contain unreliable data relating to consent statement versions.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4135e80970b21014bbc5a10ce4041860.html
+     */
     getSchema: (params: AccountsGetSchemaRequest) => Promise<AccountsGetSchemaResponse>;
 
     initRegistration: (params: AccountsInitRegistrationRequest) => Promise<AccountsInitRegistrationResponse>;
