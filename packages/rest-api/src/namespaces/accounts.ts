@@ -3884,6 +3884,284 @@ export type AccountsOTPUpdateRequest = GigyaRequest<{
 export type AccountsOTPUpdateResponse = GigyaResponse<{}>;
 
 /**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/8a7df13c9c00464a88b6e653472261ea.html#parameters
+ */
+export type AccountsPoliciesEmailTemplatesGetConfigRequest = GigyaRequest<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/8a7df13c9c00464a88b6e653472261ea.html#response-data
+ */
+export type AccountsPoliciesEmailTemplatesGetConfigResponse = GigyaResponse<{
+    /**
+     * @TODO: Type this out.
+     */
+    codeVerification?: unknown;
+    /**
+     * @TODO: Type this out.
+     */
+    emailNotifications?: unknown;
+    /**
+     * @TODO: Type this out.
+     */
+    emailVerification?: unknown;
+    /**
+     * @TODO: Type this out.
+     */
+    magicLink?: unknown;
+    /**
+     * @TODO: Type this out.
+     */
+    preferencesCenter?: unknown;
+    /**
+     * @TODO: Type this out.
+     */
+    doubleOptIn?: unknown;
+    /**
+     * @TODO: Type this out.
+     */
+    passwordReset?: unknown;
+    /**
+     * @TODO: Type this out.
+     */
+    twoFactorAuth?: unknown;
+    /**
+     * @TODO: Type this out.
+     */
+    impossibleTraveler?: unknown;
+    /**
+     * @TODO: Type this out.
+     */
+    unknownLocationNotification?: unknown;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/277d048b59634c8ca33de401290e58ca.html#parameters
+ */
+export type AccountsPoliciesEmailTemplatesSetConfigRequest = GigyaRequest<{
+    /**
+     * @TODO: Type this out.
+     */
+    codeVerification?: unknown;
+    /**
+     * @TODO: Type this out.
+     */
+    emailNotifications?: unknown;
+    /**
+     * @TODO: Type this out.
+     */
+    emailVerification?: unknown;
+    /**
+     * @TODO: Type this out.
+     */
+    magicLink?: unknown;
+    /**
+     * @TODO: Type this out.
+     */
+    preferencesCenter?: unknown;
+    /**
+     * @TODO: Type this out.
+     */
+    doubleOptIn?: unknown;
+    /**
+     * @TODO: Type this out.
+     */
+    passwordReset?: unknown;
+    /**
+     * @TODO: Type this out.
+     */
+    twoFactorAuth?: unknown;
+    /**
+     * @TODO: Type this out.
+     */
+    impossibleTraveler?: unknown;
+    /**
+     * @TODO: Type this out.
+     */
+    unknownLocationNotification?: unknown;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/277d048b59634c8ca33de401290e58ca.html#response-data
+ */
+export type AccountsPoliciesEmailTemplatesSetConfigResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41381aaa70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsProgressionGetPolicyRequest = GigyaRequest<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41381aaa70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsProgressionGetPolicyResponse = GigyaResponse<{
+    /**
+     * The policy for handling the data of accounts that progress from lite to full. Possible values:
+     * - none - no account progression policy was defined for this site.
+     * - auto - all the data that is saved to the lite account, is merged to the full account, including subscriptions, consent, profile and custom data. If there is different data for the same fields, the full account data is saved, meaning lite data is saved only when no other data exists for that field. The accountTypeswill be both lite and full.
+     *
+     * In both cases, the user will no longer be able to access their data via the Lite Preferences Center.
+     */
+    policy?: 'none' | 'auto';
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41382da770b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsProgressionSetPolicyRequest = GigyaRequest<{
+    /**
+     * The policy for handling the data of accounts that progress from lite to full. Acceptable values:
+     * - auto - All the data that is saved to the lite account, is merged to the full account, including subscriptions, consent, profile and custom data. If there is different data for the same fields, the full account data is saved, meaning lite data is saved only when no other data exists for that field. The accountTypes will be both lite and full.
+     */
+    policy: 'auto';
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41382da770b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsProgressionSetPolicyResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413840aa70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsPublishProfilePhotoRequest = GigyaRequest<{
+    /**
+     * The unique ID of the user account to which to publish the photo.
+     *
+     * @note You are required to pass only one of the parameters either UID or regToken.
+     */
+    UID?: string;
+    /**
+     * The regToken returned from accounts.initRegistration, accounts.register or accounts.login API calls when the registration process has not been finalized. Please note that the regToken you receive from Gigya is valid for only one hour.
+     *
+     * @note You are required to pass only one of the parameters either UID or regToken.
+     */
+    regToken?: string;
+    /**
+     * A comma-separated pair of numbers "width,height", representing the trimming size in pixels for the thumbnail photo. If not specified, then the trimming size is taken from the profilePhoto policy (see accounts.setPolicies).
+     */
+    thumbnail?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413840aa70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsPublishProfilePhotoResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413853eb70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsRBAGetPolicyRequest = GigyaRequest<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413853eb70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsRBAGetPolicyResponse = GigyaResponse<{
+    /**
+     * The complete account's RBA Policy object.
+     *
+     * @TODO: Type this out.
+     */
+    policy?: unknown;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413866d370b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsRBALockRequest = GigyaRequest<{
+    /**
+     * The loginID of the user whose account is to be locked (email or username; dependent upon schema). You must pass either a loginID, UID or ip.
+     */
+    loginID?: string;
+    /**
+     * The UID of the user whose account is to be locked. You must pass either a loginID , UID or ip.
+     */
+    UID?: string;
+    /**
+     * The IP address to lock. You must pass either a loginID, UID or ip.
+     */
+    ip?: string;
+    /**
+     * The duration for which the user account is locked, in seconds. After the duration has passed, the account is automatically unlocked. A '0' means the account is locked indefinitely, and may be released as explained above. Note that a '0' may not be applied to an ip lock.
+     */
+    duration?: number;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413866d370b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsRBALockResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/ee51584c371945a799d4f7d9cbeb77e1.html#parameters
+ */
+export type AccountsRBASDKConfigurationGetRequest = GigyaRequest<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/ee51584c371945a799d4f7d9cbeb77e1.html#response-data
+ */
+export type AccountsRBASDKConfigurationGetResponse = GigyaResponse<{
+    /**
+     * The name and supported versions for the SDK types that exist on the site.
+     */
+    result?: Array<{
+        /**
+         * The SDK Type
+         */
+        type: string;
+        /**
+         * The name of the SDK type that is displayed to the admin in the console.
+         */
+        displayName: string;
+        /**
+         * Array of all versions of this SDK type from which traffic to the site is allowed.
+         *
+         * If no versions are displayed, this means that traffic is either allowed from all versions of this SDK type or blocked for SDK type. To know whether traffic is allowed or blocked, check out the SDK Management screen, seeSDK Management.
+         */
+        supportedVersions?: string[];
+    }>;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413879cb70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsRBASetPolicyRequest = GigyaRequest<{
+    /**
+     * The complete rba policy object.
+     *
+     * @TODO: Type this out.
+     */
+    policy: unknown;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413879cb70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsRBASetPolicyResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41388cd270b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsRBAUnlockRequest = GigyaRequest<{
+    /**
+     * The loginID of the user whose account is to be unlocked (email or username; dependent upon schema). You must pass either a loginID, UID or ip.
+     */
+    loginID?: string;
+    /**
+     * The UID of the user whose account is to be unlocked. You must pass either a loginID, UID or ip.
+     */
+    UID?: string;
+    /**
+     * The IP address to unlock. You must pass either a loginID, UID or ip.
+     */
+    ip?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41388cd270b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsRBAUnlockResponse = GigyaResponse<{}>;
+
+/**
  * This method resets a user's password, either via email or directly. The email format is according to the templates defined in the site policy.
  *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/559574624b634e5a955e0f7eeba01c07.html
@@ -5380,6 +5658,88 @@ export type GigyaAccountsNamespace<
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413807a270b21014bbc5a10ce4041860.html
      */
     'otp.update': (params: AccountsOTPUpdateRequest) => Promise<AccountsOTPUpdateResponse>;
+
+    /**
+     * This API retrieves the current email templates configuration for the site/apiKey.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/8a7df13c9c00464a88b6e653472261ea.html
+     */
+    'policies.emailTemplates.getConfig': (
+        params: AccountsPoliciesEmailTemplatesGetConfigRequest,
+    ) => Promise<AccountsPoliciesEmailTemplatesGetConfigResponse>;
+
+    /**
+     * This API sets the html of one or more system emails for a site/apiKey.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/277d048b59634c8ca33de401290e58ca.html
+     */
+    'policies.emailTemplates.setConfig': (
+        params: AccountsPoliciesEmailTemplatesSetConfigRequest,
+    ) => Promise<AccountsPoliciesEmailTemplatesSetConfigResponse>;
+
+    /**
+     * The following information is internal, and may not be shared with customers.
+     *
+     * @TODO: What is this description...?
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41381aaa70b21014bbc5a10ce4041860.html
+     */
+    'progression.getPolicy': (
+        params: AccountsProgressionGetPolicyRequest,
+    ) => Promise<AccountsProgressionGetPolicyResponse>;
+
+    /**
+     * For customers who are implementing Lite Registration, this method is used to decide how to handle the data of a user who progresses from a lite to a full account.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41382da770b21014bbc5a10ce4041860.html
+     */
+    'progression.setPolicy': (
+        params: AccountsProgressionSetPolicyRequest,
+    ) => Promise<AccountsProgressionSetPolicyResponse>;
+
+    /**
+     * This method publishes the last imported profile photo if it hadn't been published previously. When published, the photo is saved in the photoURL field of the user's Profile, in addition the photo is trimmed to the size defined by the thumbnail parameter or in the site's Policies and saved in the thumbnailURL Profile field.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413840aa70b21014bbc5a10ce4041860.html
+     */
+    publishProfilePhoto: (params: AccountsPublishProfilePhotoRequest) => Promise<AccountsPublishProfilePhotoResponse>;
+
+    /**
+     * This API gets the RBA (Risk-Based Authentication) policy for a site or master site of a group. If the requested API key belongs to a child site of a site-group, the Parent's policy is returned. If no existing custom policy is currently specified, the default policy is returned.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413853eb70b21014bbc5a10ce4041860.html
+     */
+    'rba.getPolicy': (params: AccountsRBAGetPolicyRequest) => Promise<AccountsRBAGetPolicyResponse>;
+
+    /**
+     * Use this method to lock a user account, based on their UID, loginID or IP address, for a specified time period.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413866d370b21014bbc5a10ce4041860.html
+     */
+    'rba.lock': (params: AccountsRBALockRequest) => Promise<AccountsRBALockResponse>;
+
+    /**
+     * This API retrieves a list of all SDK types and their versions supported on the site. This might be needed if you want to increase site security by blocking calls coming from old, empty, or non-existing SDK calls. For more information, see SDK Management.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/ee51584c371945a799d4f7d9cbeb77e1.html
+     */
+    'rba.sdkConfiguration.get': (
+        params: AccountsRBASDKConfigurationGetRequest,
+    ) => Promise<AccountsRBASDKConfigurationGetResponse>;
+
+    /**
+     * This API sets the RBA (Risk-Based Authentication) policy for a site or master site of a group.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413879cb70b21014bbc5a10ce4041860.html
+     */
+    'rba.setPolicy': (params: AccountsRBASetPolicyRequest) => Promise<AccountsRBASetPolicyResponse>;
+
+    /**
+     * This API unlocks either the specified user's account or the specified IP, depending upon which parameters are passed.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41388cd270b21014bbc5a10ce4041860.html
+     */
+    'rba.unlock': (params: AccountsRBAUnlockRequest) => Promise<AccountsRBAUnlockResponse>;
 
     register: (
         params: AccountsRegisterRequest<DataSchema, PreferencesSchema, SubscriptionsSchema>,
