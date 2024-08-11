@@ -428,7 +428,10 @@ export type GigyaAccountsNamespaceJS<
      *
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/eb93d538b9ae45bfadd9a8aaa8806753.html
      */
-    login: GigyaJSFunction<AccountsLoginRequestJS, AccountsLoginResponseJS<DataSchema, PreferencesSchema, SubscriptionsSchema>>;
+    login: GigyaJSFunction<
+        AccountsLoginRequestJS,
+        AccountsLoginResponseJS<DataSchema, PreferencesSchema, SubscriptionsSchema>
+    >;
 
     /**
      * This method Logs out the current user of your site.
