@@ -1021,10 +1021,10 @@ export type AccountsExtensionsCreateRequest = GigyaRequest<{
      * - OnBeforeSocialLogin
      */
     extensionPoint:
-    | 'OnBeforeAccountsRegister'
-    | 'OnBeforeAccountsLogin'
-    | 'OnBeforeSetAccountInfo'
-    | 'OnBeforeSocialLogin';
+        | 'OnBeforeAccountsRegister'
+        | 'OnBeforeAccountsLogin'
+        | 'OnBeforeSetAccountInfo'
+        | 'OnBeforeSocialLogin';
 }>;
 
 /**
@@ -1167,10 +1167,10 @@ export type AccountsExtensionsListResponse = GigyaResponse<{
          * The extension point this extension is connected to.
          */
         extensionPoint:
-        | 'OnBeforeAccountsRegister'
-        | 'OnBeforeAccountsLogin'
-        | 'OnBeforeSetAccountInfo'
-        | 'OnBeforeSocialLogin';
+            | 'OnBeforeAccountsRegister'
+            | 'OnBeforeAccountsLogin'
+            | 'OnBeforeSetAccountInfo'
+            | 'OnBeforeSocialLogin';
         /**
          * The timeout configured for this extension.
          */
@@ -2435,10 +2435,10 @@ export type AccountsIdentifiersFindResponse = GigyaResponse<{
      */
     identifiers?: {
         [identifier in
-        | 'gigya.com/identifiers/UID'
-        | 'gigya.com/identifiers/email'
-        | 'gigya.com/identifiers/username'
-        | 'gigya.com/identifiers/phone']?: Array<string>;
+            | 'gigya.com/identifiers/UID'
+            | 'gigya.com/identifiers/email'
+            | 'gigya.com/identifiers/username'
+            | 'gigya.com/identifiers/phone']?: Array<string>;
     };
 }>;
 
@@ -2558,21 +2558,21 @@ export type AccountsImportFullAccountRequest<
              * @note For the sap_abap password algorithm, only the hashedPassword is required.
              */
             hashAlgorithm?:
-            | 'md5'
-            | 'sha1'
-            | 'sha1_hashbytes'
-            | 'sha256'
-            | 'sha512'
-            | 'sha512Hexa'
-            | 'md5_double_salted'
-            | 'md5_crypt'
-            | 'bcrypt'
-            | 'pbkdf2'
-            | 'pbkdf2_sha256'
-            | 'pbkdf2_sha512'
-            | 'drupal'
-            | 'symphony2'
-            | 'sap_abap';
+                | 'md5'
+                | 'sha1'
+                | 'sha1_hashbytes'
+                | 'sha256'
+                | 'sha512'
+                | 'sha512Hexa'
+                | 'md5_double_salted'
+                | 'md5_crypt'
+                | 'bcrypt'
+                | 'pbkdf2'
+                | 'pbkdf2_sha256'
+                | 'pbkdf2_sha512'
+                | 'drupal'
+                | 'symphony2'
+                | 'sap_abap';
             /**
              * The BASE64 encoded value of the salt. If HashFormat is specified and it contains "$salt" -> HashSalt is a required parameter and should be clear text, not BASE64-encoded. The max number of salt bits is 1024.
              */
@@ -2794,13 +2794,13 @@ export type AccountsLinkAccountsRequest = GigyaRequest<{
      */
     password: string;
     /**
-     * A comma-separated list of fields to include in the response. The possible values are: identities-active, identities-all, loginIDs, emails, profile, data, and id_token. The default is profile and data so if this parameter is not used, the response will return the Profile and data objects. 
+     * A comma-separated list of fields to include in the response. The possible values are: identities-active, identities-all, loginIDs, emails, profile, data, and id_token. The default is profile and data so if this parameter is not used, the response will return the Profile and data objects.
      */
     include?: string;
     /**
      * This parameter defines your client side environment, which in return determines the server response data fields. The default value of this parameter is "browser", which means that by default you receive cookie-related data in the response.
-     * 
-     * If your client runs on a mobile: 
+     *
+     * If your client runs on a mobile:
      * If you are calling this method using a Mobile SDK since version 2.15.6, this parameter is automatically set to "mobile" (there is no need to set it manually). In any other case, you should set this parameter to be "mobile".
      * As a result of setting the parameter to "mobile" the server response data fields will include: sessionToken and sessionSecret (instead of cookie related data). In such case, you should send the sessionToken and sessionSecret to your mobile client. On your client side, call GSAPI.setSession (using the Mobile SDK) to save them in the app's storage.
      */
@@ -2850,7 +2850,7 @@ export type AccountsLinkAccountsResponse<
     data?: DataSchema;
     /**
      * The email addresses belonging to the user.
-     * 
+     *
      * @note Emails must be specified explicitly in the include parameter in order to be included in the response.
      */
     emails?: {
@@ -2865,13 +2865,13 @@ export type AccountsLinkAccountsResponse<
     };
     /**
      * When using CIAM for B2B, this is where the user's Organization Management data is stored. For a detailed Description of this field, see the Groups object documentation.
-     * 
+     *
      * @TODO: Type this out.
      */
     groups?: unknown;
     /**
      * An array of Identity Objects, each object represents a user's social identity. Each Identity Object contains imported data from a social network that the user has connected to.
-     * 
+     *
      * @note You must explicitly specify identities within the include parameter for them to be included in the response: identities-active , identities-all, or identities-global to return only active identities, all identities of a site, or all identities of a site group, respectively.
      * @note Be advised that if a user registers to your site using a Social Identity, then goes through the Forgot Password flow, a Site Login is added to their account, however, a Site Identity is not. A Site Identity can only be created when accounts.setAccountInfo is called on the user's account.
      */
@@ -2933,7 +2933,7 @@ export type AccountsLinkAccountsResponse<
     lastUpdatedTimestamp?: number;
     /**
      * The user's login identifiers.
-     * 
+     *
      * @note loginIDs must be specified explicitly in the include parameter in order to be included in the response.
      */
     loginIDs?: {
@@ -3044,6 +3044,9 @@ export type AccountsLinkAccountsResponse<
     verifiedTimestamp?: number;
 }>;
 
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/683844d3c4b54104b2201efffdf558e3.html#parameters
+ */
 export type AccountsLoginRequest = GigyaRequest<{
     /**
      * The aToken returned for this user from accounts.identifiers.createToken.
@@ -3064,6 +3067,15 @@ export type AccountsLoginRequest = GigyaRequest<{
      */
     password: string;
     /**
+     * The CAPTCHA provider configured for the site. Possible values are:
+     * - reCaptchaV2
+     * - invisible
+     * - reCaptchaV3
+     * - reCaptchaEnterpriseScore
+     * - FunCaptcha
+     */
+    captchaType?: 'reCaptchaV2' | 'invisible' | 'reCaptchaV3' | 'reCaptchaEnterpriseScore' | 'FunCaptcha';
+    /**
      * The CAPTCHA challenge. This parameter is required only if the CAPTCHA failed login threshold in the site's policy has been reached (security.captcha.failedLoginThreshold).
      */
     captchaToken?: string;
@@ -3080,10 +3092,6 @@ export type AccountsLoginRequest = GigyaRequest<{
      */
     actionAttributes?: unknown;
     /**
-     * A string of maximum 100 characters length. The CID sets categories for transactions that can be used later for filtering reports generated by SAP Customer Data Cloud in the "Context ID" combo box. The CID allows you to associate the report information with your own internal data. For example, to identify a specific widget or page on your site/application. You should not define more than 100 different context IDs.
-     */
-    cid?: string;
-    /**
      * Additional information regarding the client who made the login request, used for server-side Risk Based Authentication implementations. When passing the client context, any RBA rules apply and may be triggered.
      *
      * @todo: Type this out, this is probably used somewhere else too
@@ -3097,8 +3105,6 @@ export type AccountsLoginRequest = GigyaRequest<{
      * - cn1
      */
     dataCenter?: GigyaRegion;
-    /**
-     * A comma-separated list of fields to include in the response. The possible values are:
     /**
      * A comma-separated list of fields to include in the response. The possible values are:
      * - identities-active
@@ -3137,11 +3143,18 @@ export type AccountsLoginRequest = GigyaRequest<{
     targetEnv?: 'browser' | 'mobile';
 }>;
 
-export type AccountsLoginResponse = GigyaResponse<{
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/683844d3c4b54104b2201efffdf558e3.html#response-data
+ */
+export type AccountsLoginResponse<
+    DataSchema extends GigyaData,
+    PreferencesSchema extends GigyaPreferences,
+    SubscriptionsSchema extends GigyaSubscriptions,
+> = GigyaResponse<{
     /**
      * Indicates whether the user logging in is new. The parameter is returned only when it is set to "true", or when the user is missing the 'connectionIdentity' field in the DB.
      */
-    isNewUser: boolean;
+    isNewUser?: boolean;
     /**
      * An object containing session information. The content of this object depends on the targetEnv parameter.
      *
@@ -3150,10 +3163,13 @@ export type AccountsLoginResponse = GigyaResponse<{
      * Create a session cookie with the name and value specified by these fields.
      *
      * Alternatively, if the targetEnv parameter is set to "mobile" (your client runs on a mobile), the sessionInfo object contains the the following string fields: sessionToken and sessionSecret. Send these fields to your mobile client. On your client side, call GSAPI.setSession (using the Mobile SDK) to save them on the app's storage.
-     *
-     * @todo: type this out
      */
-    sessionInfo: unknown;
+    sessionInfo?: {
+        cookieName?: string;
+        cookieValue?: string;
+        sessionToken?: string;
+        sessionSecret?: string;
+    };
     /**
      * A ticket that is used to complete a registration process. The regToken is returned when there is a pending registration error, which occurs when the user did not complete the registration process, or there are missing fields in the user profile data that were defined as "required" in the Schema. The regToken is valid for 1 hour.
      */
@@ -3176,26 +3192,201 @@ export type AccountsLoginResponse = GigyaResponse<{
     createdTimestamp?: number;
     /**
      * Custom data. Any data that you want to store regarding the user that isn't part of the Profile object.
-     *
-     * @todo: type this out
      */
-    data?: GigyaData;
+    data?: DataSchema;
     /**
      * 	The email addresses belonging to the user. This includes the following fields:
      * - verified - an array of strings representing the user's verified email addresses
      * - unverified - an array of strings representing the user's unverified email addresses
      *
-     * @todo: type this out
+     * @note Note: emails must be specified explicitly in the include parameter in order to be included in the response.
      */
-    emails?: unknown;
+    emails?: {
+        verified?: Array<string>;
+        unverified?: Array<string>;
+    };
+    /**
+     * 	When using CIAM for B2B, this is where the user's Organization Management data is stored. For a detailed Description of this field, see the Groups object documentation.
+     *
+     * @TODO: Type this out
+     */
+    groups?: unknown;
+    /**
+     * An array of Identity Objects, each object represents a user's social identity. Each Identity Object contains imported data from a social network that the user has connected to.
+     *
+     * @note You must explicitly specify identities within the include parameter for them to be included in the response: identities-active , identities-all, or identities-global to return only active identities, all identities of a site, or all identities of a site group, respectively.
+     * @note Be advised that if a user registers to your site using a Social Identity, then goes through the Forgot Password flow, a Site Login is added to their account, however, a Site Identity is not. A Site Identity can only be created when accounts.setAccountInfo is called on the user's account.
+     */
+    identities?: Array<GigyaIdentity>;
+    /**
+     * Indicates whether the account is active. The account is active once the user creates it even without finalizing it. The account can be deactivated, but it will still be registered if the registration process has been finalized. If isActive==false the user cannot log in, however any currently active sessions remain valid.
+     */
+    isActive?: boolean;
+    /**
+     * Indicates whether the user is registered. The user is registered once their registration has been finalized.
+     */
+    isRegistered?: boolean;
+    /**
+     * Indicates whether the account email is verified.
+     */
+    isVerified?: boolean;
+    /**
+     * The time of the last login of the user in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
+     */
+    lastLogin?: string;
+    /**
+     * The user's last login location, derived from IP address.
+     */
+    lastLoginLocation?: {
+        /**
+         * A string representing the two-character country code.
+         */
+        country?: string;
+        /**
+         * A string representing the state, where available.
+         */
+        state?: string;
+        /**
+         * A string representing the city name.
+         */
+        city?: string;
+        coordinates?: {
+            /**
+             * A double representing the latitude of the center of the city.
+             */
+            lat?: number;
+            /**
+             * A double representing the longitude of the center of the city.
+             */
+            lon?: number;
+        };
+    };
+    /**
+     * The UTC time of the last login of the user in Unix time format including milliseconds (that is, the number of seconds since Jan. 1st 1970 * 1000).
+     */
+    lastLoginTimestamp?: number;
+    /**
+     * The UTC time when user profile, preferences, or subscriptions data was last updated (either full or partial update) in ISO 8601 format, e.g., "2017-07-16T19:20:30Z".
+     */
+    lastUpdated?: string;
+    /**
+     * The UTC time when the last update of the object occurred (either full or partial update) in Unix time including milliseconds, based on when the 'lastUpdated', 'Report AccountsFirstLogin' or 'AccountsReturnedLogin' events are fired.
+     */
+    lastUpdatedTimestamp?: number;
+    /**
+     * The user's login identifiers.
+     *
+     * @note loginIDs must be specified explicitly in the include parameter in order to be included in the response.
+     */
+    loginIDs?: {
+        /**
+         * A string representing the username.
+         */
+        username?: string;
+        /**
+         * An array of strings representing email addresses
+         */
+        emails?: Array<string>;
+        /**
+         * An array of strings representing email addresses that were not validated
+         */
+        unverifiedEmails?: Array<string>;
+    };
+    /**
+     * The name of the provider that the user used in order to log in.
+     */
+    loginProvider?: string;
+    /**
+     * The UTC time when the oldest data of the object was refreshed in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
+     */
+    oldestDataUpdated?: string;
+    /**
+     * The UTC time when the oldest data of the object was refreshed in Unix time format including milliseconds (that is, the number of seconds since Jan. 1st 1970 * 1000).
+     */
+    oldestDataUpdatedTimestamp?: number;
+    /**
+     * The user's Site account password details.
+     */
+    password?: {
+        /**
+         * The hashed password
+         */
+        hash?: string;
+        hashSettings?: {
+            /**
+             * Represents the hash algorithm used to encrypt the password.
+             */
+            algorithm?: string;
+            /**
+             * Represents the number of iterations to perform the hashing.
+             */
+            rounds?: number;
+            /**
+             * Represents the BASE64 encoded value of the salt.
+             */
+            salt?: string;
+            /**
+             * Represents the template for merging clear-text passwords. This is only returned if the pwHashFormat parameter was set during account import and until the user's first login to Gigya (when the user's password is rehashed per the site's settings). See the User Import Guide for additional information.
+             */
+            format?: string;
+        };
+    };
+    /**
+     * The Phone Number login identifier, if the account uses Phone Number Login. The phone number formatting is e.164. Note that this field cannot be mapped using the UI Builder or the Web SDK.
+     */
+    phoneNumber?: string;
+    /**
+     * The user's preferences information as described in the Preferences Object. To have this data returned in the response, it must be specifically requested using the include parameter.
+     */
+    preferences?: PreferencesSchema;
+    /**
+     * The user's profile information as described in the object. If the user has more than one type of identity (i.e. site and social), data from a 'site' source will override data from a social network and always take precedence. If no site data exists, the first social account to update a field's data will take precedence. The profile* is returned in the response by default, but if the include parameter is used to specify other fields that should be provided in the response, the profile must also be specified explicitly in the include parameter.
+     */
     profile?: GigyaProfile;
+    /**
+     * The current RBA Policy defined for the specified user.
+     */
+    rbaPolicy?: {
+        /**
+         * Determines the rule set from the defined rulesSets configured in accounts.rba.setPolicy or one of the default policies.
+         */
+        riskPolicy?: string;
+        /**
+         * Determines whether the user can change their own riskPolicy. If true, only an admin can change the user's riskPolicy.
+         */
+        riskPolicyLocked?: boolean;
+    };
+    /**
+     * The UTC time when the isRegistered parameter was set to true in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
+     */
+    registered?: string;
+    /**
+     * The GMT time when the isRegistered parameter was set to true in Unix time format, including milliseconds.
+     */
+    registeredTimestamp?: number;
+    /**
+     * A string representing the source of the registration. Can be used to set varying destination pages in accounts.setPolicies.
+     */
+    regSource?: string;
+    /**
+     * A comma-separated list of the names of the providers to which the user is connected/logged in.
+     */
+    socialProviders?: string;
+    /**
+     * The user's subscription information.
+     */
+    subscriptions?: SubscriptionsSchema;
+    /**
+     * The UTC time when the isVerified parameter was set to true in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
+     */
+    verified?: string;
+    /**
+     * The GMT time when the isVerified parameter was set to true in Unix time format including milliseconds (that is, the number of seconds since Jan. 1st 1970 * 1000).
+     */
+    verifiedTimestamp?: number;
 }>;
 
 /**
- * This method logs out the specified user from your site or site group across all devices and terminates any active sessions and revokes any active OIDC refresh tokens.
- *
- * Please note, that this method does not disconnect the user from the social providers, the user's site account remains associated with any connected social accounts, even when logged out. When the user logs in again, full access to all the previously connected providers is restored, i.e. the association remains.
- *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41376ba570b21014bbc5a10ce4041860.html#parameters
  */
 export type AccountsLogoutRequest = GigyaRequest<{
@@ -4760,27 +4951,45 @@ export type GigyaAccountsNamespace<
      *      3. accounts.finalizeRegistration
      *
      *  The method returns a regToken (registration token) in the response, which is required when calling accounts.register/ accounts.finalizeRegistration/ accounts.linkAccounts.
-     * 
+     *
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4136e1f370b21014bbc5a10ce4041860.html
      */
     initRegistration: (params: AccountsInitRegistrationRequest) => Promise<AccountsInitRegistrationResponse>;
 
     /**
      * This method checks whether a certain login identifier (username / email) is available. A login identifier is available if it is unique in this user management system.
-     * 
+     *
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41370be670b21014bbc5a10ce4041860.html
      */
     isAvailableLoginID: (params: AccountsIsAvailableLoginIDRequest) => Promise<AccountsIsAvailableLoginIDResponse>;
 
     /**
      * This method merges the account identified by the provided UID with the account identified by the provided login credentials (loginID + password). The method first validates the login credentials, then merges the data and social connections from both accounts into one account.
-     * 
+     *
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/2a4dabf377414d0b92a29ffba5f0970a.html
      */
-    linkAccounts: (params: AccountsLinkAccountsRequest) => Promise<AccountsLinkAccountsResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>>;
+    linkAccounts: (
+        params: AccountsLinkAccountsRequest,
+    ) => Promise<AccountsLinkAccountsResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>>;
 
-    login: (params: AccountsLoginRequest) => Promise<AccountsLoginResponse>;
+    /**
+     * This method logs a user into your site and opens a session for the logged-in user on success. If a userkey/secret pair is not passed in this request it is treated as a client-side call and all client-side rate limits will apply, regardless if the request came from a server.
+     *
+     * @note When receiving the response from this API, make sure to create a session cookie, using data contained in the returned sessionInfo object, so as to maintain the client application synchronized with the user state. The response includes data fields specifying the name, content, and location of the session cookie. Make sure that the page following the login includes SAP Customer Data Cloud's library that is, gigya.js, in order for SAP Customer Data Cloud to read the cookie before it expires. If you are using an ajax-based site login (no page refresh after logging in), make a call to socialize.refreshUI after setting the session cookie so that SAP Customer Data Cloud is able to process the authorization before it expires.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/683844d3c4b54104b2201efffdf558e3.html
+     */
+    login: (
+        params: AccountsLoginRequest,
+    ) => Promise<AccountsLoginResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>>;
 
+    /**
+     * This method logs out the specified user from your site or site group across all devices and terminates any active sessions and revokes any active OIDC refresh tokens.
+     *
+     * Please note, that this method does not disconnect the user from the social providers, the user's site account remains associated with any connected social accounts, even when logged out. When the user logs in again, full access to all the previously connected providers is restored, i.e. the association remains.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41376ba570b21014bbc5a10ce4041860.html
+     */
     logout: (params: AccountsLogoutRequest) => Promise<AccountsLogoutResponse>;
 
     'otp.sendCode': (params: AccountsOTPSendCodeRequest) => Promise<AccountsOTPSendCodeResponse>;
