@@ -4585,9 +4585,7 @@ export type AccountsResendVerificationCodeRequest = GigyaRequest<{
 export type AccountsResendVerificationCodeResponse = GigyaResponse<{}>;
 
 /**
- * This method resets a user's password, either via email or directly. The email format is according to the templates defined in the site policy.
- *
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/559574624b634e5a955e0f7eeba01c07.html
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/559574624b634e5a955e0f7eeba01c07.html#parameters
  */
 export type AccountsResetPasswordRequest = GigyaRequest<{
     /**
@@ -4699,8 +4697,124 @@ export type AccountsResetPasswordResponse = GigyaResponse<{
 }>;
 
 /**
- * This method sets account data into a user's account. The method accepts a list of optional parameters each defining a field/object in the account. The parameters that are passed in the request modify the relevant fields, and the other fields remain unchanged.
- *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/b32ce0918af44c3ebd7e96650fa6cc1d.html#parameters
+ */
+export type AccountsSearchRequest = GigyaRequest<{
+    /**
+     * The SQL-like query used to search the audit log. When using cursors, this parameter should only be sent with the initial request and omitted from subsequent requests.
+     */
+    query: string;
+    /**
+     * When set to true, the search response will include, in addition to the first page, another field named nextCursorId, which is used to fetch the next batch of results. This parameter should only be used on the first request and later should be removed from the request.
+     * When openCursor is active, the Limit clause sets the number of results returned in the batch and should not be larger than 1000 (one thousand).
+     *
+     * @note When using a cursor with a Limit set, the number of results in a batch is not guaranteed.
+     * @note You can't use a cursor if you have a group by or when using 'start'.
+     * @note openCursor is not supported when using querySig and can only be used in server-to-server calls that include a userKey and secret.
+     */
+    openCursor?: boolean;
+    /**
+     * The cursor ID that contains the nextCursorId value received in the first search call.
+     *
+     * @note You can't pass both cursorId and query on the same request - cursorId brings the next page for the search for which it was opened. Also, the time between search requests using a cursorId must not exceed 5 minutes (300 seconds).
+     * @note Each request should contain a different cursorId obtained from the response of the previous request (not the first) using the nextCursorId field. The exception to this rule is when a request fails or when a particular result set needs to be resent; in this case, resend the same cursorID (as long as it has not expired) to receive its associated result set.
+     */
+    cursorId?: string;
+    /**
+     * The timeout for the request (in milliseconds). Default value is 20000 (20 seconds). Maximum allowed value is 60000 (60 seconds).
+     */
+    timeout?: number;
+    /**
+     * An SQL-like query specifying the data to retrieve. When using this parameter, the query specified must meet the regex criteria defined for the user making this call.
+     * When using restrictedQuery, an ACL must exist with a regex limiting the allowValues for this parameter.
+     */
+    restrictedQuery?: string;
+    /**
+     * The type of account to retrieve: full or lite. Acceptable values:
+     * - full (the default value)
+     * - lite
+     * - full,lite
+     */
+    accountTypes?: 'full' | 'lite' | 'full,lite';
+}>;
+
+/**
+ * @note This isn't officially documented.
+ */
+export type AccountsSearchResponse<
+    DataSchema extends GigyaData,
+    PreferencesSchema extends GigyaPreferences,
+    SubscriptionsSchema extends GigyaSubscriptions,
+> = GigyaResponse<{
+    /**
+     * The number of objects returned in the "data" array.
+     */
+    objectsCount?: number;
+    /**
+     * 	The total number of object that satisfy the query in the DB. This is useful for knowing how many objects are in the DB, when fetching limited amount using the "limit" parameter.
+     */
+    totalCount?: number;
+    /**
+     * Used to fetch the next batch of results. This parameter is not returned on the last batch of results, its absence means that the result set is finished.
+     */
+    nextCursorId?: string;
+    /**
+     * The data returned by the search query.
+     */
+    results?: AccountsGetAccountInfoResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>[];
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4139643c70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsSendLiteInviteRequest = GigyaRequest<{
+    /**
+     * The email address associated with the lite account you want to send the invitation.
+     *
+     * @note Only one of either email or emailToken must be supplied; attempting to send both will cause the call to fail.
+     */
+    email?: string;
+    /**
+     * The emailToken associated with the lite account you want to send the invitation.
+     *
+     * @note Only one of either email or emailToken must be supplied; attempting to send both will cause the call to fail.
+     */
+    emailToken?: string;
+    /**
+     * The length of time in seconds the link will remain valid that is inside the email sent to the user in the invitation; the default is 600 (10 minutes).
+     */
+    invitationExpiration?: number;
+    /**
+     * The language of the email template to send to the user, the default is "en". Sending an email other than English requires that you have the appropriate template defined in the preferencesCenter object of your Site's Policies.
+     */
+    lang?: string;
+    /**
+     * The length of time the user's session will be valid when arriving to your site after clicking the invitation link in the email; the default is 3600 (1 hour).
+     */
+    sessionExpiration?: number;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4139643c70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsSendLiteInviteResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/6e5f013e6369493091d086c56d842862.html#parameters
+ */
+export type AccountsSessionVerifyRequest = GigyaRequest<{
+    /**
+     * An access token.
+     */
+    oauth_token: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/6e5f013e6369493091d086c56d842862.html#response-data
+ */
+export type AccountsSessionVerifyResponse = GigyaResponse<{}>;
+
+/**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41398a8670b21014bbc5a10ce4041860.html
  */
 export type AccountsSetAccountInfoRequest<
@@ -4856,7 +4970,7 @@ export type AccountsSetAccountInfoRequest<
 }>;
 
 /**
- *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41398a8670b21014bbc5a10ce4041860.html#response-data
  */
 export type AccountsSetAccountInfoResponse = GigyaResponse<{
     /**
@@ -4906,76 +5020,6 @@ export type AccountsSetProfilePhotoRequest = GigyaRequest<{
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4139fc6970b21014bbc5a10ce4041860.html#response-data
  */
 export type AccountsSetProfilePhotoResponse = GigyaResponse<{}>;
-
-/**
- * Searches and retrieves data from SAP Customer Data Cloud's Accounts Storage.
- *
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/b32ce0918af44c3ebd7e96650fa6cc1d.html#parameters
- */
-export type AccountsSearchRequest = GigyaRequest<{
-    /**
-     * The SQL-like query used to search the audit log. When using cursors, this parameter should only be sent with the initial request and omitted from subsequent requests.
-     */
-    query?: string;
-    /**
-     * When set to true, the search response will include, in addition to the first page, another field named nextCursorId, which is used to fetch the next batch of results. This parameter should only be used on the first request and later should be removed from the request.
-     * When openCursor is active, the Limit clause sets the number of results returned in the batch and should not be larger than 1000 (one thousand).
-     *
-     * @note When using a cursor with a Limit set, the number of results in a batch is not guaranteed.
-     * @note You can't use a cursor if you have a group by or when using 'start'.
-     * @note openCursor is not supported when using querySig and can only be used in server-to-server calls that include a userKey and secret.
-     */
-    openCursor?: boolean;
-    /**
-     * The cursor ID that contains the nextCursorId value received in the first search call.
-     *
-     * @note You can't pass both cursorId and query on the same request - cursorId brings the next page for the search for which it was opened. Also, the time between search requests using a cursorId must not exceed 5 minutes (300 seconds).
-     * @note Each request should contain a different cursorId obtained from the response of the previous request (not the first) using the nextCursorId field. The exception to this rule is when a request fails or when a particular result set needs to be resent; in this case, resend the same cursorID (as long as it has not expired) to receive its associated result set.
-     */
-    cursorId?: string;
-    /**
-     * The timeout for the request (in milliseconds). Default value is 20000 (20 seconds). Maximum allowed value is 60000 (60 seconds).
-     */
-    timeout?: number;
-    /**
-     * An SQL-like query specifying the data to retrieve. When using this parameter, the query specified must meet the regex criteria defined for the user making this call.
-     * When using restrictedQuery, an ACL must exist with a regex limiting the allowValues for this parameter.
-     */
-    restrictedQuery?: string;
-    /**
-     * The type of account to retrieve: full or lite. Acceptable values:
-     * - full (the default value)
-     * - lite
-     * - full,lite
-     */
-    type?: 'full' | 'lite' | 'full,lite';
-}>;
-
-/**
- * @todo: This is documented in the official documentation.
- */
-export type AccountsSearchResponse<
-    DataSchema extends GigyaData,
-    PreferencesSchema extends GigyaPreferences,
-    SubscriptionsSchema extends GigyaSubscriptions,
-> = GigyaResponse<{
-    /**
-     * The number of objects returned in the "data" array.
-     */
-    objectsCount?: number;
-    /**
-     * 	The total number of object that satisfy the query in the DB. This is useful for knowing how many objects are in the DB, when fetching limited amount using the "limit" parameter.
-     */
-    totalCount?: number;
-    /**
-     * Used to fetch the next batch of results. This parameter is not returned on the last batch of results, its absence means that the result set is finished.
-     */
-    nextCursorId?: string;
-    /**
-     * The data returned by the search query.
-     */
-    results?: AccountsGetAccountInfoResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>[];
-}>;
 
 /**
  * This method resets the means of identification (e.g., SMS or authenticating app) used as the second step of authentication in a TFA flow for a specified user. The user will be prompted to enter a new verification method on their next login.
@@ -5863,12 +5907,41 @@ export type GigyaAccountsNamespace<
         params: AccountsResendVerificationCodeRequest,
     ) => Promise<AccountsResendVerificationCodeResponse>;
 
+    /**
+     * This method resets a user's password, either via email or directly. The email format is according to the templates defined in the site policy. For more information on the email format, refer to account.setPolicies or to the Password Reset Email section of the User Management Policies guide.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/559574624b634e5a955e0f7eeba01c07.html
+     */
     resetPassword: (params: AccountsResetPasswordRequest) => Promise<AccountsResetPasswordResponse>;
 
+    /**
+     * Searches and retrieves data from SAP Customer Data Cloud's Accounts Storage using an SQL-like query. SQL queries are converted intoSAP Customer Data Cloud's proprietary query language. SQL injection attacks are not possible because queries are both created by the customer and then converted by SAP Customer Data Cloud.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/b32ce0918af44c3ebd7e96650fa6cc1d.html
+     */
     search: (
         params: AccountsSearchRequest,
     ) => Promise<AccountsSearchResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>>;
 
+    /**
+     * This external API triggers an email from the Gigya server to the email address registered to a lite account. The email contains a clickable link and verifies that the email belongs to the user. The user may click the link to receive an access token that is sent with the user to the page you defined as your Lite Preference Center. The Screen-Sets hosted in your Lite Preference Center will read and validate this token and, on success, allow the user to access and edit their data.
+     *
+     * @seehttps://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4139643c70b21014bbc5a10ce4041860.html
+     */
+    sendLiteInvite: (params: AccountsSendLiteInviteRequest) => Promise<AccountsSendLiteInviteResponse>;
+
+    /**
+     * This API can be used to determine if a given token is valid (received from socialize.getToken).
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/6e5f013e6369493091d086c56d842862.html
+     */
+    'session.verify': (params: AccountsSessionVerifyRequest) => Promise<AccountsSessionVerifyResponse>;
+
+    /**
+     * This method sets account data into a user's account. The method accepts a list of optional parameters each defining a field/object in the account. The parameters that are passed in the request modify the relevant fields, and the other fields remain unchanged.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41398a8670b21014bbc5a10ce4041860.html
+     */
     setAccountInfo: (
         params: AccountsSetAccountInfoRequest<DataSchema, PreferencesSchema, SubscriptionsSchema>,
     ) => Promise<AccountsSetAccountInfoResponse>;
