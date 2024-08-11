@@ -1021,10 +1021,10 @@ export type AccountsExtensionsCreateRequest = GigyaRequest<{
      * - OnBeforeSocialLogin
      */
     extensionPoint:
-    | 'OnBeforeAccountsRegister'
-    | 'OnBeforeAccountsLogin'
-    | 'OnBeforeSetAccountInfo'
-    | 'OnBeforeSocialLogin';
+        | 'OnBeforeAccountsRegister'
+        | 'OnBeforeAccountsLogin'
+        | 'OnBeforeSetAccountInfo'
+        | 'OnBeforeSocialLogin';
 }>;
 
 /**
@@ -1167,10 +1167,10 @@ export type AccountsExtensionsListResponse = GigyaResponse<{
          * The extension point this extension is connected to.
          */
         extensionPoint:
-        | 'OnBeforeAccountsRegister'
-        | 'OnBeforeAccountsLogin'
-        | 'OnBeforeSetAccountInfo'
-        | 'OnBeforeSocialLogin';
+            | 'OnBeforeAccountsRegister'
+            | 'OnBeforeAccountsLogin'
+            | 'OnBeforeSetAccountInfo'
+            | 'OnBeforeSocialLogin';
         /**
          * The timeout configured for this extension.
          */
@@ -2435,10 +2435,10 @@ export type AccountsIdentifiersFindResponse = GigyaResponse<{
      */
     identifiers?: {
         [identifier in
-        | 'gigya.com/identifiers/UID'
-        | 'gigya.com/identifiers/email'
-        | 'gigya.com/identifiers/username'
-        | 'gigya.com/identifiers/phone']?: Array<string>;
+            | 'gigya.com/identifiers/UID'
+            | 'gigya.com/identifiers/email'
+            | 'gigya.com/identifiers/username'
+            | 'gigya.com/identifiers/phone']?: Array<string>;
     };
 }>;
 
@@ -2558,21 +2558,21 @@ export type AccountsImportFullAccountRequest<
              * @note For the sap_abap password algorithm, only the hashedPassword is required.
              */
             hashAlgorithm?:
-            | 'md5'
-            | 'sha1'
-            | 'sha1_hashbytes'
-            | 'sha256'
-            | 'sha512'
-            | 'sha512Hexa'
-            | 'md5_double_salted'
-            | 'md5_crypt'
-            | 'bcrypt'
-            | 'pbkdf2'
-            | 'pbkdf2_sha256'
-            | 'pbkdf2_sha512'
-            | 'drupal'
-            | 'symphony2'
-            | 'sap_abap';
+                | 'md5'
+                | 'sha1'
+                | 'sha1_hashbytes'
+                | 'sha256'
+                | 'sha512'
+                | 'sha512Hexa'
+                | 'md5_double_salted'
+                | 'md5_crypt'
+                | 'bcrypt'
+                | 'pbkdf2'
+                | 'pbkdf2_sha256'
+                | 'pbkdf2_sha512'
+                | 'drupal'
+                | 'symphony2'
+                | 'sap_abap';
             /**
              * The BASE64 encoded value of the salt. If HashFormat is specified and it contains "$salt" -> HashSalt is a required parameter and should be clear text, not BASE64-encoded. The max number of salt bits is 1024.
              */
@@ -4162,6 +4162,429 @@ export type AccountsRBAUnlockRequest = GigyaRequest<{
 export type AccountsRBAUnlockResponse = GigyaResponse<{}>;
 
 /**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/1fe26c820cd145cd8c927a497c33d935.html#parameters
+ */
+export type AccountsRegisterRequest<
+    DataSchema extends GigyaData,
+    PreferencesSchema extends GigyaPreferences,
+    SubscriptionsSchema extends GigyaSubscriptions,
+> = GigyaRequest<{
+    /**
+     * A string that the users enter to identify their account.
+     */
+    username?: string;
+    /**
+     * The user's email address.
+     */
+    email?: string;
+    /**
+     * 	The user's password. SAP Customer Data Cloud validates that the password meets the complexity requirements defined in the site's Password Strength policy.
+     */
+    password?: string;
+    /**
+     * Additional information regarding the client who made the login request, used for server-side Risk Based Authentication implementations. When passing the client context, any RBA rules apply and may be triggered.
+     *
+     * @todo: type this out
+     */
+    clientContext?: unknown;
+    /**
+     * The regToken that was returned by accounts.initRegistration, or from accounts.getLiteToken in a lite account progression flow. This parameter is not mandatory when calling this method server-side.
+     *
+     * The regToken expires one hour after it is produced.
+     */
+    regToken?: string;
+    /**
+     * The user's profile information. The object may include site's custom fields in addition to reserved field names (as defined in the Profile object). Fields that are defined as required in the Schema , are required by this method. If not passed, the method will return a "pending registration" error and a new regToken.
+     */
+    profile?: GigyaProfile;
+    /**
+     * The CAPTCHA provider configured for the site. Possible values are:
+     * - reCaptchaV2
+     * - invisible
+     * - reCaptchaV3
+     * - reCaptchaEnterpriseScore
+     * - FunCaptcha
+     */
+    captchaProvider?: GigyaCaptchaType;
+    /**
+     * The CAPTCHA challenge. This parameter is required if specified so in the site's CAPTCHA policy.
+     */
+    captchaToken?: string;
+    /**
+     * Custom data. The purpose of this object is storing any custom data associated to the user, but which is not part of the Profile object. SAP Customer Data Cloud validates that the data fields meet the requirements that are defined in the Schema.
+     */
+    data?: DataSchema;
+    /**
+     * If set to 'true', this API call will also finalize the registration process for the user, and the user will appear as a 'New registered user' in the user reports.
+     *
+     * If there are missing fields, the registration will remain pending. The default value is 'false'.
+     */
+    finalizeRegistration?: boolean;
+    /**
+     * A Preferences Object containing consent data for this user.
+     */
+    preferences?: PreferencesSchema;
+    /**
+     * A Communications Object containing the user's subscription data to communication topics.
+     *
+     * @todo type this out
+     */
+    communications?: unknown;
+    /**
+     * The secret question that can be used for verification. This parameter is required if specified so in the site's requireSecurityQuestion Policy.
+     */
+    secretQuestion?: string;
+    /**
+     * The answer to the secret question. This parameter is required if specified so in the site's requireSecurityQuestion Policy.
+     */
+    secretAnswer?: string;
+    /**
+     * A Subscriptions Object containing subscription data for this user.
+     */
+    subscriptions?: SubscriptionsSchema;
+    /**
+     * The language used in the current registration process, e.g. for communicating error messages and validation emails (see also Email Templates). If an email template is defined for this language, SAP Customer Data Cloud will send emails in this language (e.g. email verification).
+     *
+     * @note If a profile.locale is not passed, it will be inferred from the lang passed in accounts.register.
+     */
+    lang?: string;
+    /**
+     * This parameter defines your client-side environment, which in return determines the server response data fields. The default value of this parameter is "browser", which means that by default you receive cookie-related data in the response.
+     */
+    targetEnv?: 'browser' | 'mobile';
+    /**
+     * A comma-separated list of fields to include in the response. The possible values are: identities-active, identities-all, loginIDs, emails, profile, data, password, missing-required-fields, lastLoginLocation and irank. The default is profile, so if this parameter is not used, the response will return only the Profile object.
+     */
+    include?: string;
+    /**
+     * This parameter defines the time in seconds that SAP Customer Data Cloud should keep the login session valid for the user. To end the session when the browser closes, assign the value '0'. If this parameter is not specified, the session is valid forever. See Managing Session Expiration for additional information.
+     */
+    sessionExpiration?: number;
+    /**
+     * You may specify the UID to use with this account; if not specified, it is auto-generated.
+     *
+     * @note The parameter accepts up to 252 ASCII characters (unicode is not supported).
+     */
+    siteUID?: string;
+    /**
+     * Records the source of the registration. The default value is the URL of the current page but it can be any string value. regSource is stored in the account and can be used by verification emails to determine which page should be opened.
+     */
+    regSource?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/1fe26c820cd145cd8c927a497c33d935.html#response-data
+ */
+export type AccountsRegisterResponse<
+    DataSchema extends GigyaData,
+    PreferencesSchema extends GigyaPreferences,
+    SubscriptionsSchema extends GigyaSubscriptions,
+> = GigyaResponse<{
+    /**
+     * An object containing session information. The content of this object depends on the targetEnv parameter (see above).
+     *
+     * By default, if the targetEnv parameter is not set (your client environment is web), the sessionInfo object contains the the following string fields: cookieName and cookieValue.
+     *
+     * Create a session cookie with the name and value specified by these fields.
+     *
+     * Alternatively, if the targetEnv parameter is set to "mobile" (your client runs on a mobile), the sessionInfo object contains the following string fields: sessionToken and sessionSecret. Send these fields to your mobile client. On your client side, call GSAPI.setSession (using the Mobile SDK) to save them on the app's storage.
+     */
+    sessionInfo?: {
+        cookieName?: string;
+        cookieValue?: string;
+        sessionToken?: string;
+        sessionSecret?: string;
+    };
+    /**
+     * A ticket that is used to complete a registration process. A new regToken is returned when there is a pending registration error, which occurs when the user did not complete the registration process, or there are missing fields in the user profile data that were defined as "required" in the Schema. The regToken is valid for one hour from the moment it is returned.
+     */
+    regToken?: string;
+    /**
+     * One or more unverified emails, in case there is a pending verification error.
+     */
+    unverifiedEmails?: Array<string>;
+    /**
+     * In case of a data validation errors (errorCode 400006), you will receive this field as an array of error objects. Each object represents a validation error regarding one of the following required fields: username, password, secretQuestion, secretAnswer, email.
+     */
+    validationErrors?: GigyaValidationError[];
+    /**
+     * Indicates whether a new user was created in this call.
+     */
+    newUser?: boolean;
+    /**
+     * The unique user ID. This user ID should be used for login verification. See User.UID for more information.
+     */
+    UID?: string;
+    /**
+     * The UTC time the account was created in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
+     */
+    created?: string;
+    /**
+     * The UTC time the account was created in Unix time format including milliseconds (i.e., the number of seconds since Jan. first 1970 * 1000).
+     */
+    createdTimestamp?: number;
+    /**
+     * Custom data. Any data that you want to store regarding the user that isn't part of the Profile object.
+     */
+    data?: DataSchema;
+    /**
+     * The email addresses belonging to the user. This includes the following fields:
+     * - verified - an array of strings representing the user's verified email addresses.
+     * - unverified - an array of strings representing the user's unverified email addresses.
+     *
+     * @note Emails must be specified explicitly in the include parameter in order to be included in the response.
+     */
+    emails?: {
+        verified?: Array<string>;
+        unverified?: Array<string>;
+    };
+    /**
+     * When using CIAM for B2B, this is where the user's Organization Management data is stored. For a detailed Description of this field, see the Groups object documentation.
+     *
+     * @todo: type this out
+     */
+    groups?: unknown;
+    /**
+     * An array of Identity Objects, each object represents a user's social identity. Each Identity Object contains imported data from a social network that the user has connected to.
+     *
+     * @note: You must explicitly specify identities within the include parameter for them to be included in the response: identities-active , identities-all, or identities-global to return only active identities, all identities of a site, or all identities of a site group, respectively.
+     * @note: Be advised that if a user registers to your site using a Social Identity, then goes through the Forgot Password flow, a Site Login is added to their account, however, a Site Identity is not. A Site Identity can only be created when accounts.setAccountInfo is called on the user's account.
+     */
+    identities?: Array<GigyaIdentity>;
+    /**
+     * Indicates whether the account is active. The account is active once the user creates it even without finalizing it. The account can be deactivated, but it will still be registered if the registration process has been finalized. If isActive==false the user cannot log in, however any currently active sessions remain valid.
+     */
+    isActive?: boolean;
+    /**
+     * Indicates whether the user is registered. The users are registered once their registration has been finalized.
+     */
+    isRegistered?: boolean;
+    /**
+     * Indicates whether the account email is verified.
+     */
+    isVerified?: boolean;
+    /**
+     * The time of the last login of the user in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
+     */
+    lastLogin?: string;
+    /**
+     * The user's last login location, derived from IP address. This includes the following fields:
+     * - country - a string representing the two-character country code.
+     * - state - a string representing the state, where available.
+     * - city - a string representing the city name.
+     * - coordinates - an object containing:
+     *   - lat - a number representing the latitude.
+     *   - lon - a number representing the longitude.
+     */
+    lastLoginLocation?: {
+        country?: string;
+        state?: string;
+        city?: string;
+        coordinates?: {
+            lat?: number;
+            lon?: number;
+        };
+    };
+    /**
+     * The UTC time of the last login of the user in Unix time format including milliseconds (i.e., the number of seconds since Jan. 1st 1970 * 1000).
+     */
+    lastLoginTimestamp?: number;
+    /**
+     * The UTC time when user profile, preferences, or subscriptions data was last updated (either full or partial update) in ISO 8601 format, e.g., "2017-07-16T19:20:30Z".
+     */
+    lastUpdated?: string;
+    /**
+     * The UTC time when the last update of the object occurred (either full or partial update) in Unix time including milliseconds, based on when the 'lastUpdated', 'Report AccountsFirstLogin' or 'AccountsReturnedLogin' events are fired.
+     */
+    lastUpdatedTimestamp?: number;
+    /**
+     * The user's login identifiers. This includes the following fields:
+     * - username - a string representing the user's username.
+     * - emails - an array of strings representing the user's email addresses.
+     * - unverifiedEmails - an array of strings representing email addresses that were not validated.
+     *
+     * @note: LoginIDs must be specified explicitly in the include parameter in order to be included in the response.
+     */
+    loginIDs?: {
+        username?: string;
+        emails?: Array<string>;
+        unverifiedEmails?: Array<string>;
+    };
+    /**
+     * The name of the provider that the user used in order to log in.
+     */
+    loginProvider?: string;
+    /**
+     * The UTC time when the oldest data of the object was refreshed in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
+     */
+    oldestDataUpdated?: string;
+    /**
+     * The UTC time when the oldest data of the object was refreshed in Unix time format including milliseconds (i.e., the number of seconds since Jan. 1st 1970 * 1000).
+     */
+    oldestDataUpdatedTimestamp?: number;
+    /**
+     * The user's Site account password details. Includes the following:
+     * - hash - the hashed password
+     * - hashSettings - object includes:
+     *   - algorithm - Represents the hash algorithm used to encrypt the password.
+     *   - rounds - Represents the number of iterations to perform the hashing.
+     *   - salt - Represents the BASE64 encoded value of the salt.
+     *   - format - Represents the template for merging clear-text passwords. This is only returned if the pwHashFormat parameter was set during account import and until the user's first login to SAP Customer Data Cloud (when the user's password is rehashed per the site's settings). See the RaaS Import Guide for additional information.
+     */
+    password?: {
+        hash?: string;
+        hashSettings?: {
+            algorithm?: string;
+            rounds?: number;
+            salt?: string;
+            format?: string;
+        };
+    };
+    /**
+     * The Phone Number login identifier, if the account uses Phone Number Login. The phone number formatting is e.164.
+     */
+    phoneNumber?: string;
+    /**
+     * The user's preferences information as described in the Preferences Object. To have this data returned in the response it must be specifically requested using the include parameter.
+     */
+    preferences?: PreferencesSchema;
+    /**
+     * The user's profile information as described in the object. If the user has more than one type of identity (i.e. site and social), data from a 'site' source will override data from a social network and always take precedence. If no site data exists, the first social account to update a field's data will take precedence. The profile is returned in the response by default, but if the include parameter is used to specify other fields that should be provided in the response, the profile must also be specified explicitly in the include parameter.
+     */
+    profile?: GigyaProfile;
+    /**
+     * The current RBA Policy defined for the specified user. Properties include:
+     * - riskPolicy - Determines the rule set from the defined rulesSets configured in accounts.rba.setPolicy or one of the default policies.
+     * - riskPolicyLocked - Determines whether the user can change their own riskPolicy. If true, only an admin can change the user's riskPolicy.
+     *
+     * @note: type this out
+     */
+    rba?: unknown;
+    /**
+     * The UTC time when the isRegistered parameter was set to true in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
+     */
+    registered?: string;
+    /**
+     * The GMT time when the isRegistered parameter was set to true in Unix time format, including milliseconds.
+     */
+    registeredTimestamp?: number;
+    /**
+     * A string representing the source of the registration. Can be used to set varying destination pages in accounts.setPolicies.
+     */
+    regSource?: string;
+    /**
+     * A comma-separated list of the names of the providers to which the user is connected/logged in.
+     */
+    socialProviders?: string;
+    /**
+     * The user's email subscription information.
+     */
+    subscriptions?: SubscriptionsSchema;
+    /**
+     * The user's subscription to communication topics information.
+     *
+     * @todo: type this out
+     */
+    communications?: unknown;
+    /**
+     * The UTC time when the isVerified parameter was set to true in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
+     */
+    verified?: string;
+    /**
+     * The GMT time when the isVerified parameter was set to true in Unix time format including milliseconds (i.e., the number of seconds since Jan. 1st 1970 * 1000).
+     */
+    verifiedTimestamp?: number;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/d5d894b89e3f41e885d322bcaee36bea.html#parameters
+ */
+export type AccountsRemoveEmailsRequest = GigyaRequest<{
+    /**
+     * The unique ID of the user for which to add user account emails.
+     */
+    UID?: string;
+    /**
+     * A string holding a comma-separated list of email addresses. The email addresses are removed from the account's verifiedEmail list.
+     */
+    verifiedEmails?: string;
+    /**
+     * A string holding a comma-separated list of email addresses. The email addresses are removed from the account's unverifiedEmail list.
+     */
+    unverifiedEmails?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/d5d894b89e3f41e885d322bcaee36bea.html#response-data
+ */
+export type AccountsRemoveEmailsResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4138cb4370b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsResendDOIConfirmationEmailRequest = GigyaRequest<{
+    /**
+     * The email address of the subscribed user.
+     */
+    email: string;
+    /**
+     * The ID of the subscription to which the user subscribed.
+     */
+    subscriptionId: string;
+    /**
+     * The code of the language of the double opt-in email to send to this subscriber. The default value is "en".
+     */
+    lang?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4138cb4370b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsResendDOIConfirmationEmailResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413917bf70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsResetSitePreferencesRequest = GigyaRequest<{
+    /**
+     * The unique identifier of the user for which the consent statements are being reset.
+     */
+    UID?: string;
+    /**
+     * If you are resetting the consent status of the user on a site that is not the site from which the call originates, the API key of the site for which to reset the consent status.
+     */
+    resetPreferencesApiKey?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413917bf70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsResetSitePreferencesResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4138f19d70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsResendVerificationCodeRequest = GigyaRequest<{
+    /**
+     * The unique ID of a logged-in user. This is the UID you receive from Gigya after a successful login of this user.
+     */
+    UID?: string;
+    /**
+     * The regToken returned from accounts.initRegistration, accounts.register or accounts.login API calls when the registration process has not been finalized. Please note that the regToken you receive from Gigya is valid for only one hour.
+     */
+    regToken?: string;
+    /**
+     * The email address to which to send a verification email. If specified the verification email will only be sent to this address, otherwise it will be sent to all unverified email addresses. If this email address is not associated with the account already it will be automatically added as another unverified email address and a verification email will be sent to that address. If loginIdentifiers in the policy (accounts.setPolicies) contains "email" then this email will also be added as an unlocked login identifier.
+     */
+    email?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4138f19d70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsResendVerificationCodeResponse = GigyaResponse<{}>;
+
+/**
  * This method resets a user's password, either via email or directly. The email format is according to the templates defined in the site policy.
  *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/559574624b634e5a955e0f7eeba01c07.html
@@ -4553,358 +4976,6 @@ export type AccountsSearchResponse<
      */
     results?: AccountsGetAccountInfoResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>[];
 }>;
-
-/**
- * This method registers a new user at your site, in accordance with the predefined site Policies and the Schema of the Accounts Storage. The accounts.register call is followed by accounts.finalizeRegistration, unless the finalizeRegistration parameter of accounts.register is set to 'true' (in which case there is no need to call accounts.finalizeRegistration).
- *
- * A regToken (registration token), generated by accounts.initRegistration, is not required when using this method server-side, with a signed request.
- *
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/1fe26c820cd145cd8c927a497c33d935.html
- */
-export type AccountsRegisterRequest<
-    DataSchema extends GigyaData,
-    PreferencesSchema extends GigyaPreferences,
-    SubscriptionsSchema extends GigyaSubscriptions,
-> = GigyaRequest<{
-    /**
-     * A string that the users enter to identify their account.
-     */
-    username?: string;
-    /**
-     * The user's email address.
-     */
-    email?: string;
-    /**
-     * 	The user's password. SAP Customer Data Cloud validates that the password meets the complexity requirements defined in the site's Password Strength policy.
-     */
-    password?: string;
-    /**
-     * Additional information regarding the client who made the login request, used for server-side Risk Based Authentication implementations. When passing the client context, any RBA rules apply and may be triggered.
-     *
-     * @todo: type this out
-     */
-    clientContext?: unknown;
-    /**
-     * The regToken that was returned by accounts.initRegistration, or from accounts.getLiteToken in a lite account progression flow. This parameter is not mandatory when calling this method server-side.
-     *
-     * The regToken expires one hour after it is produced.
-     */
-    regToken?: string;
-    /**
-     * The user's profile information. The object may include site's custom fields in addition to reserved field names (as defined in the Profile object). Fields that are defined as required in the Schema , are required by this method. If not passed, the method will return a "pending registration" error and a new regToken.
-     */
-    profile?: GigyaProfile;
-    /**
-     * The CAPTCHA challenge. This parameter is required if specified so in the site's CAPTCHA policy.
-     */
-    captchaToken?: string;
-    /**
-     * Custom data. The purpose of this object is storing any custom data associated to the user, but which is not part of the Profile object. SAP Customer Data Cloud validates that the data fields meet the requirements that are defined in the Schema.
-     */
-    data?: DataSchema;
-    /**
-     * If set to 'true', this API call will also finalize the registration process for the user, and the user will appear as a 'New registered user' in the user reports.
-     *
-     * If there are missing fields, the registration will remain pending. The default value is 'false'.
-     */
-    finalizeRegistration?: boolean;
-    /**
-     * A Preferences Object containing consent data for this user.
-     */
-    preferences?: PreferencesSchema;
-    /**
-     * A Communications Object containing the user's subscription data to communication topics.
-     *
-     * @todo type this out
-     */
-    communications?: unknown;
-    /**
-     * The secret question that can be used for verification. This parameter is required if specified so in the site's requireSecurityQuestion Policy.
-     */
-    secretQuestion?: string;
-    /**
-     * The answer to the secret question. This parameter is required if specified so in the site's requireSecurityQuestion Policy.
-     */
-    secretAnswer?: string;
-    /**
-     * A Subscriptions Object containing subscription data for this user.
-     */
-    subscriptions?: SubscriptionsSchema;
-    /**
-     * The language used in the current registration process, e.g. for communicating error messages and validation emails (see also Email Templates). If an email template is defined for this language, SAP Customer Data Cloud will send emails in this language (e.g. email verification).
-     *
-     * @note If a profile.locale is not passed, it will be inferred from the lang passed in accounts.register.
-     */
-    lang?: string;
-    /**
-     * This parameter defines your client-side environment, which in return determines the server response data fields. The default value of this parameter is "browser", which means that by default you receive cookie-related data in the response.
-     */
-    targetEnv?: 'browser' | 'mobile';
-    /**
-     * A comma-separated list of fields to include in the response. The possible values are: identities-active, identities-all, loginIDs, emails, profile, data, password, missing-required-fields, lastLoginLocation and irank. The default is profile, so if this parameter is not used, the response will return only the Profile object.
-     */
-    include?: string;
-    /**
-     * This parameter defines the time in seconds that SAP Customer Data Cloud should keep the login session valid for the user. To end the session when the browser closes, assign the value '0'. If this parameter is not specified, the session is valid forever. See Managing Session Expiration for additional information.
-     */
-    sessionExpiration?: number;
-    /**
-     * You may specify the UID to use with this account; if not specified, it is auto-generated.
-     *
-     * @note The parameter accepts up to 252 ASCII characters (unicode is not supported).
-     */
-    siteUID?: string;
-    /**
-     * Records the source of the registration. The default value is the URL of the current page but it can be any string value. regSource is stored in the account and can be used by verification emails to determine which page should be opened.
-     */
-    regSource?: string;
-}>;
-
-/**
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/1fe26c820cd145cd8c927a497c33d935.html#response-data
- */
-export type AccountsRegisterResponse<
-    DataSchema extends GigyaData,
-    PreferencesSchema extends GigyaPreferences,
-    SubscriptionsSchema extends GigyaSubscriptions,
-> = GigyaResponse<{
-    /**
-     * An object containing session information. The content of this object depends on the targetEnv parameter (see above).
-     *
-     * By default, if the targetEnv parameter is not set (your client environment is web), the sessionInfo object contains the the following string fields: cookieName and cookieValue.
-     *
-     * Create a session cookie with the name and value specified by these fields.
-     *
-     * Alternatively, if the targetEnv parameter is set to "mobile" (your client runs on a mobile), the sessionInfo object contains the following string fields: sessionToken and sessionSecret. Send these fields to your mobile client. On your client side, call GSAPI.setSession (using the Mobile SDK) to save them on the app's storage.
-     *
-     * @todo: type this out
-     */
-    sessionInfo?: unknown;
-    /**
-     * A ticket that is used to complete a registration process. A new regToken is returned when there is a pending registration error, which occurs when the user did not complete the registration process, or there are missing fields in the user profile data that were defined as "required" in the Schema. The regToken is valid for one hour from the moment it is returned.
-     */
-    regToken?: string;
-    /**
-     * One or more unverified emails, in case there is a pending verification error.
-     */
-    unverifiedEmails?: Array<string>;
-    /**
-     * In case of a data validation errors (errorCode 400006), you will receive this field as an array of error objects. Each object represents a validation error regarding one of the following required fields: username, password, secretQuestion, secretAnswer, email.
-     */
-    validationErrors?: GigyaValidationError[];
-    /**
-     * Indicates whether a new user was created in this call.
-     */
-    newUser?: boolean;
-    /**
-     * The unique user ID. This user ID should be used for login verification. See User.UID for more information.
-     */
-    UID?: string;
-    /**
-     * The UTC time the account was created in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
-     */
-    created?: string;
-    /**
-     * The UTC time the account was created in Unix time format including milliseconds (i.e., the number of seconds since Jan. first 1970 * 1000).
-     */
-    createdTimestamp?: number;
-    /**
-     * Custom data. Any data that you want to store regarding the user that isn't part of the Profile object.
-     */
-    data?: DataSchema;
-    /**
-     * The email addresses belonging to the user. This includes the following fields:
-     * - verified - an array of strings representing the user's verified email addresses.
-     * - unverified - an array of strings representing the user's unverified email addresses.
-     *
-     * @note Emails must be specified explicitly in the include parameter in order to be included in the response.
-     */
-    emails?: {
-        verified?: Array<string>;
-        unverified?: Array<string>;
-    };
-    /**
-     * When using CIAM for B2B, this is where the user's Organization Management data is stored. For a detailed Description of this field, see the Groups object documentation.
-     *
-     * @todo: type this out
-     */
-    groups?: unknown;
-    /**
-     * An array of Identity Objects, each object represents a user's social identity. Each Identity Object contains imported data from a social network that the user has connected to.
-     *
-     * @note: You must explicitly specify identities within the include parameter for them to be included in the response: identities-active , identities-all, or identities-global to return only active identities, all identities of a site, or all identities of a site group, respectively.
-     * @note: Be advised that if a user registers to your site using a Social Identity, then goes through the Forgot Password flow, a Site Login is added to their account, however, a Site Identity is not. A Site Identity can only be created when accounts.setAccountInfo is called on the user's account.
-     */
-    identities?: Array<GigyaIdentity>;
-    /**
-     * Indicates whether the account is active. The account is active once the user creates it even without finalizing it. The account can be deactivated, but it will still be registered if the registration process has been finalized. If isActive==false the user cannot log in, however any currently active sessions remain valid.
-     */
-    isActive?: boolean;
-    /**
-     * Indicates whether the user is registered. The users are registered once their registration has been finalized.
-     */
-    isRegistered?: boolean;
-    /**
-     * Indicates whether the account email is verified.
-     */
-    isVerified?: boolean;
-    /**
-     * The time of the last login of the user in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
-     */
-    lastLogin?: string;
-    /**
-     * The user's last login location, derived from IP address. This includes the following fields:
-     * - country - a string representing the two-character country code.
-     * - state - a string representing the state, where available.
-     * - city - a string representing the city name.
-     * - coordinates - an object containing:
-     *   - lat - a number representing the latitude.
-     *   - lon - a number representing the longitude.
-     */
-    lastLoginLocation?: {
-        country?: string;
-        state?: string;
-        city?: string;
-        coordinates?: {
-            lat?: number;
-            lon?: number;
-        };
-    };
-    /**
-     * The UTC time of the last login of the user in Unix time format including milliseconds (i.e., the number of seconds since Jan. 1st 1970 * 1000).
-     */
-    lastLoginTimestamp?: number;
-    /**
-     * The UTC time when user profile, preferences, or subscriptions data was last updated (either full or partial update) in ISO 8601 format, e.g., "2017-07-16T19:20:30Z".
-     */
-    lastUpdated?: string;
-    /**
-     * The UTC time when the last update of the object occurred (either full or partial update) in Unix time including milliseconds, based on when the 'lastUpdated', 'Report AccountsFirstLogin' or 'AccountsReturnedLogin' events are fired.
-     */
-    lastUpdatedTimestamp?: number;
-    /**
-     * The user's login identifiers. This includes the following fields:
-     * - username - a string representing the user's username.
-     * - emails - an array of strings representing the user's email addresses.
-     * - unverifiedEmails - an array of strings representing email addresses that were not validated.
-     *
-     * @note: LoginIDs must be specified explicitly in the include parameter in order to be included in the response.
-     */
-    loginIDs?: {
-        username?: string;
-        emails?: Array<string>;
-        unverifiedEmails?: Array<string>;
-    };
-    /**
-     * The name of the provider that the user used in order to log in.
-     */
-    loginProvider?: string;
-    /**
-     * The UTC time when the oldest data of the object was refreshed in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
-     */
-    oldestDataUpdated?: string;
-    /**
-     * The UTC time when the oldest data of the object was refreshed in Unix time format including milliseconds (i.e., the number of seconds since Jan. 1st 1970 * 1000).
-     */
-    oldestDataUpdatedTimestamp?: number;
-    /**
-     * The user's Site account password details. Includes the following:
-     * - hash - the hashed password
-     * - hashSettings - object includes:
-     *   - algorithm - Represents the hash algorithm used to encrypt the password.
-     *   - rounds - Represents the number of iterations to perform the hashing.
-     *   - salt - Represents the BASE64 encoded value of the salt.
-     *   - format - Represents the template for merging clear-text passwords. This is only returned if the pwHashFormat parameter was set during account import and until the user's first login to SAP Customer Data Cloud (when the user's password is rehashed per the site's settings). See the RaaS Import Guide for additional information.
-     */
-    password?: {
-        hash?: string;
-        hashSettings?: {
-            algorithm?: string;
-            rounds?: number;
-            salt?: string;
-            format?: string;
-        };
-    };
-    /**
-     * The Phone Number login identifier, if the account uses Phone Number Login. The phone number formatting is e.164.
-     */
-    phoneNumber?: string;
-    /**
-     * The user's preferences information as described in the Preferences Object. To have this data returned in the response it must be specifically requested using the include parameter.
-     */
-    preferences?: PreferencesSchema;
-    /**
-     * The user's profile information as described in the object. If the user has more than one type of identity (i.e. site and social), data from a 'site' source will override data from a social network and always take precedence. If no site data exists, the first social account to update a field's data will take precedence. The profile is returned in the response by default, but if the include parameter is used to specify other fields that should be provided in the response, the profile must also be specified explicitly in the include parameter.
-     */
-    profile?: GigyaProfile;
-    /**
-     * The current RBA Policy defined for the specified user. Properties include:
-     * - riskPolicy - Determines the rule set from the defined rulesSets configured in accounts.rba.setPolicy or one of the default policies.
-     * - riskPolicyLocked - Determines whether the user can change their own riskPolicy. If true, only an admin can change the user's riskPolicy.
-     *
-     * @note: type this out
-     */
-    rba?: unknown;
-    /**
-     * The UTC time when the isRegistered parameter was set to true in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
-     */
-    registered?: string;
-    /**
-     * The GMT time when the isRegistered parameter was set to true in Unix time format, including milliseconds.
-     */
-    registeredTimestamp?: number;
-    /**
-     * A string representing the source of the registration. Can be used to set varying destination pages in accounts.setPolicies.
-     */
-    regSource?: string;
-    /**
-     * A comma-separated list of the names of the providers to which the user is connected/logged in.
-     */
-    socialProviders?: string;
-    /**
-     * The user's email subscription information.
-     */
-    subscriptions?: SubscriptionsSchema;
-    /**
-     * The user's subscription to communication topics information.
-     *
-     * @todo: type this out
-     */
-    communications?: unknown;
-    /**
-     * The UTC time when the isVerified parameter was set to true in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
-     */
-    verified?: string;
-    /**
-     * The GMT time when the isVerified parameter was set to true in Unix time format including milliseconds (i.e., the number of seconds since Jan. 1st 1970 * 1000).
-     */
-    verifiedTimestamp?: number;
-}>;
-
-/**
- * This method is used to resend a validation email to unverified addresses associated with the account. The email format is according to the templates defined in the policy. For more information on the email format, refer to account.setPolicies or to the Email Templates section of the User Management Policies guide.
- *
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4138f19d70b21014bbc5a10ce4041860.html#parameters
- */
-export type AccountsResendVerificationCodeRequest = GigyaRequest<{
-    /**
-     * The unique ID of a logged-in user. This is the UID you receive from Gigya after a successful login of this user.
-     */
-    UID?: string;
-    /**
-     * The regToken returned from accounts.initRegistration, accounts.register or accounts.login API calls when the registration process has not been finalized. Please note that the regToken you receive from Gigya is valid for only one hour.
-     */
-    regToken?: string;
-    /**
-     * The email address to which to send a verification email. If specified the verification email will only be sent to this address, otherwise it will be sent to all unverified email addresses. If this email address is not associated with the account already it will be automatically added as another unverified email address and a verification email will be sent to that address. If loginIdentifiers in the policy (accounts.setPolicies) contains "email" then this email will also be added as an unlocked login identifier.
-     */
-    email?: string;
-}>;
-
-/**
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4138f19d70b21014bbc5a10ce4041860.html#response-data
- */
-export type AccountsResendVerificationCodeResponse = GigyaResponse<{}>;
 
 /**
  * This method resets the means of identification (e.g., SMS or authenticating app) used as the second step of authentication in a TFA flow for a specified user. The user will be prompted to enter a new verification method on their next login.
@@ -5741,10 +5812,53 @@ export type GigyaAccountsNamespace<
      */
     'rba.unlock': (params: AccountsRBAUnlockRequest) => Promise<AccountsRBAUnlockResponse>;
 
+    /**
+     * This method registers a new user at your site, in accordance with the predefined site Policies and the Schema of the Accounts Storage. The accounts.register call is followed by accounts.finalizeRegistration, unless the finalizeRegistration parameter of accounts.register is set to 'true' (in which case there is no need to call accounts.finalizeRegistration).
+     *
+     * A regToken (registration token), generated by accounts.initRegistration, is not required when using this method server-side, with a signed request.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/1fe26c820cd145cd8c927a497c33d935.html
+     */
     register: (
         params: AccountsRegisterRequest<DataSchema, PreferencesSchema, SubscriptionsSchema>,
     ) => Promise<AccountsRegisterResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>>;
 
+    /**
+     * This API removes emails from a user's account.
+     *
+     * @note This API call doesn't affect the profile email or login IDs. To change the profile email or login IDs, use the accounts.setAccountInfo REST API call.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/d5d894b89e3f41e885d322bcaee36bea.html
+     */
+    removeEmails: (params: AccountsRemoveEmailsRequest) => Promise<AccountsRemoveEmailsResponse>;
+
+    /**
+     * This method is used to resend an email in a subscription flow that requires double opt-in. Note that this method is currently not supported for global sites.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4138cb4370b21014bbc5a10ce4041860.html
+     */
+    resendDOIConfirmationEmail: (
+        params: AccountsResendDOIConfirmationEmailRequest,
+    ) => Promise<AccountsResendDOIConfirmationEmailResponse>;
+
+    /**
+     * For implementations of Customer Consent, this method is used to reset the preferences (consent statement status) of a registered site user, on a child site in a site group, for all the consent statements including any mandatory consent statements to which they have agreed. Note that this will reset only consent statements that are unique to the site, i.e. will not affect statements that are active in other sites of the group. As a result of successfully calling this endpoint:
+     * - Active sessions are terminated for this user
+     * - The consent status for this user is withdrawn for active consent statements that are unique to this site
+     * - 'Site Preferences Reset' and 'Account Updated' webhooks are fired
+     * - The event is registered in the audit log
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413917bf70b21014bbc5a10ce4041860.html
+     */
+    resetSitePreferences: (
+        params: AccountsResetSitePreferencesRequest,
+    ) => Promise<AccountsResetSitePreferencesResponse>;
+
+    /**
+     * This method is used to resend an email in a subscription flow that requires double opt-in. Note that this method is currently not supported for global sites.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4138cb4370b21014bbc5a10ce4041860.html
+     */
     resendVerificationCode: (
         params: AccountsResendVerificationCodeRequest,
     ) => Promise<AccountsResendVerificationCodeResponse>;
