@@ -3407,6 +3407,304 @@ export type AccountsLogoutResponse = GigyaResponse<{
 }>;
 
 /**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/bd09a6608f694a4d8461c8b0cb00a75b.html#parameters
+ */
+export type AccountsNotifyLoginRequest = GigyaRequest<{
+    /**
+     * A unique identifier used by your site to identify the user. You may use the user's account ID that you have designated for this user in your database, or alternatively the user's existing Gigya UID.
+     *
+     * @note The parameter accepts only ASCII characters (not Unicode) and up to 252 characters. If you use this parameter, providerSessions is Optional.
+     * @note You are required to pass at least one of the parameters siteUID and/or providerSessions.
+     */
+    siteUID?: string;
+    /**
+     * This parameter gives the option to pass to SAP Customer Data Cloud, session information obtained directly from a social network, so it can be used for making API calls to the social network. The value of this parameter is a JSON object with reference to other objects. The field names of the main object are the names of the provider to set the session information for. The sub-objects contain the session information.
+     *
+     * @note You are required to pass at least one of the parameters siteUID and/or providerSessions.
+     */
+    providerSessions?: {
+        [provider: string]: {
+            /**
+             * The session authentication token.
+             */
+            authToken?: string;
+            /**
+             * The session token secret.
+             */
+            tokenSecret?: string;
+            /**
+             * The absolute time when the session token expires in UNIX time format.
+             */
+            tokenExpiration?: number;
+            /**
+             * The session handle encoded in BASE64.
+             */
+            sessionHandle?: string;
+            /**
+             * The absolute time when the session expires in UNIX time format.
+             */
+            sessionHandleExpiration?: number;
+        };
+    };
+    /**
+     * This parameter defines the length of time that SAP Customer Data Cloud should keep the user's login session valid. It can be configured via WebSDK Configuration, via an individual API call, or left empty. If no value is specified, the default values are 0 or -2, depending on whether your site uses RaaS or not (see below); Global configuration overrides the default, and setting the value via individual API calls override the global configuration.
+     *
+     * The expected values are:
+     * - 0 - Session expires when the browser closes. This is the default behavior when RaaS is enabled in your site. This behavior is dependent upon the browser's cookie handling procedures, i.e., Chrome keeps processes running in the background even after the browser is technically closed, this keeps the cookies valid until the background processes are terminated. This value is not supported when using our Mobile SDKs, and the session will behave as if set to -2.
+     * - -1 - Session ends after a 60 second period; SAP Customer Data Cloud gives you the option of creating a cookie that is stored on the site visitor's client (browser), allowing the site to control the session length within this 60 second window, after which the session is terminated if no cookie is found. A typical use case is when the session could include sensitive data (such as credit card details), and the session should be short, with the option of restarting the duration when users perform actions. Useful if you always set the session expiration via individual API methods or with each request, such as when the site session is controlled by a CMS (e.g., Drupal). For additional information, see how to define a session expiration cookie.
+     * - -2 - Session is valid forever. This is the default behavior when RaaS is not enabled in your site.
+     * - Any custom integer - Defines the number of seconds the session is active, e.g., 3600 (one hour).
+     */
+    sessionExpiration?: number;
+    /**
+     * Default is false. If set to true, the server will not perform any validation on the user and will not return any pending state errors and will not check for any registration requirements for the end user. This parameter can only be used over HTTPS.
+     */
+    skipValidation?: boolean;
+    /**
+     * This parameter defines your client side environment, which in return determines the server response data fields. The default value of this parameter is "browser", which means that by default you receive cookie-related data in the response.
+     *
+     * If your client runs on a mobile:
+     * If you are calling this method using a Mobile SDK since version 2.15.6, this parameter is automatically set to "mobile" (there is no need to set it manually). In any other case, you should set this parameter to be "mobile".
+     * As a result of setting the parameter to "mobile" the server response data fields will include: sessionToken and sessionSecret (instead of cookie related data). In such case, you should send the sessionToken and sessionSecret to your mobile client. On your client side, call GSAPI.setSession (using the Mobile SDK) to save them in the app's storage.
+     */
+    targetEnv?: 'browser' | 'mobile';
+    /**
+     * Records the source of the registration. The default value is the URL of the current page but it can be any string value. regSource is stored in the account and can be used by verification emails to determine which page should be opened (see accounts.set Policies). Can also be set via the Global Conf object.
+     */
+    regSource?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/bd09a6608f694a4d8461c8b0cb00a75b.html#response-data
+ */
+export type AccountsNotifyLoginResponse = GigyaResponse<{
+    /**
+     * The unique user ID. This user ID should be used for login verification. See User.UID for more information.
+     */
+    UID?: string;
+    /**
+     * The UTC time the account was created in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
+     */
+    created?: string;
+    /**
+     * The UTC time the account was created in Unix time format including milliseconds (i.e., the number of seconds since Jan. 1st 1970 * 1000).
+     */
+    createdTimestamp?: number;
+    /**
+     * An array of Identity Objects, each object represents a user's social identity. Each Identity Object contains imported data from a social network that the user has connected to.
+     *
+     * @note Be advised that if a user registers to your site using a Social Identity, then goes through the Forgot Password flow, a Site Login is added to their account, however, a Site Identity is not. A Site Identity can only be created when accounts.setAccountInfo is called on the user's account.
+     */
+    identities?: Array<GigyaIdentity>;
+    /**
+     * An id_token of the current user.
+     */
+    id_token?: string;
+    /**
+     * Indicates whether the account is active. The account is active once the user creates it even without finalizing it. The account can be deactivated, but it will still be registered if the registration process has been finalized. If isActive==false the user cannot log in, however any currently active sessions remain valid.
+     */
+    isActive?: boolean;
+    /**
+     * Indicates whether the user is registered. The user is registered once his registration has been finalized.
+     */
+    isRegistered?: boolean;
+    /**
+     * Indicates whether the account email is verified.
+     */
+    isVerified?: boolean;
+    /**
+     * The time of the last login of the user in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
+     */
+    lastLogin?: string;
+    /**
+     * The UTC time of the last login of the user in Unix time format including milliseconds (i.e., the number of seconds since Jan. 1st 1970 * 1000).
+     */
+    lastLoginTimestamp?: number;
+    /**
+     * The UTC time when user profile, preferences, or subscriptions data was last updated (either full or partial update) in ISO 8601 format, e.g., "2017-07-16T19:20:30Z".
+     */
+    lastUpdated?: string;
+    /**
+     * The UTC time when the last update of the object occurred (either full or partial update) in Unix time including milliseconds, based on when the 'lastUpdated', 'Report AccountsFirstLogin' or 'AccountsReturnedLogin' events are fired.
+     */
+    lastUpdatedTimestamp?: number;
+    /**
+     * The name of the provider that the user used in order to login.
+     */
+    loginProvider?: string;
+    /**
+     * The UTC time when the oldest data of the object was refreshed in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
+     */
+    oldestDataUpdated?: string;
+    /**
+     * The UTC time when the oldest data of the object was refreshed in Unix time format including milliseconds (i.e., the number of seconds since Jan. 1st 1970 * 1000).
+     */
+    oldestDataUpdatedTimestamp?: number;
+    /**
+     * The Phone Number login identifier, if the account uses Phone Number Login. The phone number formatting is e.164. Note that this field cannot be mapped using the UI Builder or the Web SDK.
+     */
+    phoneNumber?: string;
+    /**
+     * The user's profile information as described in the object. If the user has more than one type of identity (i.e. site and social), data from a 'site' source will override data from a social network and always take precedence. If no site data exists, the first social account to update a field's data will take precedence. The profile is returned in the response by default.
+     */
+    profile?: GigyaProfile;
+    /**
+     * The UTC time when the isRegistered parameter was set to true in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
+     */
+    registered?: string;
+    /**
+     * A comma-separated list of the names of the providers to which the user is connected/logged in.
+     */
+    socialProviders?: string;
+    /**
+     * The UTC time when the isVerified parameter was set to true in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
+     */
+    verified?: string;
+    /**
+     * The GMT time when the isVerified parameter was set to true in Unix time format including milliseconds (i.e., the number of seconds since Jan. 1st 1970 * 1000).
+     */
+    verifiedTimestamp?: number;
+    /**
+     * Indicates whether or not this is a new user. This value will always return false in a TFA flow.
+     */
+    newUser?: boolean;
+    /**
+     * A ticket that is used to complete a registration process. A new regToken is returned when there is a pending registration error, which occurs when the user did not complete the registration process, or there are missing fields in the user profile data that were defined as "required" in the Schema.
+     */
+    regToken?: string;
+    /**
+     * An object containing session information. The content of this object depends on the targetEnv parameter (see above).
+     *
+     * By default, if the targetEnv parameter is not set (your client environment is web), the sessionInfo object contains the the following string fields: cookieName and cookieValue.
+     *
+     * Please create a session cookie with the name and value specified by these fields.
+     *
+     * Alternatively, if the targetEnv parameter is set to "mobile" (your client runs on a mobile), the sessionInfo object contains the the following string fields: sessionToken and sessionSecret. Please send these fields to your mobile client. On your client side, call GSAPI.setSession (using the Mobile SDK) to save them on the app's storage.
+     */
+    sessionInfo?: {
+        cookieName?: string;
+        cookieValue?: string;
+        sessionToken?: string;
+        sessionSecret?: string;
+    };
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413795be70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsNotifySocialLoginRequest = GigyaRequest<{
+    /**
+     * This parameter passes to Gigya, session information obtained directly from a social network, for validating the user and their session, and calling the providers. The providerSessions object is made of sub-objects, each holding session information of a different social provider.
+     */
+    providerSessions: {
+        [provider: string]: {
+            /**
+             * The session authentication token.
+             */
+            authToken?: string;
+            /**
+             * The session token secret.
+             */
+            tokenSecret?: string;
+            /**
+             * The absolute time when the session token expires in UNIX time format.
+             */
+            tokenExpiration?: number;
+            /**
+             * The session handle encoded in BASE64.
+             */
+            sessionHandle?: string;
+            /**
+             * The absolute time when the session expires in UNIX time format.
+             */
+            sessionHandleExpiration?: number;
+        };
+    };
+    /**
+     * The data center in which the registering user's data will be stored. Acceptable values:
+     * - us1
+     * - eu1
+     * - au1
+     * - cn1
+     */
+    dataCenter?: GigyaRegion;
+    /**
+     * The login mode. Available values:
+     * - standard - (default) Performs a new login with the provided provider session. This mode is not to be used when there is an existing session for the user.
+     * - connect - This should be set when using this endpoint to add a connection to an existing user (see socialize.addConnection. This mode can only be used when there is an existing session for the user.
+     * - link - Link accounts flow. In this mode a regToken for linking should be provided.
+     */
+    loginMode?: 'standard' | 'connect' | 'link';
+    /**
+     * The phone number login identifier, if the account uses Phone Number Login. The supported phone number formatting is E.164. This parameter can only be passed if the loginMode is 'link'.
+     */
+    phoneNumber?: string;
+    /**
+     * This parameter defines the length of time that Gigya should keep the user's login session valid. It can be configured via WebSDK Configuration, via an individual API call, or left empty. If no value is specified, the default values are 0 or -2, depending on whether your site uses RaaS or not (see below); Global configuration overrides the default, and setting the value via individual API calls override the global configuration.
+     *
+     * The expected values are:
+     * - 0 - Session expires when the browser closes. This is the default behavior when RaaS is enabled in your site. This behavior is dependent upon the browser's cookie handling procedures, i.e., Chrome keeps processes running in the background even after the browser is technically closed, this keeps the cookies valid until the background processes are terminated. This value is not supported when using our Mobile SDKs, and the session will behave as if set to -2.
+     * - -1 - Session ends after a 60 second period; Gigya gives you the option of creating a cookie that is stored on the site visitor's client (browser), allowing the site to control the session length within this 60 second window, after which the session is terminated if no cookie is found. A typical use case is when the session could include sensitive data (such as credit card details), and the session should be short, with the option of restarting the duration when users perform actions. Useful if you always set the session expiration via individual API methods or with each request, such as when the site session is controlled by a CMS (e.g., Drupal). For additional information, see how to define a session expiration cookie.
+     * - -2 - Session is valid forever. This is the default behavior when RaaS is not enabled in your site.
+     * - Any custom integer - Defines the number of seconds the session is active, e.g., 3600 (one hour).
+     */
+    sessionExpiration?: number;
+    /**
+     * This parameter defines your client side environment, which in return determines the server response data fields. The default value of this parameter is "browser", which means that by default you receive cookie-related data in the response.
+     *
+     * If your client runs on a mobile:
+     * If you are calling this method using a Mobile SDK since version 2.15.6, this parameter is automatically set to "mobile" (there is no need to set it manually). In any other case, you should set this parameter to be "mobile".
+     * As a result of setting the parameter to "mobile" the server response data fields will include: sessionToken and sessionSecret (instead of cookie related data). In such case, you should send the sessionToken and sessionSecret to your mobile client. On your client side, call GSAPI.setSession (using the Mobile SDK) to save them in the app's storage.
+     */
+    targetEnv?: 'browser' | 'mobile';
+    /**
+     * The source of the registration. The default value is the URL of the current page but it can be any string value. regSource is stored in the account and can be used by verification emails to determine which page should the user be redirected to (see accounts.set Policies).
+     */
+    regSource?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413795be70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsNotifySocialLoginResponse = GigyaResponse<{
+    /**
+     * A token returned to be used internally by the WebSDK which is placed into a browser cookie and then used in all subsequent requests.
+     */
+    login_token?: string;
+    /**
+     * This is true if loginMode was set to 'connect', otherwise, false.
+     */
+    isAddConnection?: boolean;
+    /**
+     * If this call was generated by a SAP Customer Data Cloud default Console application.
+     *
+     * @note Default apps should never be used in a production environment and are only for testing.
+     */
+    isDefaultApp?: boolean;
+    /**
+     * If the user is a new registered user, as opposed to an existing account. Note that this will always be false if TFA is enabled, even for new users.
+     */
+    isNewUser?: boolean;
+    /**
+     * Tells if the request succeeded or not.
+     */
+    status?: string;
+    /**
+     * The id_token necessary for validating the response in a global site group.
+     */
+    id_token?: string;
+    /**
+     * An object containg session information. The content of this object depends on the targetEnv parameter (see above).
+     */
+    sessionInfo?: {
+        cookieName?: string;
+        cookieValue?: string;
+        sessionToken?: string;
+        sessionSecret?: string;
+    };
+}>;
+
+/**
  * This method resets a user's password, either via email or directly. The email format is according to the templates defined in the site policy.
  *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/559574624b634e5a955e0f7eeba01c07.html
@@ -4991,6 +5289,26 @@ export type GigyaAccountsNamespace<
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41376ba570b21014bbc5a10ce4041860.html
      */
     logout: (params: AccountsLogoutRequest) => Promise<AccountsLogoutResponse>;
+
+    /**
+     * This method notifies SAP Customer Data Cloud of an external login that happened outside of the Accounts system.
+     *
+     * The notifyLogin call registers a new user in the Accounts service, in case the siteUID parameter provided is new, or reconnects a returning user in case the siteUID already exists in our records.
+     *
+     * @note When receiving the response from this API, make sure to create a session cookie, using data contained in the returned sessionInfo object, so as to maintain the client application synchronized with the user state. The response includes data fields specifying the name, content and location of the session cookie. Please make sure that the page following the login includes SAP Customer Data Cloud's library i.e., gigya.js, in order for SAP Customer Data Cloud to read the cookie before it expires. If you are using an ajax-based site login (no page refresh after logging in), make a call to socialize.refreshUI after setting the session cookie so that SAP Customer Data Cloud is able to process the authorization before it expires.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/bd09a6608f694a4d8461c8b0cb00a75b.html
+     */
+    notifyLogin: (params: AccountsNotifyLoginRequest) => Promise<AccountsNotifyLoginResponse>;
+
+    /**
+     * This method notifies Gigya of a login with a social provider that happened outside of the Accounts system. The notifySocialLogin call registers a new user, or reconnects an existing user, in the Accounts database.
+     *
+     * Unlike accounts.notifyLogin, there is no user data returned in this response, if you require the user's data you must call getUserInfo (mobile) or accounts.getAccountInfo (web) to receive the user data after a successful notifySocialLogin call.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413795be70b21014bbc5a10ce4041860.html
+     */
+    notifySocialLogin: (params: AccountsNotifySocialLoginRequest) => Promise<AccountsNotifySocialLoginResponse>;
 
     'otp.sendCode': (params: AccountsOTPSendCodeRequest) => Promise<AccountsOTPSendCodeResponse>;
 
