@@ -132,7 +132,7 @@ export type DSSearchRequest = GigyaRequest<{
     /**
      * A SQL-like query specifying the data to retrieve.
      */
-    query: string;
+    query?: string;
     /**
      * When set to true, the search response will include, in addition to the first page, another field named nextCursorId, which is used to fetch the next batch of results. This parameter should only be used on the first request and later should be removed from the request. When openCursor is true, the Limit clause sets the number of results returned in the batch.
      *

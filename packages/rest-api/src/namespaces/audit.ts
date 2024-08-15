@@ -8,7 +8,7 @@ export type AuditSearchRequest = GigyaRequest<{
     /**
      * The SQL-like query used to search the audit log. Please refer to the Query language specification above. Note that Gigya field names are case-sensitive, i.e., uid is NOT the same as UID.
      */
-    query: string;
+    query?: string;
     /**
      * The cursor ID that contains the nextCursorId value received in the first search call. You cannot pass both cursorId and query on the same request - cursorId brings the next page for the search for which it was opened. In addition, the time between search requests using a cursorId must not exceed 5 minutes.
      * Each request should contain a different cursorId obtained from the response of the previous request (not the first) using the nextCursorId field. The exception to this rule is when a request fails or when a particular result set needs to be re-sent; in this case, resend the same cursorID (as long as it has not expired) to receive its associated result set.
