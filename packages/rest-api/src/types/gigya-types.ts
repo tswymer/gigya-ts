@@ -848,3 +848,22 @@ export type GigyaSubscriptionsSchema = {
         };
     };
 };
+
+export type GigyaClientContext = {
+    /**
+     *  The IP address of the client from which the login was made. mode, the JWT contains the attribute: action="verify", telling the provider that we only allow the users to verify themselves.
+     */
+    clientIP: string;
+    /**
+     * The ID of the end user device from which the login was made. The default is null. The maximum number of allowed characters is 100.
+     */
+    deviceID?: string;
+    /**
+     * Indicates whether the end user has completed a CAPTCHA (or similar) challenge during the registration process. If this is false, and RBA configuration includes a CAPTCHA challenge, the user may be shown a CAPTCHA challenge, based on RBA logic. The default is false.
+     */
+    isCaptchaVerified?: boolean;
+    /**
+     * A positive numerical value indicating the level of risk associated with this login attempt. This is compared to the defined threshold for triggering a configured RBA rule.
+     */
+    riskScore?: number;
+};

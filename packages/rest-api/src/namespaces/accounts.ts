@@ -1,6 +1,13 @@
 import { GigyaCaptchaType, GigyaRegion, GigyaRequest, GigyaResponse } from '../types/gigya-requests';
 import { GigyaSubscriptions, UpdateSubscriptions } from '../types/gigya-subscriptions';
-import { GigyaData, GigyaIdentity, GigyaPreferences, GigyaProfile, GigyaValidationError } from '../types/gigya-types';
+import {
+    GigyaClientContext,
+    GigyaData,
+    GigyaIdentity,
+    GigyaPreferences,
+    GigyaProfile,
+    GigyaValidationError,
+} from '../types/gigya-types';
 
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/23e5e21ad35f4c85b98ce39e895e5f24.html#parameters
@@ -5133,6 +5140,10 @@ export type AccountsTFAPhoneCompleteVerificationResponse = GigyaResponse<{
  */
 export type AccountsInitTFARequest = GigyaRequest<{
     /**
+     * The regToken returned from accounts.initRegistration, accounts.register or accounts.login API calls when the registration process has not been finalized. Please note that the regToken you receive from SAP Customer Data Cloud is valid for only one hour.
+     */
+    regToken: string;
+    /**
      * The name of the TFA provider for which the token mode is set.
      */
     provider: 'gigyaPhone' | 'gigyaTotp' | 'gigyaPush' | 'gigyaEmail';
@@ -5144,6 +5155,10 @@ export type AccountsInitTFARequest = GigyaRequest<{
      * - edit
      */
     mode: 'register' | 'verify' | 'add' | 'edit';
+    /**
+     * Additional information regarding the client who made the login request, used for server-side Risk Based Authentication implementations. When passing the client context, any RBA rules apply and may be triggered.
+     */
+    clientContext?: GigyaClientContext;
 }>;
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b93e570b21014bbc5a10ce4041860.html#response-data

@@ -350,7 +350,7 @@ export type AccountsOTPSendCodeResponseJS = Omit<AccountsOTPSendCodeResponse, 'c
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b93e570b21014bbc5a10ce4041860.html#parameters
  */
-export type AccountsInitTFARequestJS = AccountsInitTFARequest;
+export type AccountsInitTFARequestJS = Omit<AccountsInitTFARequest, 'clientContext'>;
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b93e570b21014bbc5a10ce4041860.html#response-data
  */
