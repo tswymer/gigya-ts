@@ -5140,9 +5140,13 @@ export type AccountsTFAPhoneCompleteVerificationResponse = GigyaResponse<{
  */
 export type AccountsInitTFARequest = GigyaRequest<{
     /**
+     * The users UID, can be specified when the user is logged in.
+     */
+    UID?: string;
+    /**
      * The regToken returned from accounts.initRegistration, accounts.register or accounts.login API calls when the registration process has not been finalized. Please note that the regToken you receive from SAP Customer Data Cloud is valid for only one hour.
      */
-    regToken: string;
+    regToken?: string;
     /**
      * The name of the TFA provider for which the token mode is set.
      */
