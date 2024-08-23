@@ -890,3 +890,8 @@ export type GigyaPhoneObject = {
      */
     lastverification: string;
 };
+
+export type GigyaProviderGeneric = {
+    name?: string;
+    capabilities?: string[];
+};
