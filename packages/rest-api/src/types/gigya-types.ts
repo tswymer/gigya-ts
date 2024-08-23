@@ -867,3 +867,26 @@ export type GigyaClientContext = {
      */
     riskScore?: number;
 };
+
+export type GigyaPhoneObject = {
+    /**
+     * The unique identifier of the phone.
+     */
+    id: string;
+    /**
+     * The phone number with the last 3 digits visble, e.g. "##-###-#762".
+     */
+    obfuscated: string;
+    /**
+     * The full phone number, e.g. "972555926762"
+     */
+    plain: string;
+    /**
+     * Can be either "sms" or "voice".
+     */
+    lastMethod: string;
+    /**
+     * The last verification time in UNIX time.
+     */
+    lastverification: string;
+};

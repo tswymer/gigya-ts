@@ -4,6 +4,7 @@ import {
     GigyaClientContext,
     GigyaData,
     GigyaIdentity,
+    GigyaPhoneObject,
     GigyaPreferences,
     GigyaProfile,
     GigyaValidationError,
@@ -5174,6 +5175,48 @@ export type AccountsInitTFAResponse = GigyaResponse<{
     gigyaAssertion: string;
 }>;
 
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413be06570b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAPhoneGetRegisteredPhoneNumbersRequest = GigyaRequest<{
+    /**
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature:
+        Header:
+        {
+            "alg": "http://www.w3.org/2000/09/xmldsig#rsa-sha1Information published on non-SAP site",
+            "typ": "JWT",
+            "x5u": "http://accounts.gigya.com/accounts.tfa.getCertificateInformation published on non-SAP site"
+        }
+        Body:
+        {
+            iss - a string representing the issuer, e.g. "gigya.com".
+            aud - a string representing the TFA provider name, e.g. "gigyaPhone".
+            sub - a string representing a unique Gigya identifier for this user.
+            action - a string enum representing the requested action type, can be "verify", "edit", or "registerOrVerify".
+            params - a JSON object with string properties and values with TFA provider-specific parameters. These are the params from the policy for this provider.
+            iat - an integer representing the creation time of this JWT object in UNIX time.
+            jti - a string representing the JWT ID; a crypto-strength nonce value.
+            ctx - a string representing an encrypted Gigya context.
+        }
+        Signature: Computed using the private key matching the public key whose URL is specified in the header.
+     */
+    gigyaAssertion: string;
+}>;
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413be06570b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAPhoneGetRegisteredPhoneNumbersResponse = GigyaResponse<{
+    /**
+     * An array of objects, each object includes the following fields:
+        - id - the unique identifier of the phone.
+        - obfuscated - the phone number with the last 3 digits visble, e.g. "##-###-#762".
+        - plain - the full phone number, e.g. "972555926762"
+        - lastMethod - can be either "sms" or "voice".
+        - lastVerification - the last verification time in UNIX time.
+     */
+    phones: GigyaPhoneObject[];
+}>;
+
 export type GigyaAccountsNamespace<
     DataSchema extends GigyaData,
     PreferencesSchema extends GigyaPreferences,
@@ -5980,6 +6023,10 @@ export type GigyaAccountsNamespace<
     'tfa.phone.completeVerification': (
         params: AccountsTFAPhoneCompleteVerificationRequest,
     ) => Promise<AccountsTFAPhoneCompleteVerificationResponse>;
+
+    'tfa.phone.getRegisteredPhoneNumbers': (
+        params: AccountsTFAPhoneGetRegisteredPhoneNumbersRequest,
+    ) => Promise<AccountsTFAPhoneGetRegisteredPhoneNumbersResponse>;
 
     'tfa.initTFA': (params: AccountsInitTFARequest) => Promise<AccountsInitTFAResponse>;
 };
