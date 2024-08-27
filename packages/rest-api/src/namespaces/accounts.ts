@@ -5116,6 +5116,45 @@ export type AccountsTFAUnregisterDeviceRequest = GigyaRequest<{
 export type AccountsTFAUnregisterDeviceResponse = GigyaResponse<{}>;
 
 /**
+ * When implementing Risk Based Authentication, this method removes the given phone ID from the user's list of verified phone numbers.
+ *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413bf36d70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAPhoneRemovePhoneRequest = GigyaRequest<{
+    /**
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object, and a signature:
+     *  Header:
+     *  {
+     *      "alg": "http://www.w3.org/2000/09/xmldsig#rsa-sha1Information published on non-SAP site",
+     *      "typ": "JWT",
+     *      "x5u": "http://accounts.gigya.com/accounts.tfa.getCertificateInformation published on non-SAP site"
+     *  }
+     *  Body:
+     *  {
+     *      iss - a string representing the issuer, e.g. "gigya.com".
+     *      aud - a string representing the TFA provider name, e.g. "gigyaPhone".
+     *      sub - a string representing a unique Gigya identifier for this user.
+     *      action - a string enum representing the requested action type. In this case, "edit" is the only possible value.
+     *      params - a JSON object with string properties and values with TFA provider-specific parameters. These are the params from the policy for this provider.
+     *      iat - an integer representing the creation time of this JWT object in UNIX time.
+     *      jti - a string representing the JWT ID; a crypto-strength nonce value.
+     *      ctx - a string representing an encrypted Gigya context.
+     *  }
+     *  Signature: Computed using the private key matching the public key whose URL is specified in the header.
+     */
+    gigyaAssertion: string;
+    /**
+     * 	The unique identifier of the phone.
+     */
+    phoneId: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413bf36d70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAPhoneRemovePhoneResponse = GigyaResponse<{}>;
+
+/**
  * When implementing Risk Based Authentication, this method sends a crypto-random 6-digit verification code to the specified number.
  *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c069e70b21014bbc5a10ce4041860.html#parameters
@@ -6185,6 +6224,15 @@ export type GigyaAccountsNamespace<
     'tfa.phone.getRegisteredPhoneNumbers': (
         params: AccountsTFAPhoneGetRegisteredPhoneNumbersRequest,
     ) => Promise<AccountsTFAPhoneGetRegisteredPhoneNumbersResponse>;
+
+    /**
+     * When implementing Risk Based Authentication, this method removes the given phone ID from the user's list of verified phone numbers.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413bf36d70b21014bbc5a10ce4041860.html
+     */
+    'tfa.phone.removePhone': (
+        params: AccountsTFAPhoneRemovePhoneRequest,
+    ) => Promise<AccountsTFAPhoneRemovePhoneResponse>;
 
     /**
      * This method initializes two-factor authentication (TFA) by returning a JWT token that can be used to register with a new provider, or to verify the user using an existing provider, or to edit an existing provider.
