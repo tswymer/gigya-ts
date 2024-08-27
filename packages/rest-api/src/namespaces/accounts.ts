@@ -5225,6 +5225,81 @@ export type AccountsInitTFAResponse = GigyaResponse<{
 }>;
 
 /**
+ * This method finalizes the two-factor authentication (TFA) flow that started with accounts.tfa.initTFA.
+ *
+ * The server validates the JWT token, extracts the inner secure ticket and if the flow is:
+ *
+ * register - the server adds the provider to the "active" providers list of the user, adds the deviceID to the list of verified devices for the user, and reports a 'tfa registration' event.
+ * add - the server adds the provider to the "active" providers list of the user, but does not update the deviceID in the list of verified devices for the user, and reports a 'tfa added' event.
+ * verify - the server updates/inserts the deviceID to the list of verified devices for the user, and reports a 'tfa verification' event.
+ * edit - the server updates the deviceID in the list of verified devices for the user, and reports a 'tfa edited' event.
+ *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b44d170b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAFinalizeTFARequest = GigyaRequest<{
+    /**
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature:
+     *  Header:
+     *  {
+     *       "alg": "http://www.w3.org/2000/09/xmldsig#rsa-sha1Information published on non-SAP site",
+     *       "typ": "JWT",
+     *       "x5u": "http://accounts.gigya.com/accounts.tfa.getCertificateInformation published on non-SAP site"
+     *  }
+     *  Body:
+     *  {
+     *      iss - a string representing the issuer, e.g., "gigya.com".
+     *      aud - a string representing the TFA provider name, e.g., "gigyaPhone".
+     *      sub - a string representing a unique Gigya identifier for this user.
+     *      action - a string enum representing the requested action type, can be "verify", "edit", or "registerOrVerify".
+     *      params - a JSON object with string properties and values with TFA provider-specific parameters. These are the params from the policy for this provider.
+     *      iat - an integer representing the creation time of this JWT object in UNIX time.
+     *      jti - a string representing the JWT ID; a crypto-strength nonce value.
+     *      ctx - a string representing an encrypted Gigya context.
+     *  }
+     *  Signature: Computed using the private key matching the public key whose URL is specified in the header.
+     */
+    gigyaAssertion: string;
+    /**
+     * The JWT token from the TFA provider. The It is made up of a header object, a body object and a signature:
+     *  Header:
+     *  {
+     *      "alg": "http://www.w3.org/2000/09/xmldsig#rsa-sha1Information published on non-SAP site",
+     *      "typ": "JWT",
+     *      "x5u":
+     *  }
+     *  Body:
+     *  {
+     *      iss - a string representing the issuer, e.g. "gigya.com".
+     *      aud - a string representing the TFA provider name, thesame as the issuer of the Gigya assertion that triggered the TFA check, e.g., "gigya.com".
+     *      sub - a string representing the TFA provider's unique identifier for this user. May match Gigya's user identifier from gigya assertion's subject.
+     *      method - a string representing an optional indication of the method used for identifying the user, only relevant to providers who offer multiple methods.
+     *      iat - an integer representing the creation time of this JWT object in UNIX time.
+     *      jti - a string representing the JWT ID; a crypto-strength nonce value.
+     *      rti - a string representing the JTI value of the Gigya assertion that triggered this TFA process. This strongly binds this assertion with the Gigya assertion.
+     *  }
+     *  Signature: Computed using the private key matching the public key whose URL is specified in the header.
+     */
+    providerAssertion: string;
+    /**
+     * The regToken returned from the previous API or notifyLogin response.
+     */
+    regToken?: string;
+    /**
+     * The users UID, can be specified when the user is logged in.
+     */
+    UID?: string;
+    /**
+     * Indicates whether this device is temporary and should not be remembered as an active device. The default value is "false". When this value is true the server marks the device as "oneTimeOnly". When login is performed, "oneTimeOnly" devices are treated as not verified.
+     */
+    tempDevice?: boolean;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b44d170b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAFinalizeTFAResponse = GigyaResponse<{}>;
+
+/**
  * When implementing Risk Based Authentication, this method returns the list of phone numbers that are verified for the user. For security reasons, full phone numbers are not returned, instead, an obfuscated number (last 3 digits) and a unique ID are returned for each phone.
  *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413be06570b21014bbc5a10ce4041860.html#parameters
@@ -6117,4 +6192,18 @@ export type GigyaAccountsNamespace<
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413ba6e870b21014bbc5a10ce4041860.html
      */
     'tfa.initTFA': (params: AccountsInitTFARequest) => Promise<AccountsInitTFAResponse>;
+
+    /**
+     * This method finalizes the two-factor authentication (TFA) flow that started with accounts.tfa.initTFA.
+     *
+     * The server validates the JWT token, extracts the inner secure ticket and if the flow is:
+     *
+     * register - the server adds the provider to the "active" providers list of the user, adds the deviceID to the list of verified devices for the user, and reports a 'tfa registration' event.
+     * add - the server adds the provider to the "active" providers list of the user, but does not update the deviceID in the list of verified devices for the user, and reports a 'tfa added' event.
+     * verify - the server updates/inserts the deviceID to the list of verified devices for the user, and reports a 'tfa verification' event.
+     * edit - the server updates the deviceID in the list of verified devices for the user, and reports a 'tfa edited' event.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b44d170b21014bbc5a10ce4041860.html
+     */
+    'tfa.finalizeTFA': (params: AccountsTFAFinalizeTFARequest) => Promise<AccountsTFAFinalizeTFAResponse>;
 };
