@@ -1030,10 +1030,10 @@ export type AccountsExtensionsCreateRequest = GigyaRequest<{
      * - OnBeforeSocialLogin
      */
     extensionPoint:
-        | 'OnBeforeAccountsRegister'
-        | 'OnBeforeAccountsLogin'
-        | 'OnBeforeSetAccountInfo'
-        | 'OnBeforeSocialLogin';
+    | 'OnBeforeAccountsRegister'
+    | 'OnBeforeAccountsLogin'
+    | 'OnBeforeSetAccountInfo'
+    | 'OnBeforeSocialLogin';
 }>;
 
 /**
@@ -1176,10 +1176,10 @@ export type AccountsExtensionsListResponse = GigyaResponse<{
          * The extension point this extension is connected to.
          */
         extensionPoint:
-            | 'OnBeforeAccountsRegister'
-            | 'OnBeforeAccountsLogin'
-            | 'OnBeforeSetAccountInfo'
-            | 'OnBeforeSocialLogin';
+        | 'OnBeforeAccountsRegister'
+        | 'OnBeforeAccountsLogin'
+        | 'OnBeforeSetAccountInfo'
+        | 'OnBeforeSocialLogin';
         /**
          * The timeout configured for this extension.
          */
@@ -2444,10 +2444,10 @@ export type AccountsIdentifiersFindResponse = GigyaResponse<{
      */
     identifiers?: {
         [identifier in
-            | 'gigya.com/identifiers/UID'
-            | 'gigya.com/identifiers/email'
-            | 'gigya.com/identifiers/username'
-            | 'gigya.com/identifiers/phone']?: Array<string>;
+        | 'gigya.com/identifiers/UID'
+        | 'gigya.com/identifiers/email'
+        | 'gigya.com/identifiers/username'
+        | 'gigya.com/identifiers/phone']?: Array<string>;
     };
 }>;
 
@@ -2567,21 +2567,21 @@ export type AccountsImportFullAccountRequest<
              * @note For the sap_abap password algorithm, only the hashedPassword is required.
              */
             hashAlgorithm?:
-                | 'md5'
-                | 'sha1'
-                | 'sha1_hashbytes'
-                | 'sha256'
-                | 'sha512'
-                | 'sha512Hexa'
-                | 'md5_double_salted'
-                | 'md5_crypt'
-                | 'bcrypt'
-                | 'pbkdf2'
-                | 'pbkdf2_sha256'
-                | 'pbkdf2_sha512'
-                | 'drupal'
-                | 'symphony2'
-                | 'sap_abap';
+            | 'md5'
+            | 'sha1'
+            | 'sha1_hashbytes'
+            | 'sha256'
+            | 'sha512'
+            | 'sha512Hexa'
+            | 'md5_double_salted'
+            | 'md5_crypt'
+            | 'bcrypt'
+            | 'pbkdf2'
+            | 'pbkdf2_sha256'
+            | 'pbkdf2_sha512'
+            | 'drupal'
+            | 'symphony2'
+            | 'sap_abap';
             /**
              * The BASE64 encoded value of the salt. If HashFormat is specified and it contains "$salt" -> HashSalt is a required parameter and should be clear text, not BASE64-encoded. The max number of salt bits is 1024.
              */
