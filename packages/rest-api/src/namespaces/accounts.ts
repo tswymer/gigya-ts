@@ -1,6 +1,15 @@
 import { GigyaCaptchaType, GigyaRegion, GigyaRequest, GigyaResponse } from '../types/gigya-requests';
 import { GigyaSubscriptions, UpdateSubscriptions } from '../types/gigya-subscriptions';
-import { GigyaData, GigyaIdentity, GigyaPreferences, GigyaProfile, GigyaValidationError } from '../types/gigya-types';
+import {
+    GigyaClientContext,
+    GigyaData,
+    GigyaIdentity,
+    GigyaPhoneObject,
+    GigyaPreferences,
+    GigyaProfile,
+    GigyaProviderGeneric,
+    GigyaValidationError,
+} from '../types/gigya-types';
 
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/23e5e21ad35f4c85b98ce39e895e5f24.html#parameters
@@ -5022,6 +5031,45 @@ export type AccountsSetProfilePhotoRequest = GigyaRequest<{
 export type AccountsSetProfilePhotoResponse = GigyaResponse<{}>;
 
 /**
+ * This method retrieves the two-factor authentication (TFA) providers for a site and user.
+ *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b6ced70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAGetProvidersRequest = GigyaRequest<{
+    /**
+     * You are required to pass only one of the parameters either UID or regToken.
+     *
+     * The unique ID of the user for which to retrieve data. Use either this parameter or regToken.
+     * If you call this method through an external OAuth2 SDK, then the UID may be passed implicitly within the access_token.
+     */
+    UID?: string;
+    /**
+     * You are required to pass only one of the parameters either UID or regToken.
+     *
+     * The regToken returned from accounts.initRegistration, accounts.register or accounts.login API calls when the registration process has not been finalized. Please note that the regToken you receive from Gigya is valid for only one hour.
+     */
+    regToken?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b6ced70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAGetProvidersResponse = GigyaResponse<{
+    /**
+     * All the TFA providers that the site supports and to which the user registered. Returned as an array of objects, each object with the field "name" that indicates the type of TFA provider, e.g., gigyaPhone:
+     */
+    activeProviders: GigyaProviderGeneric[];
+    /**
+     * All the TFA providers that the site supports and to which the user did not register. Returned as an array of objects, each object with the field "name" that indicates the type of TFA provider, e.g., gigyaPhone:
+     */
+    inactiveProviders: GigyaProviderGeneric[];
+    /**
+     * All the TFA providers that the site supports that are pending opt-in. Returned as an array of objects, each object with the field "name" that indicates the type of TFA provider, e.g., gigyaPush:
+     */
+    pendingOptin: GigyaProviderGeneric[];
+}>;
+
+/**
  * This method resets the means of identification (e.g., SMS or authenticating app) used as the second step of authentication in a TFA flow for a specified user. The user will be prompted to enter a new verification method on their next login.
  *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c65da70b21014bbc5a10ce4041860.html#parameters
@@ -5068,6 +5116,47 @@ export type AccountsTFAUnregisterDeviceRequest = GigyaRequest<{
 export type AccountsTFAUnregisterDeviceResponse = GigyaResponse<{}>;
 
 /**
+ * When implementing Risk Based Authentication, this method removes the given phone ID from the user's list of verified phone numbers.
+ *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413bf36d70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAPhoneRemovePhoneRequest = GigyaRequest<{
+    /**
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object, and a signature:
+     *  Header:
+     *  {
+     *      "alg": "http://www.w3.org/2000/09/xmldsig#rsa-sha1Information published on non-SAP site",
+     *      "typ": "JWT",
+     *      "x5u": "http://accounts.gigya.com/accounts.tfa.getCertificateInformation published on non-SAP site"
+     *  }
+     *  Body:
+     *  {
+     *      iss - a string representing the issuer, e.g. "gigya.com".
+     *      aud - a string representing the TFA provider name, e.g. "gigyaPhone".
+     *      sub - a string representing a unique Gigya identifier for this user.
+     *      action - a string enum representing the requested action type. In this case, "edit" is the only possible value.
+     *      params - a JSON object with string properties and values with TFA provider-specific parameters. These are the params from the policy for this provider.
+     *      iat - an integer representing the creation time of this JWT object in UNIX time.
+     *      jti - a string representing the JWT ID; a crypto-strength nonce value.
+     *      ctx - a string representing an encrypted Gigya context.
+     *  }
+     *  Signature: Computed using the private key matching the public key whose URL is specified in the header.
+     */
+    gigyaAssertion: string;
+    /**
+     * 	The unique identifier of the phone.
+     */
+    phoneId: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413bf36d70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAPhoneRemovePhoneResponse = GigyaResponse<{}>;
+
+/**
+ * When implementing Risk Based Authentication, this method sends a crypto-random 6-digit verification code to the specified number.
+ *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c069e70b21014bbc5a10ce4041860.html#parameters
  */
 export type AccountsTFAPhoneSendVerificationCodeRequest = GigyaRequest<{
@@ -5101,7 +5190,10 @@ export type AccountsTFAPhoneSendVerificationCodeResponse = GigyaResponse<{
      */
     phvToken: string;
 }>;
+
 /**
+ * When implementing Risk Based Authentication, this method verifies that the provided verification code matches the code in the token, and adds the phone number in the phvToken to the user's verified phones list.
+ *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413bb9ee70b21014bbc5a10ce4041860.html#parameters
  */
 export type AccountsTFAPhoneCompleteVerificationRequest = GigyaRequest<{
@@ -5118,6 +5210,7 @@ export type AccountsTFAPhoneCompleteVerificationRequest = GigyaRequest<{
      */
     code: string;
 }>;
+
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413bb9ee70b21014bbc5a10ce4041860.html#response-data
  */
@@ -5129,9 +5222,19 @@ export type AccountsTFAPhoneCompleteVerificationResponse = GigyaResponse<{
 }>;
 
 /**
+ * This method initializes two-factor authentication (TFA) by returning a JWT token that can be used to register with a new provider, or to verify the user using an existing provider, or to edit an existing provider.
+ *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b93e570b21014bbc5a10ce4041860.html#parameters
  */
 export type AccountsInitTFARequest = GigyaRequest<{
+    /**
+     * The users UID, can be specified when the user is logged in.
+     */
+    UID?: string;
+    /**
+     * The regToken returned from accounts.initRegistration, accounts.register or accounts.login API calls when the registration process has not been finalized. Please note that the regToken you receive from SAP Customer Data Cloud is valid for only one hour.
+     */
+    regToken?: string;
     /**
      * The name of the TFA provider for which the token mode is set.
      */
@@ -5144,7 +5247,12 @@ export type AccountsInitTFARequest = GigyaRequest<{
      * - edit
      */
     mode: 'register' | 'verify' | 'add' | 'edit';
+    /**
+     * Additional information regarding the client who made the login request, used for server-side Risk Based Authentication implementations. When passing the client context, any RBA rules apply and may be triggered.
+     */
+    clientContext?: GigyaClientContext;
 }>;
+
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b93e570b21014bbc5a10ce4041860.html#response-data
  */
@@ -5153,6 +5261,125 @@ export type AccountsInitTFAResponse = GigyaResponse<{
      * The JWT token, which is made up of a header object, a body object and a signature.
      */
     gigyaAssertion: string;
+}>;
+
+/**
+ * This method finalizes the two-factor authentication (TFA) flow that started with accounts.tfa.initTFA.
+ *
+ * The server validates the JWT token, extracts the inner secure ticket and if the flow is:
+ *
+ * register - the server adds the provider to the "active" providers list of the user, adds the deviceID to the list of verified devices for the user, and reports a 'tfa registration' event.
+ * add - the server adds the provider to the "active" providers list of the user, but does not update the deviceID in the list of verified devices for the user, and reports a 'tfa added' event.
+ * verify - the server updates/inserts the deviceID to the list of verified devices for the user, and reports a 'tfa verification' event.
+ * edit - the server updates the deviceID in the list of verified devices for the user, and reports a 'tfa edited' event.
+ *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b44d170b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAFinalizeTFARequest = GigyaRequest<{
+    /**
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature:
+     *  Header:
+     *  {
+     *       "alg": "http://www.w3.org/2000/09/xmldsig#rsa-sha1Information published on non-SAP site",
+     *       "typ": "JWT",
+     *       "x5u": "http://accounts.gigya.com/accounts.tfa.getCertificateInformation published on non-SAP site"
+     *  }
+     *  Body:
+     *  {
+     *      iss - a string representing the issuer, e.g., "gigya.com".
+     *      aud - a string representing the TFA provider name, e.g., "gigyaPhone".
+     *      sub - a string representing a unique Gigya identifier for this user.
+     *      action - a string enum representing the requested action type, can be "verify", "edit", or "registerOrVerify".
+     *      params - a JSON object with string properties and values with TFA provider-specific parameters. These are the params from the policy for this provider.
+     *      iat - an integer representing the creation time of this JWT object in UNIX time.
+     *      jti - a string representing the JWT ID; a crypto-strength nonce value.
+     *      ctx - a string representing an encrypted Gigya context.
+     *  }
+     *  Signature: Computed using the private key matching the public key whose URL is specified in the header.
+     */
+    gigyaAssertion: string;
+    /**
+     * The JWT token from the TFA provider. The It is made up of a header object, a body object and a signature:
+     *  Header:
+     *  {
+     *      "alg": "http://www.w3.org/2000/09/xmldsig#rsa-sha1Information published on non-SAP site",
+     *      "typ": "JWT",
+     *      "x5u":
+     *  }
+     *  Body:
+     *  {
+     *      iss - a string representing the issuer, e.g. "gigya.com".
+     *      aud - a string representing the TFA provider name, thesame as the issuer of the Gigya assertion that triggered the TFA check, e.g., "gigya.com".
+     *      sub - a string representing the TFA provider's unique identifier for this user. May match Gigya's user identifier from gigya assertion's subject.
+     *      method - a string representing an optional indication of the method used for identifying the user, only relevant to providers who offer multiple methods.
+     *      iat - an integer representing the creation time of this JWT object in UNIX time.
+     *      jti - a string representing the JWT ID; a crypto-strength nonce value.
+     *      rti - a string representing the JTI value of the Gigya assertion that triggered this TFA process. This strongly binds this assertion with the Gigya assertion.
+     *  }
+     *  Signature: Computed using the private key matching the public key whose URL is specified in the header.
+     */
+    providerAssertion: string;
+    /**
+     * The regToken returned from the previous API or notifyLogin response.
+     */
+    regToken?: string;
+    /**
+     * The users UID, can be specified when the user is logged in.
+     */
+    UID?: string;
+    /**
+     * Indicates whether this device is temporary and should not be remembered as an active device. The default value is "false". When this value is true the server marks the device as "oneTimeOnly". When login is performed, "oneTimeOnly" devices are treated as not verified.
+     */
+    tempDevice?: boolean;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b44d170b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAFinalizeTFAResponse = GigyaResponse<{}>;
+
+/**
+ * When implementing Risk Based Authentication, this method returns the list of phone numbers that are verified for the user. For security reasons, full phone numbers are not returned, instead, an obfuscated number (last 3 digits) and a unique ID are returned for each phone.
+ *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413be06570b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAPhoneGetRegisteredPhoneNumbersRequest = GigyaRequest<{
+    /**
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature:
+        Header:
+        {
+            "alg": "http://www.w3.org/2000/09/xmldsig#rsa-sha1Information published on non-SAP site",
+            "typ": "JWT",
+            "x5u": "http://accounts.gigya.com/accounts.tfa.getCertificateInformation published on non-SAP site"
+        }
+        Body:
+        {
+            iss - a string representing the issuer, e.g. "gigya.com".
+            aud - a string representing the TFA provider name, e.g. "gigyaPhone".
+            sub - a string representing a unique Gigya identifier for this user.
+            action - a string enum representing the requested action type, can be "verify", "edit", or "registerOrVerify".
+            params - a JSON object with string properties and values with TFA provider-specific parameters. These are the params from the policy for this provider.
+            iat - an integer representing the creation time of this JWT object in UNIX time.
+            jti - a string representing the JWT ID; a crypto-strength nonce value.
+            ctx - a string representing an encrypted Gigya context.
+        }
+        Signature: Computed using the private key matching the public key whose URL is specified in the header.
+     */
+    gigyaAssertion: string;
+}>;
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413be06570b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAPhoneGetRegisteredPhoneNumbersResponse = GigyaResponse<{
+    /**
+     * An array of objects, each object includes the following fields:
+        - id - the unique identifier of the phone.
+        - obfuscated - the phone number with the last 3 digits visble, e.g. "##-###-#762".
+        - plain - the full phone number, e.g. "972555926762"
+        - lastMethod - can be either "sms" or "voice".
+        - lastVerification - the last verification time in UNIX time.
+     */
+    phones: GigyaPhoneObject[];
 }>;
 
 export type GigyaAccountsNamespace<
@@ -5948,19 +6175,83 @@ export type GigyaAccountsNamespace<
 
     setProfilePhoto: (params: AccountsSetProfilePhotoRequest) => Promise<AccountsSetProfilePhotoResponse>;
 
+    /**
+     * This method retrieves the two-factor authentication (TFA) providers for a site and user.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b6ced70b21014bbc5a10ce4041860.html
+     */
+    'tfa.getProviders': (params: AccountsTFAGetProvidersRequest) => Promise<AccountsTFAGetProvidersResponse>;
+
+    /**
+     * This method resets the means of identification (e.g., SMS or authenticating app) used as the second step of authentication in a TFA flow for a specified user. The user will be prompted to enter a new verification method on their next login.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c65da70b21014bbc5a10ce4041860.html
+     */
     'tfa.resetTFA': (params: AccountsTFAResetTFARequest) => Promise<AccountsTFAResetTFAResponse>;
 
+    /**
+     * This method unregisters devices from the list of verified devices for the user, used in Risk-Based Authentication flows. A verified device is a device (phone or web browser) that has already been verified with an SMS, TOTP, or email verification code. The method may unregister all devices, or those with an active session.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413cc8e070b21014bbc5a10ce4041860.html
+     */
     'tfa.unregisterDevice': (
         params: AccountsTFAUnregisterDeviceRequest,
     ) => Promise<AccountsTFAUnregisterDeviceResponse>;
 
+    /**
+     * When implementing Risk Based Authentication, this method sends a crypto-random 6-digit verification code to the specified number.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c069e70b21014bbc5a10ce4041860.html
+     */
     'tfa.phone.sendVerificationCode': (
         params: AccountsTFAPhoneSendVerificationCodeRequest,
     ) => Promise<AccountsTFAPhoneSendVerificationCodeResponse>;
 
+    /**
+     * When implementing Risk Based Authentication, this method verifies that the provided verification code matches the code in the token, and adds the phone number in the phvToken to the user's verified phones list.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413bb9ee70b21014bbc5a10ce4041860.html
+     */
     'tfa.phone.completeVerification': (
         params: AccountsTFAPhoneCompleteVerificationRequest,
     ) => Promise<AccountsTFAPhoneCompleteVerificationResponse>;
 
+    /**
+     * When implementing Risk Based Authentication, this method r eturns the list of phone numbers that are verified for the user. For security reasons, full phone numbers are not returned, instead, an obfuscated number (last 3 digits) and a unique ID are returned for each phone.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413be06570b21014bbc5a10ce4041860.html
+     */
+    'tfa.phone.getRegisteredPhoneNumbers': (
+        params: AccountsTFAPhoneGetRegisteredPhoneNumbersRequest,
+    ) => Promise<AccountsTFAPhoneGetRegisteredPhoneNumbersResponse>;
+
+    /**
+     * When implementing Risk Based Authentication, this method removes the given phone ID from the user's list of verified phone numbers.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413bf36d70b21014bbc5a10ce4041860.html
+     */
+    'tfa.phone.removePhone': (
+        params: AccountsTFAPhoneRemovePhoneRequest,
+    ) => Promise<AccountsTFAPhoneRemovePhoneResponse>;
+
+    /**
+     * This method initializes two-factor authentication (TFA) by returning a JWT token that can be used to register with a new provider, or to verify the user using an existing provider, or to edit an existing provider.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413ba6e870b21014bbc5a10ce4041860.html
+     */
     'tfa.initTFA': (params: AccountsInitTFARequest) => Promise<AccountsInitTFAResponse>;
+
+    /**
+     * This method finalizes the two-factor authentication (TFA) flow that started with accounts.tfa.initTFA.
+     *
+     * The server validates the JWT token, extracts the inner secure ticket and if the flow is:
+     *
+     * register - the server adds the provider to the "active" providers list of the user, adds the deviceID to the list of verified devices for the user, and reports a 'tfa registration' event.
+     * add - the server adds the provider to the "active" providers list of the user, but does not update the deviceID in the list of verified devices for the user, and reports a 'tfa added' event.
+     * verify - the server updates/inserts the deviceID to the list of verified devices for the user, and reports a 'tfa verification' event.
+     * edit - the server updates the deviceID in the list of verified devices for the user, and reports a 'tfa edited' event.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b44d170b21014bbc5a10ce4041860.html
+     */
+    'tfa.finalizeTFA': (params: AccountsTFAFinalizeTFARequest) => Promise<AccountsTFAFinalizeTFAResponse>;
 };
