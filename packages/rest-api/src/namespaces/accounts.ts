@@ -3393,6 +3393,12 @@ export type AccountsLoginResponse<
      * The GMT time when the isVerified parameter was set to true in Unix time format including milliseconds (that is, the number of seconds since Jan. 1st 1970 * 1000).
      */
     verifiedTimestamp?: number;
+    /**
+     * The JWT for the user. Only included in the response if `include: "id_token"` is passed in the request.
+     * 
+     * @note This response field is not documentated.
+     */
+    id_token?: string;
 }>;
 
 /**
