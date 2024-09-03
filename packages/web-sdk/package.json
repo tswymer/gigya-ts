@@ -1,6 +1,6 @@
 {
     "name": "@gigya-ts/web-sdk",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "description": "TypeScript definitions for the Gigya Web SDK",
     "type": "module",
     "main": "dist/index.js",
