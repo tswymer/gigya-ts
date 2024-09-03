@@ -90,7 +90,7 @@ export type GigyaJSOnLoginEvent<DataSchema extends GigyaData> = {
     remember: boolean;
     /**
      * The JWT for the user. Only included in the response if `include: "id_token"` is passed in the request.
-     * 
+     *
      * @note This response field is not documentated.
      */
     id_token?: string;
