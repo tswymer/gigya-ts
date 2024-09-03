@@ -7,4 +7,5 @@ export type GigyaWebSDK<
     SubscriptionsSchema extends GigyaSubscriptions,
 > = {
     accounts: GigyaAccountsNamespaceJS<DataSchema, PreferencesSchema, SubscriptionsSchema>;
+    isReady: boolean;
 };
