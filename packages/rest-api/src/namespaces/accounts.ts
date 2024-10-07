@@ -3878,7 +3878,7 @@ export type AccountsOTPUpdateRequest = GigyaRequest<{
      *
      * The length of the code may change, so we recommend that your implementation will not expect a fixed number of digits.
      */
-    code: number;
+    code: string;
     /**
      * The unique identifier of the user whose login information is being updated.
      *
