@@ -107,6 +107,7 @@ export type AccountsGetAccountInfoResponseJS<
         password: {
             created?: string;
         };
+        id_token?: string;
     };
 
 /**
