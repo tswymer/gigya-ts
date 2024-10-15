@@ -18,7 +18,7 @@ export type GigyaUserInfo = {
 export type GigyaProfile = {
     firstName?: string;
     lastName?: string;
-    nickName?: string;
+    nickname?: string;
     address?: string;
     city?: string;
     country?: string;
