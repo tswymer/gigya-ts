@@ -1,12 +1,12 @@
 # @gigya-ts/gigya
 
-<a href="https://pkg-size.dev/@gigya-ts/gigya"><img src="https://pkg-size.dev/badge/bundle/3415" title="Bundle size for @gigya-ts/gigya"></a>
-
 A tiny type-safe wrapper client for interacting with the [Gigya REST API](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/416d906d70b21014bbc5a10ce4041860.html), for Node.js and browsers.
 
-See [@gigya-ts/web-sdk](/packages/web-sdk/README.md) if you are working with the [Gigya Web SDK](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/417f6b5e70b21014bbc5a10ce4041860.html) instead.
+See [@gigya-ts/web-sdk](/packages/web-sdk/README.md) if you want to use the [Gigya Web SDK](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/417f6b5e70b21014bbc5a10ce4041860.html) instead.
 
-## Installation & Usage
+## Installation
+
+<a href="https://pkg-size.dev/@gigya-ts/gigya"><img src="https://pkg-size.dev/badge/bundle/3415" title="Bundle size for @gigya-ts/gigya"></a>
 
 Install the `@gigya-ts/gigya` package from your package manager of choice:
 
@@ -18,6 +18,8 @@ yarn add @gigya-ts/gigya
 # pnpm
 pnpm add @gigya-ts/gigya
 ```
+
+## Usage
 
 ### 0. (Optional) Define your Gigya schemas
 

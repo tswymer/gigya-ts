@@ -1,8 +1,8 @@
 # @gigya-ts/web-sdk
 
-Type definitions for interacting with the Gigya / SAP Customer Data Cloud Web SDK.
+Add type-safety to the [Gigya Web SDK](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/417f6b5e70b21014bbc5a10ce4041860.html).
 
-See [@gigya-ts/gigya](/packages/gigya/README.md) if you are working with the REST API instead.
+See [@gigya-ts/gigya](/packages/gigya/README.md) if you want to use the [Gigya REST API](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/416d906d70b21014bbc5a10ce4041860.html) instead (even from the browser!).
 
 ## Installation
 
