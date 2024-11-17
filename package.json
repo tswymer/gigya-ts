@@ -1,6 +1,8 @@
 {
     "name": "gigya-ts",
     "author": "tobi.wymer@googlemail.com",
+    "repository": "https://github.com/tswymer/gigya-ts",
+    "license": "MIT",
     "scripts": {
         "build": "pnpm -r lint && pnpm -r build",
         "test": "pnpm -r test",
