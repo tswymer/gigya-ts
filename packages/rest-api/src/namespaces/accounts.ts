@@ -12,6 +12,7 @@ import {
     GigyaSMSTemplateSettings,
     GigyaStreamEvent,
     GigyaValidationError,
+    GigyaWebhook,
 } from '../types/gigya-types';
 
 /**
@@ -1033,10 +1034,10 @@ export type AccountsExtensionsCreateRequest = GigyaRequest<{
      * - OnBeforeSocialLogin
      */
     extensionPoint:
-        | 'OnBeforeAccountsRegister'
-        | 'OnBeforeAccountsLogin'
-        | 'OnBeforeSetAccountInfo'
-        | 'OnBeforeSocialLogin';
+    | 'OnBeforeAccountsRegister'
+    | 'OnBeforeAccountsLogin'
+    | 'OnBeforeSetAccountInfo'
+    | 'OnBeforeSocialLogin';
 }>;
 
 /**
@@ -1179,10 +1180,10 @@ export type AccountsExtensionsListResponse = GigyaResponse<{
          * The extension point this extension is connected to.
          */
         extensionPoint:
-            | 'OnBeforeAccountsRegister'
-            | 'OnBeforeAccountsLogin'
-            | 'OnBeforeSetAccountInfo'
-            | 'OnBeforeSocialLogin';
+        | 'OnBeforeAccountsRegister'
+        | 'OnBeforeAccountsLogin'
+        | 'OnBeforeSetAccountInfo'
+        | 'OnBeforeSocialLogin';
         /**
          * The timeout configured for this extension.
          */
@@ -2447,10 +2448,10 @@ export type AccountsIdentifiersFindResponse = GigyaResponse<{
      */
     identifiers?: {
         [identifier in
-            | 'gigya.com/identifiers/UID'
-            | 'gigya.com/identifiers/email'
-            | 'gigya.com/identifiers/username'
-            | 'gigya.com/identifiers/phone']?: Array<string>;
+        | 'gigya.com/identifiers/UID'
+        | 'gigya.com/identifiers/email'
+        | 'gigya.com/identifiers/username'
+        | 'gigya.com/identifiers/phone']?: Array<string>;
     };
 }>;
 
@@ -2570,21 +2571,21 @@ export type AccountsImportFullAccountRequest<
              * @note For the sap_abap password algorithm, only the hashedPassword is required.
              */
             hashAlgorithm?:
-                | 'md5'
-                | 'sha1'
-                | 'sha1_hashbytes'
-                | 'sha256'
-                | 'sha512'
-                | 'sha512Hexa'
-                | 'md5_double_salted'
-                | 'md5_crypt'
-                | 'bcrypt'
-                | 'pbkdf2'
-                | 'pbkdf2_sha256'
-                | 'pbkdf2_sha512'
-                | 'drupal'
-                | 'symphony2'
-                | 'sap_abap';
+            | 'md5'
+            | 'sha1'
+            | 'sha1_hashbytes'
+            | 'sha256'
+            | 'sha512'
+            | 'sha512Hexa'
+            | 'md5_double_salted'
+            | 'md5_crypt'
+            | 'bcrypt'
+            | 'pbkdf2'
+            | 'pbkdf2_sha256'
+            | 'pbkdf2_sha512'
+            | 'drupal'
+            | 'symphony2'
+            | 'sap_abap';
             /**
              * The BASE64 encoded value of the salt. If HashFormat is specified and it contains "$salt" -> HashSalt is a required parameter and should be clear text, not BASE64-encoded. The max number of salt bits is 1024.
              */
@@ -5291,8 +5292,228 @@ export type AccountsStreamReadResponse = GigyaResponse<{
 }>;
 
 /**
- * This method retrieves the two-factor authentication (TFA) providers for a site and user.
- *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413abafd70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFABackupCodesCreateRequest = GigyaRequest<{
+    /**
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature.
+     */
+    gigyaAssertion: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413abafd70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFABackupCodesCreateResponse = GigyaResponse<{
+    /**
+     * An array of backup codes generated for this user.
+     */
+    backupCodes?: string[];
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413ace4a70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFABackupCodesGetRequest = GigyaRequest<{
+    /**
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature.
+     */
+    gigyaAssertion: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413ace4a70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFABackupCodesGetResponse = GigyaResponse<{
+    /**
+     * An array of backup codes generated for this user.
+     */
+    backupCodes?: string[];
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413ae15570b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFABackupCodesVerifyRequest = GigyaRequest<{
+    /**
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature.
+     */
+    gigyaAssertion: string;
+    /**
+     * The backup code submitted by the user. This is validated against the secret token (sctToken) that is saved to the user's account.
+     */
+    code: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413ae15570b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFABackupCodesVerifyResponse = GigyaResponse<{
+    /**
+     * The JWT token from the TFA provider. The It is made up of a header object, a body object and a signature.
+     */
+    gigyaAssertion?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413af46770b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFADeactivateProviderRequest = GigyaRequest<{
+    /**
+     * The unique ID of the user, for whom to deactivate the provider.
+     */
+    UID: string;
+    /**
+     * The TFA provider to deactivate.
+     */
+    provider: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413af46770b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFADeactivateProviderResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b0b7d70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAEmailCompleteVerificationRequest = GigyaRequest<{
+    /**
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature.
+     */
+    gigyaAssertion: string;
+    /**
+     * A secure token that includes the code that was sent to the user's email, and gigyaAssertion.jti.
+     */
+    phvToken: string;
+    /**
+     * The verification code entered by the user.
+     */
+    code: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b0b7d70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAEmailCompleteVerificationResponse = GigyaResponse<{
+    /**
+     * The JWT token from the TFA provider. The It is made up of a header object, a body object and a signature.
+     */
+    providerAssertion?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b1e8a70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAEmailGetEmailsRequest = GigyaRequest<{
+    /**
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature.
+     */
+    gigyaAssertion: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b1e8a70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAEmailGetEmailsResponse = GigyaResponse<{
+    /**
+     * An array of verified emails.
+     */
+    emails?: {
+        /**
+         * A unique identifier for the email address.
+         */
+        id: string;
+        /**
+         * An obfuscated version of the email address, where asterisks replace some of the letters.
+         */
+        obfuscated: string;
+        /**
+         * The verified email address (without any obfuscation or masking).
+         */
+        plain?: string;
+        /**
+         * The last verification time in UNIX time.
+         */
+        lastVerification: number;
+    }[];
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b31d470b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAEmailSendVerificationCodeRequest = GigyaRequest<{
+    /**
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature.
+     */
+    gigyaAssertion: string;
+    /**
+     * The actual email address of the user. This email must exist in the user's verified emails list. You must pass one of either email or emailID; if both are passed emailID will be used.
+     */
+    email?: string;
+    /**
+     * The unique identifier of the email, as returned from accounts.tfa.email.getEmails. You may use the obfuscated email returned from the same method to display to the user the email with which they are expected to verify. You must pass one of either email or emailID; if both are passed emailID will be used.
+     */
+    emailID?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b31d470b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAEmailSendVerificationCodeResponse = GigyaResponse<{
+    /**
+     * A secure ticket that includes the code and gigyaAssertion.jti.
+     */
+    phvToken?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b44d170b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAFinalizeTFARequest = GigyaRequest<{
+    /**
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature.
+     */
+    gigyaAssertion: string;
+    /**
+     * The JWT token from the TFA provider. The It is made up of a header object, a body object and a signature.
+     */
+    providerAssertion: string;
+    /**
+     * The regToken returned from the previous API or notifyLogin response.
+     */
+    regToken?: string;
+    /**
+     * The users UID, can be specified when the user is logged in.
+     */
+    UID?: string;
+    /**
+     * Indicates whether this device is temporary and should not be remembered as an active device. The default value is "false". When this value is true the server marks the device as "oneTimeOnly". When login is performed, "oneTimeOnly" devices are treated as not verified.
+     */
+    tempDevice?: boolean;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b44d170b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAFinalizeTFAResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b57d970b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAGetCertificateRequest = GigyaRequest<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b57d970b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAGetCertificateResponse = GigyaResponse<{
+    /**
+     * Gigya's PEM-encoded X.509 certificate containing an RSA public key.
+     */
+    certificate?: string;
+}>;
+
+/**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b6ced70b21014bbc5a10ce4041860.html#parameters
  */
 export type AccountsTFAGetProvidersRequest = GigyaRequest<{
@@ -5330,163 +5551,41 @@ export type AccountsTFAGetProvidersResponse = GigyaResponse<{
 }>;
 
 /**
- * This method resets the means of identification (e.g., SMS or authenticating app) used as the second step of authentication in a TFA flow for a specified user. The user will be prompted to enter a new verification method on their next login.
- *
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c65da70b21014bbc5a10ce4041860.html#parameters
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b800070b21014bbc5a10ce4041860.html#parameters
  */
-export type AccountsTFAResetTFARequest = GigyaRequest<{
+export type AccountsTFAImportTFARequest = GigyaRequest<{
     /**
-     * The unique ID of the user, for whom to reset the verified phone numbers.
+     * The unique ID of the user, for whom to import the verified phone numbers.
      */
     UID: string;
     /**
-     * The TFA provider to reset. Supported values:
-     *   gigyaPhone
-     *   gigyaTotp
-     *   gigyaPush
-     * If no provider is sent, all active providers will be reset. Note that gigyaEmail cannot be reset using this method but via email verification flows instead.
+     * The TFA provider to import. We currently support only "gigyaPhone".
      */
-    provider?: string;
+    provider: 'gigyaPhone';
+    /**
+     * An array of objects, each with the phone number and the method used for the second step verification, which can be either "sms" or "voice".
+     */
+    phones: {
+        /**
+         * The phone number to import.
+         */
+        phoneNumber: string;
+        /**
+         * The method used for the second step verification. Can be either "sms" or "voice".
+         */
+        method: 'sms' | 'voice';
+    }[];
 }>;
 
 /**
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c65da70b21014bbc5a10ce4041860.html#response-data
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b800070b21014bbc5a10ce4041860.html#response-data
  */
-export type AccountsTFAResetTFAResponse = GigyaResponse<{}>;
+export type AccountsTFAImportTFAResponse = GigyaResponse<{}>;
 
 /**
- * This method unregisters devices from the list of verified devices for the user, used in Risk-Based Authentication flows. A verified device is a device (phone or web browser) that has already been verified with an SMS, TOTP, or email verification code. The method may unregister all devices, or those with an active session.
- *
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413cc8e070b21014bbc5a10ce4041860.html#parameters
- */
-export type AccountsTFAUnregisterDeviceRequest = GigyaRequest<{
-    /**
-     * The UID of the user whose TFA you want to reset.
-     */
-    UID: string;
-    /**
-     * Indicates whether to unregister all the user devices (but not to disable the TFA providers). This may be used, for example, if the user loses their mobile phone, which is used for the TFA validation. When set to 'false', only devices for which there is a current active session will be unregistered. The default value is "false".
-     */
-    allDevices?: boolean;
-}>;
-
-/**
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413cc8e070b21014bbc5a10ce4041860.html#response-data
- */
-export type AccountsTFAUnregisterDeviceResponse = GigyaResponse<{}>;
-
-/**
- * When implementing Risk Based Authentication, this method removes the given phone ID from the user's list of verified phone numbers.
- *
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413bf36d70b21014bbc5a10ce4041860.html#parameters
- */
-export type AccountsTFAPhoneRemovePhoneRequest = GigyaRequest<{
-    /**
-     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object, and a signature:
-     *  Header:
-     *  {
-     *      "alg": "http://www.w3.org/2000/09/xmldsig#rsa-sha1Information published on non-SAP site",
-     *      "typ": "JWT",
-     *      "x5u": "http://accounts.gigya.com/accounts.tfa.getCertificateInformation published on non-SAP site"
-     *  }
-     *  Body:
-     *  {
-     *      iss - a string representing the issuer, e.g. "gigya.com".
-     *      aud - a string representing the TFA provider name, e.g. "gigyaPhone".
-     *      sub - a string representing a unique Gigya identifier for this user.
-     *      action - a string enum representing the requested action type. In this case, "edit" is the only possible value.
-     *      params - a JSON object with string properties and values with TFA provider-specific parameters. These are the params from the policy for this provider.
-     *      iat - an integer representing the creation time of this JWT object in UNIX time.
-     *      jti - a string representing the JWT ID; a crypto-strength nonce value.
-     *      ctx - a string representing an encrypted Gigya context.
-     *  }
-     *  Signature: Computed using the private key matching the public key whose URL is specified in the header.
-     */
-    gigyaAssertion: string;
-    /**
-     * 	The unique identifier of the phone.
-     */
-    phoneId: string;
-}>;
-
-/**
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413bf36d70b21014bbc5a10ce4041860.html#response-data
- */
-export type AccountsTFAPhoneRemovePhoneResponse = GigyaResponse<{}>;
-
-/**
- * When implementing Risk Based Authentication, this method sends a crypto-random 6-digit verification code to the specified number.
- *
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c069e70b21014bbc5a10ce4041860.html#parameters
- */
-export type AccountsTFAPhoneSendVerificationCodeRequest = GigyaRequest<{
-    /**
-     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature.
-     */
-    gigyaAssertion: string;
-    /**
-     * The unique identifier of the phone. If this parameter is provided, there is no need for the phone parameter.
-     */
-    phoneID?: string;
-    /**
-     * The phone number. If this parameter is provided, there is no need for the phoneID parameter.
-     */
-    phone?: string;
-    /**
-     * Can be either "sms" or "voice".
-     */
-    method: 'sms' | 'voice';
-    /**
-     * The language of the text or voice message.
-     */
-    lang: string;
-}>;
-/**
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c069e70b21014bbc5a10ce4041860.html#response-data
- */
-export type AccountsTFAPhoneSendVerificationCodeResponse = GigyaResponse<{
-    /**
-     * A secure ticket that includes the method, phone, code, and gigyaAssertion.jti.
-     */
-    phvToken: string;
-}>;
-
-/**
- * When implementing Risk Based Authentication, this method verifies that the provided verification code matches the code in the token, and adds the phone number in the phvToken to the user's verified phones list.
- *
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413bb9ee70b21014bbc5a10ce4041860.html#parameters
- */
-export type AccountsTFAPhoneCompleteVerificationRequest = GigyaRequest<{
-    /**
-     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature.
-     */
-    gigyaAssertion: string;
-    /**
-     * A secure ticket that includes the method, phone, code, and gigyaAssertion.jti.
-     */
-    phvToken: string;
-    /**
-     * The verification code.
-     */
-    code: string;
-}>;
-
-/**
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413bb9ee70b21014bbc5a10ce4041860.html#response-data
- */
-export type AccountsTFAPhoneCompleteVerificationResponse = GigyaResponse<{
-    /**
-     * The JWT token from the TFA provider. The It is made up of a header object, a body object and a signature.
-     */
-    providerAssertion: string;
-}>;
-
-/**
- * This method initializes two-factor authentication (TFA) by returning a JWT token that can be used to register with a new provider, or to verify the user using an existing provider, or to edit an existing provider.
- *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b93e570b21014bbc5a10ce4041860.html#parameters
  */
-export type AccountsInitTFARequest = GigyaRequest<{
+export type AccountsTFAInitTFARequest = GigyaRequest<{
     /**
      * The users UID, can be specified when the user is logged in.
      */
@@ -5516,7 +5615,7 @@ export type AccountsInitTFARequest = GigyaRequest<{
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b93e570b21014bbc5a10ce4041860.html#response-data
  */
-export type AccountsInitTFAResponse = GigyaResponse<{
+export type AccountsTFAInitTFAResponse = GigyaResponse<{
     /**
      * The JWT token, which is made up of a header object, a body object and a signature.
      */
@@ -5524,106 +5623,54 @@ export type AccountsInitTFAResponse = GigyaResponse<{
 }>;
 
 /**
- * This method finalizes the two-factor authentication (TFA) flow that started with accounts.tfa.initTFA.
- *
- * The server validates the JWT token, extracts the inner secure ticket and if the flow is:
- *
- * register - the server adds the provider to the "active" providers list of the user, adds the deviceID to the list of verified devices for the user, and reports a 'tfa registration' event.
- * add - the server adds the provider to the "active" providers list of the user, but does not update the deviceID in the list of verified devices for the user, and reports a 'tfa added' event.
- * verify - the server updates/inserts the deviceID to the list of verified devices for the user, and reports a 'tfa verification' event.
- * edit - the server updates the deviceID in the list of verified devices for the user, and reports a 'tfa edited' event.
- *
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b44d170b21014bbc5a10ce4041860.html#parameters
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413bb9ee70b21014bbc5a10ce4041860.html#parameters
  */
-export type AccountsTFAFinalizeTFARequest = GigyaRequest<{
+export type AccountsTFAPhoneCompleteVerificationRequest = GigyaRequest<{
     /**
-     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature:
-     *  Header:
-     *  {
-     *       "alg": "http://www.w3.org/2000/09/xmldsig#rsa-sha1Information published on non-SAP site",
-     *       "typ": "JWT",
-     *       "x5u": "http://accounts.gigya.com/accounts.tfa.getCertificateInformation published on non-SAP site"
-     *  }
-     *  Body:
-     *  {
-     *      iss - a string representing the issuer, e.g., "gigya.com".
-     *      aud - a string representing the TFA provider name, e.g., "gigyaPhone".
-     *      sub - a string representing a unique Gigya identifier for this user.
-     *      action - a string enum representing the requested action type, can be "verify", "edit", or "registerOrVerify".
-     *      params - a JSON object with string properties and values with TFA provider-specific parameters. These are the params from the policy for this provider.
-     *      iat - an integer representing the creation time of this JWT object in UNIX time.
-     *      jti - a string representing the JWT ID; a crypto-strength nonce value.
-     *      ctx - a string representing an encrypted Gigya context.
-     *  }
-     *  Signature: Computed using the private key matching the public key whose URL is specified in the header.
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature.
      */
     gigyaAssertion: string;
     /**
-     * The JWT token from the TFA provider. The It is made up of a header object, a body object and a signature:
-     *  Header:
-     *  {
-     *      "alg": "http://www.w3.org/2000/09/xmldsig#rsa-sha1Information published on non-SAP site",
-     *      "typ": "JWT",
-     *      "x5u":
-     *  }
-     *  Body:
-     *  {
-     *      iss - a string representing the issuer, e.g. "gigya.com".
-     *      aud - a string representing the TFA provider name, thesame as the issuer of the Gigya assertion that triggered the TFA check, e.g., "gigya.com".
-     *      sub - a string representing the TFA provider's unique identifier for this user. May match Gigya's user identifier from gigya assertion's subject.
-     *      method - a string representing an optional indication of the method used for identifying the user, only relevant to providers who offer multiple methods.
-     *      iat - an integer representing the creation time of this JWT object in UNIX time.
-     *      jti - a string representing the JWT ID; a crypto-strength nonce value.
-     *      rti - a string representing the JTI value of the Gigya assertion that triggered this TFA process. This strongly binds this assertion with the Gigya assertion.
-     *  }
-     *  Signature: Computed using the private key matching the public key whose URL is specified in the header.
+     * A secure ticket that includes the method, phone, code, and gigyaAssertion.jti.
      */
-    providerAssertion: string;
+    phvToken: string;
     /**
-     * The regToken returned from the previous API or notifyLogin response.
+     * The verification code.
      */
-    regToken?: string;
-    /**
-     * The users UID, can be specified when the user is logged in.
-     */
-    UID?: string;
-    /**
-     * Indicates whether this device is temporary and should not be remembered as an active device. The default value is "false". When this value is true the server marks the device as "oneTimeOnly". When login is performed, "oneTimeOnly" devices are treated as not verified.
-     */
-    tempDevice?: boolean;
+    code: string;
 }>;
 
 /**
- * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b44d170b21014bbc5a10ce4041860.html#response-data
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413bb9ee70b21014bbc5a10ce4041860.html#response-data
  */
-export type AccountsTFAFinalizeTFAResponse = GigyaResponse<{}>;
+export type AccountsTFAPhoneCompleteVerificationResponse = GigyaResponse<{
+    /**
+     * The JWT token from the TFA provider. The It is made up of a header object, a body object and a signature.
+     */
+    providerAssertion: string;
+}>;
 
 /**
- * When implementing Risk Based Authentication, this method returns the list of phone numbers that are verified for the user. For security reasons, full phone numbers are not returned, instead, an obfuscated number (last 3 digits) and a unique ID are returned for each phone.
- *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413bcd4070b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAPhoneGetCertificateRequest = GigyaRequest<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413bcd4070b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAPhoneGetCertificateResponse = GigyaResponse<{
+    /**
+     * Gigya's PEM-encoded X.509 certificate containing an RSA public key.
+     */
+    certificate?: string;
+}>;
+
+/**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413be06570b21014bbc5a10ce4041860.html#parameters
  */
 export type AccountsTFAPhoneGetRegisteredPhoneNumbersRequest = GigyaRequest<{
     /**
-     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature:
-        Header:
-        {
-            "alg": "http://www.w3.org/2000/09/xmldsig#rsa-sha1Information published on non-SAP site",
-            "typ": "JWT",
-            "x5u": "http://accounts.gigya.com/accounts.tfa.getCertificateInformation published on non-SAP site"
-        }
-        Body:
-        {
-            iss - a string representing the issuer, e.g. "gigya.com".
-            aud - a string representing the TFA provider name, e.g. "gigyaPhone".
-            sub - a string representing a unique Gigya identifier for this user.
-            action - a string enum representing the requested action type, can be "verify", "edit", or "registerOrVerify".
-            params - a JSON object with string properties and values with TFA provider-specific parameters. These are the params from the policy for this provider.
-            iat - an integer representing the creation time of this JWT object in UNIX time.
-            jti - a string representing the JWT ID; a crypto-strength nonce value.
-            ctx - a string representing an encrypted Gigya context.
-        }
-        Signature: Computed using the private key matching the public key whose URL is specified in the header.
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature.
      */
     gigyaAssertion: string;
 }>;
@@ -5632,15 +5679,681 @@ export type AccountsTFAPhoneGetRegisteredPhoneNumbersRequest = GigyaRequest<{
  */
 export type AccountsTFAPhoneGetRegisteredPhoneNumbersResponse = GigyaResponse<{
     /**
-     * An array of objects, each object includes the following fields:
-        - id - the unique identifier of the phone.
-        - obfuscated - the phone number with the last 3 digits visble, e.g. "##-###-#762".
-        - plain - the full phone number, e.g. "972555926762"
-        - lastMethod - can be either "sms" or "voice".
-        - lastVerification - the last verification time in UNIX time.
+     * An array of objects, each object includes the following fields.
      */
     phones: GigyaPhoneObject[];
 }>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413bf36d70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAPhoneRemovePhoneRequest = GigyaRequest<{
+    /**
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object, and a signature.
+     */
+    gigyaAssertion: string;
+    /**
+     * 	The unique identifier of the phone.
+     */
+    phoneId: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413bf36d70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAPhoneRemovePhoneResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c069e70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAPhoneSendVerificationCodeRequest = GigyaRequest<{
+    /**
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature.
+     */
+    gigyaAssertion: string;
+    /**
+     * The unique identifier of the phone. If this parameter is provided, there is no need for the phone parameter.
+     */
+    phoneID?: string;
+    /**
+     * The phone number. If this parameter is provided, there is no need for the phoneID parameter.
+     */
+    phone?: string;
+    /**
+     * Can be either "sms" or "voice".
+     */
+    method: 'sms' | 'voice';
+    /**
+     * The language of the text or voice message.
+     */
+    lang: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c069e70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAPhoneSendVerificationCodeResponse = GigyaResponse<{
+    /**
+     * A secure ticket that includes the method, phone, code, and gigyaAssertion.jti.
+     */
+    phvToken: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c199b70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAPushIsVerifiedRequest = GigyaRequest<{
+    /**
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature.
+     */
+    gigyaAssertion: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c199b70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAPushIsVerifiedResponse = GigyaResponse<{
+    /**
+     * TODO: This is not documented.
+     */
+    providerAssertion?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c2c9870b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAPushOptInRequest = GigyaRequest<{
+    /**
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature.
+     */
+    gigyaAssertion: string;
+    /**
+     * Information about the device from which the original login request came.
+     */
+    deviceInfo: {
+        /**
+         * Acceptable values are android or ios.
+         */
+        platform: 'android' | 'ios';
+        /**
+         * Information about the manufacturer, e.g., galaxy, apple etc.
+         */
+        man: string;
+        /**
+         * The unique fcm-registration-id, as generated by Firebase for this user.
+         */
+        pushToken: string;
+        /**
+         * The version number of the operating system.
+         */
+        os: string;
+    };
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c2c9870b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAPushOptInResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c3f9d70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAPushSendVerificationRequest = GigyaRequest<{
+    /**
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature.
+     */
+    gigyaAssertion: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c3f9d70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAPushSendVerificationResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c529a70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAPushVerifyRequest = GigyaRequest<{
+    /**
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature.
+     */
+    gigyaAssertion: string;
+    /**
+     * The token associated with this user's credentials and session in the third-party app.
+     */
+    verificationToken: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c529a70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAPushVerifyResponse = GigyaResponse<{
+    /**
+     * The JWT token from the TFA provider. The It is made up of a header object, a body object and a signature.
+     */
+    providerAssertion: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c65da70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAResetTFARequest = GigyaRequest<{
+    /**
+     * The unique ID of the user, for whom to reset the verified phone numbers.
+     */
+    UID: string;
+    /**
+     * The TFA provider to reset. Supported values:
+     *   gigyaPhone
+     *   gigyaTotp
+     *   gigyaPush
+     *
+     * If no provider is sent, all active providers will be reset. Note that gigyaEmail cannot be reset using this method but via email verification flows instead.
+     */
+    provider?: 'gigyaPhone' | 'gigyaTotp' | 'gigyaPush';
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c65da70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAResetTFAResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c8bc970b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFATOTPRegisterRequest = GigyaRequest<{
+    /**
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature.
+     */
+    gigyaAssertion: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c8bc970b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFATOTPRegisterResponse = GigyaResponse<{
+    /**
+     * A URL that contains the QR code to be scanned by the user, to pair their app with their account.
+     */
+    qrCode?: string;
+    /**
+     * A secret token that is used for the actual app-based authentication.
+     */
+    sctToken?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413cb1cd70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFATOTPVerifyRequest = GigyaRequest<{
+    /**
+     * The JWT token from accounts.tfa.initTFA. It is made up of a header object, a body object and a signature.
+     */
+    gigyaAssertion: string;
+    /**
+     * The authentication code submitted by the user. This is validated against the secret token (sctToken).
+     */
+    code: string;
+    /**
+     * The secret token associated with this user's authentication app. This is required in registration mode, but not in verify mode, as it is already saved to the user's account.
+     */
+    sctToken?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413cb1cd70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFATOTPVerifyResponse = GigyaResponse<{
+    /**
+     * The JWT token from the TFA provider. The It is made up of a header object, a body object and a signature.
+     */
+    providerAssertion?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413cc8e070b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsTFAUnregisterDeviceRequest = GigyaRequest<{
+    /**
+     * The UID of the user whose TFA you want to reset.
+     */
+    UID: string;
+    /**
+     * Indicates whether to unregister all the user devices (but not to disable the TFA providers). This may be used, for example, if the user loses their mobile phone, which is used for the TFA validation. When set to 'false', only devices for which there is a current active session will be unregistered. The default value is "false".
+     */
+    allDevices?: boolean;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413cc8e070b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsTFAUnregisterDeviceResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413cef8370b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsUnsubscribeRequest = GigyaRequest<{
+    /**
+     * The name of the newsletter from which the user is being unsubscribed.
+     */
+    subscriptionID: string;
+    /**
+     * The email to unsubscribe from this newsletter.
+     *
+     * You must provide either the email or the channelToken property.
+     */
+    email?: string;
+    /**
+     * The token returned from accounts.search of the emailAccounts for the user. This is used when unsubscribing via a 3rd party, so not to expose the user's PII email address.
+     *
+     * You must provide either the email or the channelToken property.
+     */
+    channelToken?: string;
+    /**
+     * Any tags you want to associate with the subscription change. Note that this will overwrite any previous tags associated with the subscription. If passed empty, all previously existing tags will be removed.
+     */
+    tags?: string[];
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413cef8370b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsUnsubscribeResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/929ca94d9a484d7bb466d0746e449a01.html#parameters
+ */
+export type AccountsVerifyLoginRequest = GigyaRequest<{
+    /**
+     * The unique user ID. This user ID should be used for login verification.
+     */
+    UID?: string;
+    /**
+     * A comma-separated list of fields to include in the response. The possible values are:
+     * - identities-active
+     * - identities-all
+     * - loginIDs
+     * - emails
+     * - profile
+     * - data
+     * - preferences
+     * - subscriptions
+     * - groups
+     * - id_token
+     */
+    include?: string;
+    /**
+     * This parameter defines your client side environment, which in return determines the server response data fields. The default value of this parameter is "browser", which means that by default you receive cookie-related data in the response.
+     */
+    targetEnv?: 'browser' | 'mobile';
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/929ca94d9a484d7bb466d0746e449a01.html#response-data
+ */
+export type AccountsVerifyLoginResponse<DataSchema, PreferencesSchema, SubscriptionsSchema> = GigyaResponse<{
+    /**
+     * The unique user ID. This user ID should be used for login verification.
+     */
+    UID?: string;
+    /**
+     * The UTC time the account was created in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
+     */
+    created?: string;
+    /**
+     * The UTC time the account was created in Unix time format including milliseconds (i.e., the number of seconds since Jan. 1st 1970 * 1000).
+     */
+    createdTimestamp?: number;
+    /**
+     * Custom data. Any data that you want to store regarding the user that isn't part of the Profile object.
+     */
+    data?: DataSchema;
+    /**
+     * The email addresses belonging to the user.
+     */
+    emails?: {
+        /**
+         * An array of strings representing the user's verified email addresses.
+         */
+        verified?: string[];
+        /**
+         * An array of strings representing the user's unverified email addresses.
+         */
+        unverified?: string[];
+    };
+    /**
+     * When using CIAM for B2B, this is where the user's Organization Management data is stored. For a detailed Description of this field, see the Groups object documentation.
+     *
+     * TODO: Type this out.
+     */
+    groups?: unknown;
+    /**
+     * An array of Identity Objects, each object represents a user's social identity. Each Identity Object contains imported data from a social network that the user has connected to.
+     */
+    identities?: GigyaIdentity[];
+    /**
+     * Boolean	Indicates whether the account is active. The account is active once the user creates it even without finalizing it. The account can be deactivated, but it will still be registered if the registration process has been finalized. If isActive==false the user cannot log in, however any currently active sessions remain valid.
+     */
+    isActive?: boolean;
+    /**
+     * Indicates whether the user is registered. The user is registered once his registration has been finalized.
+     */
+    isRegistered?: boolean;
+    /**
+     * Indicates whether the account email is verified.
+     */
+    isVerified?: boolean;
+    /**
+     * The time of the last login of the user in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
+     */
+    lastLogin?: string;
+    /**
+     * The user's last login location, derived from IP address.
+     */
+    lastLoginLocation?: {
+        /**
+         * A string representing the two-character country code.
+         */
+        country?: string;
+        /**
+         * A string representing the state, where available.
+         */
+        state?: string;
+        /**
+         * A string representing the city name.
+         */
+        city?: string;
+        coordinates?: {
+            /**
+             * A double representing the latitude of the center of the city.
+             */
+            lat: number;
+            /**
+             * A double representing the longitude of the center of the city.
+             */
+            lon: number;
+        };
+    };
+    /**
+     * The UTC time of the last login of the user in Unix time format including milliseconds (i.e., the number of seconds since Jan. 1st 1970 * 1000).
+     */
+    lastLoginTimestamp?: number;
+    /**
+     * The UTC time when user profile, preferences, or subscriptions data was last updated (either full or partial update) in ISO 8601 format, e.g., "2017-07-16T19:20:30Z".
+     */
+    lastUpdated?: string;
+    /**
+     * The UTC time when the last update of the object occurred (either full or partial update) in Unix time including milliseconds, based on when the 'lastUpdated', 'Report AccountsFirstLogin' or 'AccountsReturnedLogin' events are fired.
+     */
+    lastUpdatedTimestamp?: number;
+    /**
+     * The user's login identifiers.
+     */
+    loginIDs?: {
+        /**
+         * A string representing the username.
+         */
+        username?: string;
+        /**
+         * An array of strings representing email addresses.
+         */
+        emails?: string[];
+        /**
+         * An array of strings representing email addresses that were not validated.
+         */
+        unverifiedEmails?: string[];
+    };
+    /**
+     * The name of the provider that the user used in order to login.
+     */
+    loginProvider?: string;
+    /**
+     * The UTC time when the oldest data of the object was refreshed in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
+     */
+    oldestDataUpdated?: string;
+    /**
+     * The UTC time when the oldest data of the object was refreshed in Unix time format including milliseconds (i.e., the number of seconds since Jan. 1st 1970 * 1000).
+     */
+    oldestDataUpdatedTimestamp?: number;
+    /**
+     * The user's Site account password details.
+     */
+    password?: {
+        /**
+         * The hashed password
+         */
+        hash?: string;
+        hashSettings?: {
+            /**
+             * Represents the hash algorithm used to encrypt the password.
+             */
+            algorithm?: string;
+            /**
+             * Represents the number of iterations to perform the hashing.
+             */
+            rounds?: number;
+            /**
+             * Represents the BASE64 encoded value of the salt.
+             */
+            salt?: string;
+            /**
+             * Represents the template for merging clear-text passwords. This is only returned if the pwHashFormat parameter was set during account import and until the user's first login to Gigya (when the user's password is rehashed per the site's settings).
+             */
+            format?: string;
+        };
+    };
+    /**
+     * The Phone Number login identifier, if the account uses Phone Number Login. The phone number formatting is e.164. Note that this field cannot be mapped using the UI Builder or the Web SDK.
+     */
+    phoneNumber?: string;
+    /**
+     * The user's preferences information as described in the Preferences Object.
+     */
+    preferences?: PreferencesSchema;
+    /**
+     * The user's profile information as described in the object. If the user has more than one type of identity (i.e. site and social), data from a 'site' source will override data from a social network and always take precedence. If no site data exists, the first social account to update a field's data will take precedence. The profile is returned in the response by default, but if the include parameter is used to specify other fields that should be provided in the response, the profile must also be specified explicitly in the include parameter.
+     */
+    profile?: GigyaProfile;
+    /**
+     * The current RBA Policy defined for the specified user.
+     *
+     * TODO: Type this out.
+     */
+    rbaPolicy?: unknown;
+    /**
+     * The UTC time when the isRegistered parameter was set to true in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
+     */
+    registered?: string;
+    /**
+     * The GMT time when the isRegistered parameter was set to true in Unix time format, including milliseconds.
+     */
+    registeredTimestamp?: number;
+    /**
+     * A string representing the source of the registration. Can be used to set varying destination pages in accounts.setPolicies.
+     */
+    regSource?: string;
+    /**
+     * A comma-separated list of the names of the providers to which the user is connected/logged in.
+     */
+    socialProviders?: string;
+    /**
+     * The user's subscription information.
+     */
+    subscriptions?: SubscriptionsSchema;
+    /**
+     * The UTC time when the isVerified parameter was set to true in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
+     */
+    verified?: string;
+    /**
+     * The GMT time when the isVerified parameter was set to true in Unix time format including milliseconds (i.e., the number of seconds since Jan. 1st 1970 * 1000).
+     */
+    verifiedTimestamp?: number;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413d28b670b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsWebhooksDeleteRequest = GigyaRequest<{
+    /**
+     * The name of the webhook to delete.
+     */
+    name: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413d28b670b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsWebhooksDeleteResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413d3bbe70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsWebhooksGetAllRequest = GigyaRequest<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413d3bbe70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsWebhooksGetAllResponse = GigyaResponse<{
+    /**
+     * An array of webhook objects.
+     */
+    webhooks?: GigyaWebhook[];
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413d4eeb70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsWebhooksGetStatusRequest = GigyaRequest<{
+    /**
+     * The callback URL to which webhook notifications are delivered. This value is case-sensitive.
+     */
+    url: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413d4eeb70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsWebhooksGetStatusResponse = GigyaResponse<{
+    /**
+     * An object that indicates the status of the webhook.
+     */
+    webhookStatus?: {
+        /**
+         * The code of the received status.
+         */
+        statusCode: number;
+        /**
+         * The time at which the notification service attempted to send the event to the specified URL. This will not appear if the message is "No Webhook activity was found".
+         */
+        lastSent: string;
+        /**
+         * Details related to the status. This will not be displayed in the case of a "200" (OK) response.
+         */
+        message: string;
+    };
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413d61fc70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsWebhooksSetRequest = GigyaRequest<{
+    /**
+     * The callback URL to which webhook notifications will be delivered. This must be unique per site and HTTPS.
+     *
+     * When updating the URL for an existing webhook, allow some time for the new URL to update and make sure it is updated in the system, before removing the previously used URL.
+     */
+    url: string;
+    /**
+     * The event types to receive notifications for.
+     *
+     * Possible values for Accounts are:
+     * - accountCreated
+     * - accountRegistered
+     * - accountUpdated
+     * - accountLoggedIn
+     * - accountDeleted
+     * - accountLockedOut
+     * - accountMerged
+     * - accountProgressed
+     * - accountUidChanged
+     * - sitePreferencesReset
+     * - subscriptionUpdated
+     *
+     * Possible values for Groups Management are:
+     * - modelCreated
+     * - modelUpdated
+     * - groupCreated
+     * - groupUpdated
+     * - groupDeleted
+     * - memberAdded
+     * - memberUpdated
+     * - memberRemoved
+     *
+     * In addition, the following B2B Organization Management B2B Organization Management webhooks are supported:
+     * - organizationRequested
+     * - organizationEnteredDraftStage
+     * - organizationEnteredApprovalWorkflow
+     * - organizationActivated
+     * - organizationSuspended
+     * - organizationRejected
+     * - organizationWorkflowEnabled
+     * - organizationDeleted
+     * - organizationUpdated
+     * - organizationMemberAdded
+     * - organizationMemberRemoved
+     *
+     * Pass multiple event types as a comma separated string or pass multiple event types as an array.
+     */
+    events: string[] | string;
+    /**
+     * The name of the webhook. This can be up to 100 characters long and must be unique per site.
+     */
+    name: string;
+    /**
+     * Indicates whether the current webhook is active. When set to false, notifications will not be sent to this webhook.
+     */
+    active: boolean;
+    /**
+     * The user or application key whose secret is used to sign the notification.
+     */
+    signingUserKey: string;
+    /**
+     * The userKey secret.
+     */
+    secret: string;
+    /**
+     * A list of name-value pairs of custom HTTP headers defined for this webhook.
+     */
+    headers?: {
+        name: string;
+        value: string;
+    }[];
+    /**
+     * The version of the Webhooks service to use with this webhook. Supported values:
+     * - 2.0: Support for using webhooks with Global Access, includes the following:
+     *   - Sign the webhook notifications with a JWT. For more information, see Validate A JWT from SAP Customer Data Cloud.
+     *   - Webhooks can be verified with the accounts.getJWTPublicKey.
+     *   - Version 2.0 adds the API key of the site that initiated the notification to the webhook payload, supporting site group scenarios where an event should be triggered only when a webhook was initiated from a specific site. endpoint without having to exchange secrets with the webhook recipient. Maximum number of multiple events sent in a single webhook message is 100.
+     * - 3.0: Supports the following:
+     *   - Only for accountCreated, accountRegistered, accountUpdated events, adds to the webhook event payload the parameters of the API call that triggered the webhook. This is optional, see “include” parameter below.
+     *   - Webhooks messages above certain message length are sent gzip-compressed.
+     *   - Maximum number of multiple events sent in a single webhook message is 500.
+     */
+    version: '2.0' | '3.0';
+    /**
+     * Only applicable to version 3.0.
+     *
+     * Comma-delimited strings. Currently only supports the string “params”. Use to include the “params” section in the webhook message payload.
+     *
+     * If this field is missing or null, then the “params” section is not added to the webhook payload.
+     */
+    include?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413d61fc70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsWebhooksSetResponse = GigyaResponse<{}>;
 
 export type GigyaAccountsNamespace<
     DataSchema extends GigyaData,
@@ -6533,6 +7246,86 @@ export type GigyaAccountsNamespace<
     'stream.read': (params: AccountsStreamReadRequest) => Promise<AccountsStreamReadResponse>;
 
     /**
+     * This method is part of a two-factor authentication (TFA) flow and is used to generate backup codes for use in a time-based authentication flow. Note that TFA is part of Risk Based Authentication (RBA).
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413abafd70b21014bbc5a10ce4041860.html
+     */
+    'tfa.backupcodes.create': (
+        params: AccountsTFABackupCodesCreateRequest,
+    ) => Promise<AccountsTFABackupCodesCreateResponse>;
+
+    /**
+     * This method is part of a two-factor authentication (TFA) flow and is used to retrieve backup codes saved for a user in a time-based authentication flow. Note that TFA is part of Risk Based Authentication (RBA).
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413ace4a70b21014bbc5a10ce4041860.html
+     */
+    'tfa.backupcodes.get': (params: AccountsTFABackupCodesGetRequest) => Promise<AccountsTFABackupCodesGetResponse>;
+
+    /**
+     * This method is part of a two-factor authentication (TFA) flow and is triggered after the user submits a backup code in a time-based authentication flow. It verifies the code against the secret saved to this user's account, and is followed by accounts.tfa.finalizeTFA. Note that TFA is part of Risk Based Authentication (RBA).
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413ae15570b21014bbc5a10ce4041860.html
+     */
+    'tfa.backupcodes.verify': (
+        params: AccountsTFABackupCodesVerifyRequest,
+    ) => Promise<AccountsTFABackupCodesVerifyResponse>;
+
+    /**
+     * This method deactivates a provider for the user across all devices. This method may only be called when the user is fully logged in (not in any "pending state").
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413af46770b21014bbc5a10ce4041860.html
+     */
+    'tfa.deactivateProvider': (
+        params: AccountsTFADeactivateProviderRequest,
+    ) => Promise<AccountsTFADeactivateProviderResponse>;
+
+    /**
+     * When implementing Risk Based Authentication Two-factor authentication, this method verifies that the verification code entered by the user matches the code that was sent to their email address (saved in a token on the Gigya server). It returns a provider assertion to be passed on to accounts.tfa.finalizeTFA for completing the authentication process.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b0b7d70b21014bbc5a10ce4041860.html
+     */
+    'tfa.email.completeVerification': (
+        params: AccountsTFAEmailCompleteVerificationRequest,
+    ) => Promise<AccountsTFAEmailCompleteVerificationResponse>;
+
+    /**
+     * When implementing Risk Based Authentication, this method returns the list of verified emails for a user, to use in a second-factor authentication flow.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b1e8a70b21014bbc5a10ce4041860.html
+     */
+    'tfa.email.getEmails': (params: AccountsTFAEmailGetEmailsRequest) => Promise<AccountsTFAEmailGetEmailsResponse>;
+
+    /**
+     * When implementing Risk Based Authentication, this method sends a crypto-random 6-digit verification code to the specified email, as part of a two-factor authentication flow.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b31d470b21014bbc5a10ce4041860.html
+     */
+    'tfa.email.sendVerificationCode': (
+        params: AccountsTFAEmailSendVerificationCodeRequest,
+    ) => Promise<AccountsTFAEmailSendVerificationCodeResponse>;
+
+    /**
+     * This method finalizes the two-factor authentication (TFA) flow that started with accounts.tfa.initTFA.
+     *
+     * The server validates the JWT token, extracts the inner secure ticket and if the flow is:
+     *
+     * register - the server adds the provider to the "active" providers list of the user, adds the deviceID to the list of verified devices for the user, and reports a 'tfa registration' event.
+     * add - the server adds the provider to the "active" providers list of the user, but does not update the deviceID in the list of verified devices for the user, and reports a 'tfa added' event.
+     * verify - the server updates/inserts the deviceID to the list of verified devices for the user, and reports a 'tfa verification' event.
+     * edit - the server updates the deviceID in the list of verified devices for the user, and reports a 'tfa edited' event.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b44d170b21014bbc5a10ce4041860.html
+     */
+    'tfa.finalizeTFA': (params: AccountsTFAFinalizeTFARequest) => Promise<AccountsTFAFinalizeTFAResponse>;
+
+    /**
+     * This method retrieves Gigya's PEM-encoded X.509 certificate containing an RSA public key, which can be used to verify the signature on the JWT tokens Gigya issues.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b57d970b21014bbc5a10ce4041860.html
+     */
+    'tfa.getCertificate': (params: AccountsTFAGetCertificateRequest) => Promise<AccountsTFAGetCertificateResponse>;
+
+    /**
      * This method retrieves the two-factor authentication (TFA) providers for a site and user.
      *
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b6ced70b21014bbc5a10ce4041860.html
@@ -6540,29 +7333,18 @@ export type GigyaAccountsNamespace<
     'tfa.getProviders': (params: AccountsTFAGetProvidersRequest) => Promise<AccountsTFAGetProvidersResponse>;
 
     /**
-     * This method resets the means of identification (e.g., SMS or authenticating app) used as the second step of authentication in a TFA flow for a specified user. The user will be prompted to enter a new verification method on their next login.
+     * When implementing Risk Based Authentication, this method takes specified phones and adds them to a specified user's verified phone numbers. If this is the first phone added to this user it will also enable the provider.
      *
-     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c65da70b21014bbc5a10ce4041860.html
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b800070b21014bbc5a10ce4041860.html
      */
-    'tfa.resetTFA': (params: AccountsTFAResetTFARequest) => Promise<AccountsTFAResetTFAResponse>;
+    'tfa.phone.importTFA': (params: AccountsTFAImportTFARequest) => Promise<AccountsTFAImportTFAResponse>;
 
     /**
-     * This method unregisters devices from the list of verified devices for the user, used in Risk-Based Authentication flows. A verified device is a device (phone or web browser) that has already been verified with an SMS, TOTP, or email verification code. The method may unregister all devices, or those with an active session.
+     * This method initializes two-factor authentication (TFA) by returning a JWT token that can be used to register with a new provider, or to verify the user using an existing provider, or to edit an existing provider.
      *
-     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413cc8e070b21014bbc5a10ce4041860.html
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413ba6e870b21014bbc5a10ce4041860.html
      */
-    'tfa.unregisterDevice': (
-        params: AccountsTFAUnregisterDeviceRequest,
-    ) => Promise<AccountsTFAUnregisterDeviceResponse>;
-
-    /**
-     * When implementing Risk Based Authentication, this method sends a crypto-random 6-digit verification code to the specified number.
-     *
-     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c069e70b21014bbc5a10ce4041860.html
-     */
-    'tfa.phone.sendVerificationCode': (
-        params: AccountsTFAPhoneSendVerificationCodeRequest,
-    ) => Promise<AccountsTFAPhoneSendVerificationCodeResponse>;
+    'tfa.initTFA': (params: AccountsTFAInitTFARequest) => Promise<AccountsTFAInitTFAResponse>;
 
     /**
      * When implementing Risk Based Authentication, this method verifies that the provided verification code matches the code in the token, and adds the phone number in the phvToken to the user's verified phones list.
@@ -6572,6 +7354,15 @@ export type GigyaAccountsNamespace<
     'tfa.phone.completeVerification': (
         params: AccountsTFAPhoneCompleteVerificationRequest,
     ) => Promise<AccountsTFAPhoneCompleteVerificationResponse>;
+
+    /**
+     * When implementing Risk Based Authentication, this method retrieves Gigya's PEM-encoded X.509 certificate containing an RSA public key, which can be used to verify the signature on the JWT tokens Gigya issues.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413bcd4070b21014bbc5a10ce4041860.html
+     */
+    'tfa.phone.getCertificate': (
+        params: AccountsTFAPhoneGetCertificateRequest,
+    ) => Promise<AccountsTFAPhoneGetCertificateResponse>;
 
     /**
      * When implementing Risk Based Authentication, this method r eturns the list of phone numbers that are verified for the user. For security reasons, full phone numbers are not returned, instead, an obfuscated number (last 3 digits) and a unique ID are returned for each phone.
@@ -6592,23 +7383,121 @@ export type GigyaAccountsNamespace<
     ) => Promise<AccountsTFAPhoneRemovePhoneResponse>;
 
     /**
-     * This method initializes two-factor authentication (TFA) by returning a JWT token that can be used to register with a new provider, or to verify the user using an existing provider, or to edit an existing provider.
+     * When implementing Risk Based Authentication, this method sends a crypto-random 6-digit verification code to the specified number.
      *
-     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413ba6e870b21014bbc5a10ce4041860.html
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c069e70b21014bbc5a10ce4041860.html
      */
-    'tfa.initTFA': (params: AccountsInitTFARequest) => Promise<AccountsInitTFAResponse>;
+    'tfa.phone.sendVerificationCode': (
+        params: AccountsTFAPhoneSendVerificationCodeRequest,
+    ) => Promise<AccountsTFAPhoneSendVerificationCodeResponse>;
 
     /**
-     * This method finalizes the two-factor authentication (TFA) flow that started with accounts.tfa.initTFA.
+     * This method is called every 3 seconds by the Web SDK to poll the SAP Customer Data Cloud service, as part of a push TFA second factor authentication flow. It is called following the sending of a push notification to a 3rd party app, to poll the service and check if the user has verified the push notification, and is thereby authenticated. When the user is verified, the response includes a providerAssertion. It is followed by accounts.tfa.finalizeTFAThe result is a push notification that appears on the user's phone.
      *
-     * The server validates the JWT token, extracts the inner secure ticket and if the flow is:
+     * This method is used after a user is opted in to a device, i.e. as part of a "verify" flow and not an "optin" flow.
      *
-     * register - the server adds the provider to the "active" providers list of the user, adds the deviceID to the list of verified devices for the user, and reports a 'tfa registration' event.
-     * add - the server adds the provider to the "active" providers list of the user, but does not update the deviceID in the list of verified devices for the user, and reports a 'tfa added' event.
-     * verify - the server updates/inserts the deviceID to the list of verified devices for the user, and reports a 'tfa verification' event.
-     * edit - the server updates the deviceID in the list of verified devices for the user, and reports a 'tfa edited' event.
-     *
-     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b44d170b21014bbc5a10ce4041860.html
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c199b70b21014bbc5a10ce4041860.html
      */
-    'tfa.finalizeTFA': (params: AccountsTFAFinalizeTFARequest) => Promise<AccountsTFAFinalizeTFAResponse>;
+    'tfa.push.isVerified': (params: AccountsTFAPushIsVerifiedRequest) => Promise<AccountsTFAPushIsVerifiedResponse>;
+
+    /**
+     * When implementing Risk Based Authentication, this method is called by an app as part of a push TFA second factor authentication opt-in flow. It is not part of a push verification flow. The result is a push notification displayed on the user's phone. This method requires an active user session.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c2c9870b21014bbc5a10ce4041860.html
+     */
+    'tfa.push.optin': (params: AccountsTFAPushOptInRequest) => Promise<AccountsTFAPushOptInResponse>;
+
+    /**
+     * When implementing Risk Based Authentication, this method is called by the Web SDK to a third party app, as part of a push TFA second factor authentication flow. The result is a push notification that appears on the user's phone.
+     *
+     * This method is used after a user is opted in to a device, i.e. as part of a "verify" flow and not an "optin" flow.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c3f9d70b21014bbc5a10ce4041860.html
+     */
+    'tfa.push.sendVerification': (
+        params: AccountsTFAPushSendVerificationRequest,
+    ) => Promise<AccountsTFAPushSendVerificationResponse>;
+
+    /**
+     * When implementing Risk Based Authentication, this method is part of a push TFA second factor authentication flow. It is a request sent from the application to SAP Customer Data Cloud (Gigya) after a user has approved a push notification on their device, to authorize the user's session. It may only be used when the user has an active session on the app that sent the request. When part of the first opt-in flow, it is followed by accounts.tfa.finalizeTFA. For more information see Push Notification.
+     *
+     * This method is part of both the opt-in, and the verification flow for push notifications.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c529a70b21014bbc5a10ce4041860.html
+     */
+    'tfa.push.verify': (params: AccountsTFAPushVerifyRequest) => Promise<AccountsTFAPushVerifyResponse>;
+
+    /**
+     * This method resets the means of identification (e.g., SMS or authenticating app) used as the second step of authentication in a TFA flow for a specified user. The user will be prompted to enter a new verification method on their next login.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c65da70b21014bbc5a10ce4041860.html
+     */
+    'tfa.resetTFA': (params: AccountsTFAResetTFARequest) => Promise<AccountsTFAResetTFAResponse>;
+
+    /**
+     * This method is part of a two-factor authentication (TFA) flow. It creates a Gigya assertion that contains some information about the user, the site, and the mode (whether registration or verify). It creates a secret that is expressed to the user as a QR code, used by the user for pairing their authenticating app, and a secret token, that is part of the actual authentication. Note that TFA is part of Risk Based Authentication (RBA).
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413c8bc970b21014bbc5a10ce4041860.html
+     */
+    'tfa.totp.register': (params: AccountsTFATOTPRegisterRequest) => Promise<AccountsTFATOTPRegisterResponse>;
+
+    /**
+     * This method is part of a two-factor authentication (TFA) flow and is triggered after the user submits the code generated by the authenticating app. It verifies the code against the secret saved to this user's account, and is followed by accounts.tfa.finalizeTFA. Note that TFA is part of Risk Based Authentication (RBA).
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413cb1cd70b21014bbc5a10ce4041860.html
+     */
+    'tfa.totp.verify': (params: AccountsTFATOTPVerifyRequest) => Promise<AccountsTFATOTPVerifyResponse>;
+
+    /**
+     * This method unregisters devices from the list of verified devices for the user, used in Risk-Based Authentication flows. A verified device is a device (phone or web browser) that has already been verified with an SMS, TOTP, or email verification code. The method may unregister all devices, or those with an active session.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413cc8e070b21014bbc5a10ce4041860.html
+     */
+    'tfa.unregisterDevice': (
+        params: AccountsTFAUnregisterDeviceRequest,
+    ) => Promise<AccountsTFAUnregisterDeviceResponse>;
+
+    /**
+     * When you are implementing Subscription Management, use this method to unsubscribe users from a mailing list or newsletter subscription with a one-click unsubscribe.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413cef8370b21014bbc5a10ce4041860.html
+     */
+    unsubscribe: (params: AccountsUnsubscribeRequest) => Promise<AccountsUnsubscribeResponse>;
+
+    /**
+     * The accounts.verifyLogin API checks user profile information against the required schema fields and site policies to ensure that all the necessary data is in place. In site groups, this is done across multiple domains. If validation passes, the user's account information is returned. If not, an error is returned.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/929ca94d9a484d7bb466d0746e449a01.html
+     */
+    verifyLogin: (
+        params: AccountsVerifyLoginRequest,
+    ) => Promise<AccountsVerifyLoginResponse<DataSchema, PreferencesSchema, SubscriptionsSchema>>;
+
+    /**
+     * This method is used to delete a webhook.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413d28b670b21014bbc5a10ce4041860.html
+     */
+    'webhooks.delete': (params: AccountsWebhooksDeleteRequest) => Promise<AccountsWebhooksDeleteResponse>;
+
+    /**
+     * This method is used to retrieve a list of all defined webhooks.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413d3bbe70b21014bbc5a10ce4041860.html
+     */
+    'webhooks.getAll': (params: AccountsWebhooksGetAllRequest) => Promise<AccountsWebhooksGetAllResponse>;
+
+    /**
+     * This method is used to check the status of a defined webhook, including the time the last bulk was sent from the Gigya servers and the status received for them from the downstream system. We recommend calling accounts.webhooks.getAll beforehand, to get the correct URL for your webhook notifications.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413d4eeb70b21014bbc5a10ce4041860.html
+     */
+    'webhooks.getStatus': (params: AccountsWebhooksGetStatusRequest) => Promise<AccountsWebhooksGetStatusResponse>;
+
+    /**
+     * This method is used to create a new webhook or update an existing one.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413d61fc70b21014bbc5a10ce4041860.html
+     */
+    'webhooks.set': (params: AccountsWebhooksSetRequest) => Promise<AccountsWebhooksSetResponse>;
 };

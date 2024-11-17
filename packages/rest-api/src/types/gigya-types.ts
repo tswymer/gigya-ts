@@ -966,3 +966,79 @@ export type GigyaStreamEvent = {
     operation: string;
     details: string[];
 };
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/417f7e7570b21014bbc5a10ce4041860.html
+ */
+export type GigyaWebhook = {
+    /**
+     * The callback URL to which webhook notifications are delivered. This must be unique per site.
+     */
+    url: string;
+    /**
+     * The name of the webhook. This can be up to 100 characters long and must be unique per site.
+     */
+    name: string;
+    /**
+     *
+     */
+    events: {
+        /**
+         * The event type.
+         */
+        type:
+            | 'accountCreated'
+            | 'accountRegistered'
+            | 'accountUpdated'
+            | 'accountDeleted'
+            | 'accountLoggedIn'
+            | 'accountLockedOut'
+            | 'subscriptionUpdated';
+        /**
+         * A unique identifier for this event.
+         *
+         * Since events can be sent more than once, use the id to check for duplicates. The id for a specific event is always the same.
+         */
+        id: string;
+        /**
+         * The GMT time when the event was triggered, in UNIX time format (the number of seconds since Jan. 1st 1970).
+         */
+        timestamp: number;
+        /**
+         *
+         */
+        data: {
+            /**
+             * The UID of the user for which the event was triggered.
+             */
+            uid: string;
+            /**
+             * This is only returned in a subscriptionUpdated webhook. The token needed for various lite account-related operations to avoid using the user's actual email address in requests.
+             */
+            emailAccountToken?: string;
+        };
+    }[];
+    /**
+     * Indicates whether the current webhook is active. When set to False, notifications are not sent to this webhook.
+     */
+    active: boolean;
+    /**
+     * A list of name-value pairs of custom HTTP headers defined for this webhook.
+     */
+    headers?: {
+        name: string;
+        value: string;
+    }[];
+    /**
+     * The user key whose secret is used to sign the notification.
+     */
+    signingUserKey: string;
+    /**
+     * The userKey secret.
+     */
+    secret: string;
+    /**
+     * The version number of this webhook. Different versions of webhooks can cause different data to be sent in the webhook notification.
+     */
+    version: number;
+};
