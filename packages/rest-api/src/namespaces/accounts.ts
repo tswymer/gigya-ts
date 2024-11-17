@@ -8,6 +8,9 @@ import {
     GigyaPreferences,
     GigyaProfile,
     GigyaProviderGeneric,
+    GigyaSMSConfig,
+    GigyaSMSTemplateSettings,
+    GigyaStreamEvent,
     GigyaValidationError,
 } from '../types/gigya-types';
 
@@ -5037,6 +5040,257 @@ export type AccountsSetProfilePhotoRequest = GigyaRequest<{
 export type AccountsSetProfilePhotoResponse = GigyaResponse<{}>;
 
 /**
+ * TODO: Type this out
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a0faa70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsSetSchemaRequest = GigyaRequest<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a0faa70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsSetSchemaResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a22ad70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsSetScreenSetRequest = GigyaRequest<{
+    /**
+     * An identifier of a screen-set to update or to create if it does not exist.
+     */
+    screenSetID: string;
+    /**
+     * The HTML code that defines the screen-set.
+     */
+    html: string;
+    /**
+     * The CSS that defines the style of the screen-set.
+     *
+     * If the HTML file (above) does not include the screens css and it is in a seperate file, you must upload that file now. You can not upload css separately from the HTML file it belongs to.
+     */
+    css?: string;
+    /**
+     * An object declaring any custom translations for the screen-set.
+     *
+     * If your screen-set requires a separate translations file, you must include it now.
+     */
+    translations?: {
+        [language: string]: {
+            [key: string]: string;
+        };
+    };
+    /**
+     * See JavaScript Parameters for additional information.
+     *
+     * TODO: Type this out
+     */
+    javascript?: unknown;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a22ad70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsSetScreenSetResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/215367b5a1604283899d505811964492.html#parameters
+ */
+export type AccountsSMSTemplatesGetRequest = GigyaRequest<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/215367b5a1604283899d505811964492.html#response-data
+ */
+export type AccountsSMSTemplatesGetResponse = GigyaResponse<{
+    /**
+     * The text templates defined for the site.
+     */
+    templates?: {
+        /**
+         * Object containing the global and country-code templates defined for the OTP flow.
+         */
+        otp?: GigyaSMSTemplateSettings;
+        /**
+         * Object containing the global and country-code templates defined for the TFA flow.
+         */
+        tfa?: GigyaSMSTemplateSettings;
+    };
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/bde4427de0f44ca2b5a3e816d5e3a7bb.html#parameters
+ */
+export type AccountsSMSTemplatesSetRequest = GigyaRequest<{
+    templates: {
+        /**
+         * Object containing the global and country-code templates defined for the OTP flow.
+         */
+        otp: GigyaSMSTemplateSettings;
+        /**
+         * Object containing the global and country-code templates defined for the TFA flow.
+         */
+        tfa: GigyaSMSTemplateSettings;
+    };
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/bde4427de0f44ca2b5a3e816d5e3a7bb.html#response-data
+ */
+export type AccountsSMSTemplatesSetResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/96386b7e9d3f4dd2ba6db6ae17636f42.html#parameters
+ */
+export type AccountsSMSConfigGetRequest = GigyaRequest<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/96386b7e9d3f4dd2ba6db6ae17636f42.html#response-data
+ */
+export type AccountsSMSConfigGetResponse = GigyaResponse<{
+    /**
+     * The configuration that was used to set SMS providers at site level.
+     */
+    smsProviderConfig?: GigyaSMSConfig;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/2f7844ac20964d0a90154d2e7982715d.html#parameters
+ */
+export type AccountsSMSConfigSetRequest = GigyaRequest<{
+    /**
+     * The configuration to be used for SMS providers at site level.
+     */
+    smsProviderConfig: GigyaSMSConfig;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/2f7844ac20964d0a90154d2e7982715d.html#response-data
+ */
+export type AccountsSMSConfigSetResponse = GigyaResponse<{}>;
+
+/**
+ * TODO: Type this out
+ *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a6e9d70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsSocialLoginRequest = GigyaRequest<{}>;
+
+/**
+ * TODO: Type this out
+ *
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a6e9d70b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsSocialLoginResponse = GigyaResponse<{}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a81a770b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsStoreDownloadConsentDocumentRequest = GigyaRequest<{
+    /**
+     * The URL of the stored document, as returned in the response of accounts.store.uploadConsentDocument REST.
+     */
+    URL: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a81a770b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsStoreDownloadConsentDocumentResponse = GigyaResponse<{
+    /**
+     * Base-64 encoding of the document content.
+     */
+    DocumentContent?: string;
+    /**
+     * The type of the document.
+     */
+    DocumentContentType?: 'application/pdf';
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a94a470b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsStoreUploadConsentDocumentRequest = GigyaRequest<{
+    /**
+     * A base-64 encoded string of the document contents.
+     */
+    documentContent: string;
+    /**
+     * The type of document. Only PDF are supported.
+     */
+    documentContentType: 'application/pdf';
+    /**
+     * The name of the document.
+     */
+    documentName?: string;
+    /**
+     * If you are storing the document on SAP Customer Data Cloud, the prefix (your site domain) that will appear in the download link. For example, if your domain is mysite.com, and you specify "mysite" here, the document will be downloaded from mysite.accounts.gigya.com.
+     *
+     * When using a URL prefix, it must be added to your CNAME configuration.
+     */
+    URLPrefix?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a94a470b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsStoreUploadConsentDocumentResponse = GigyaResponse<{
+    /**
+     * The URL of the stored document.
+     */
+    Url?: string;
+    /**
+     * The file name for the stored document.
+     */
+    FileName?: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/de20e73c5f0e4df0bc5ab38e2717f494.html#parameters
+ */
+export type AccountsStreamCreateRequest = GigyaRequest<{
+    /**
+     * The timestamp to begin the records in Unix time (for example "1702646077"). This value represents the earliest time an event occured to return in UTC (12/15/2023 @ 01:14pm), limited to: Now-30d
+     */
+    since?: number;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/de20e73c5f0e4df0bc5ab38e2717f494.html#response-example
+ */
+export type AccountsStreamCreateResponse = GigyaResponse<{
+    /**
+     * The ID of the newly created stream.
+     */
+    streamId: string;
+    /**
+     * The initial cursorId that you need to pass into the accounts.stream.read REST API.
+     */
+    cursorId: string;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/cbf4b101bc1d427da0e257e364da1c36.html#parameters
+ */
+export type AccountsStreamReadRequest = GigyaRequest<{
+    /**
+     * The cursorId is returned in every response. For the first call to this API, you must pass the cursorId received from the initial response from accounts.stream.create REST.
+     */
+    cursorId: string;
+    /**
+     * The number of results to limit each response.
+     */
+    limit?: number;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/cbf4b101bc1d427da0e257e364da1c36.html#response-data
+ */
+export type AccountsStreamReadResponse = GigyaResponse<{
+    /**
+     * The returned events in an array.
+     */
+    results?: GigyaStreamEvent[];
+}>;
+
+/**
  * This method retrieves the two-factor authentication (TFA) providers for a site and user.
  *
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b6ced70b21014bbc5a10ce4041860.html#parameters
@@ -6180,6 +6434,103 @@ export type GigyaAccountsNamespace<
     ) => Promise<AccountsSetAccountInfoResponse>;
 
     setProfilePhoto: (params: AccountsSetProfilePhotoRequest) => Promise<AccountsSetProfilePhotoResponse>;
+
+    /**
+     * This method enables you to customize your site schema for SAP Customer Data Cloud Accounts Storage.
+     *
+     * @note The writeAccess values clientCreate & clientModify on the Accounts schema are relevant only for full accounts. On Lite Registrationaccounts, there is no differentiation between clientCreate and clientModify, and the system treats both as clientModify. Thus, on Lite Registration accounts it's advised to use only the createModify and serverOnly values.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a0faa70b21014bbc5a10ce4041860.html
+     */
+    setSchema: (params: AccountsSetSchemaRequest) => Promise<AccountsSetSchemaResponse>;
+
+    /**
+     * This method updates a screen-set hosted by Gigya, or creates it if it does not exist.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a22ad70b21014bbc5a10ce4041860.html
+     */
+    setScreenSet: (params: AccountsSetScreenSetRequest) => Promise<AccountsSetScreenSetResponse>;
+
+    /**
+     * This API retrieves the multi-language SMS templates defined for the site.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/215367b5a1604283899d505811964492.html
+     */
+    'sms.templates.get': (params: AccountsSMSTemplatesGetRequest) => Promise<AccountsSMSTemplatesGetResponse>;
+
+    /**
+     * This API updates text templates for the SMS messages sent out to users as part of their site journey, if these already exist in the site, or create them, if they do not exist.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/bde4427de0f44ca2b5a3e816d5e3a7bb.html
+     */
+    'sms.templates.set': (params: AccountsSMSTemplatesSetRequest) => Promise<AccountsSMSTemplatesSetResponse>;
+
+    /**
+     * This API retrieves the configuration of an SMS provider at site level that was set by accounts.sms.config.set REST.
+     *
+     * This API retrieves the lowest level of configuration that exists: site  site group  partner. If a config at the lowest level (site level) exists, SAP Customer Data Cloud retrieves this one. Otherwise, SAP Customer Data Cloud retrieves a configuration from a higher level (site group or partner level).
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/96386b7e9d3f4dd2ba6db6ae17636f42.html
+     */
+    'sms.config.get': (params: AccountsSMSConfigGetRequest) => Promise<AccountsSMSConfigGetResponse>;
+
+    /**
+     * This API sets the configuration of an SMS provider at site level.
+     *
+     * If no configuration at site level exists, SAP Customer Data Cloud saves the new configuration (smsProviderConfig). Saving the smsProviderConfig fails, if the vendor name or credentials are missing.
+     *
+     * If smsProviderConfig already exists, and you call accounts.sms.config.set REST again, SAP Customer Data Cloud overwrites the existing smsProviderConfig.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/2f7844ac20964d0a90154d2e7982715d.html
+     */
+    'sms.config.set': (params: AccountsSMSConfigSetRequest) => Promise<AccountsSMSConfigSetResponse>;
+
+    /**
+     * This method serves as an end point for user authentication using the user's social network or webmail account. This method requires user interaction. To login/register the user to your site, redirect the user to the specified URL and pass the required parameters. The login URL shows the login screen of the requested provider. In some cases, such as Facebook login, users will also be asked to give the site permission to access their personal data.
+     *
+     * When the login process completes - either successfully or with error - the Gigya server redirects the user to the URL defined in the redirect_uri parameter and appends response parameters. Read more in Using Gigya's REST API in compliance with OAuth 2.0.
+     *
+     * You can also perform this operation using the Web SDK method accounts.socialLogin.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a6e9d70b21014bbc5a10ce4041860.html
+     */
+    socialLogin: (params: AccountsSocialLoginRequest) => Promise<AccountsSocialLoginResponse>;
+
+    /**
+     * This method is used to download a consent document into the SAP Customer Data Cloud "accounts" storage, when implementing Customer Consent.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a81a770b21014bbc5a10ce4041860.html
+     */
+    'store.downloadConsentDocument': (
+        params: AccountsStoreDownloadConsentDocumentRequest,
+    ) => Promise<AccountsStoreDownloadConsentDocumentResponse>;
+
+    /**
+     * This method is used to upload a consent document into the SAP Customer Data Cloud "accounts" storage, when implementing Customer Consent.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a94a470b21014bbc5a10ce4041860.html
+     */
+    'store.uploadConsentDocument': (
+        params: AccountsStoreUploadConsentDocumentRequest,
+    ) => Promise<AccountsStoreUploadConsentDocumentResponse>;
+
+    /**
+     * This API creates a new stream for retrieving account updates via accounts.stream.read REST.
+     *
+     * The stream returns a sorted list of changes made to accounts in a specific site group, in time order of application, Only the most recent change for a given account is guaranteed to be provided, for example if an account has had fields added, and then deleted, the API will not necessarily receive the intermediate state of the added account.
+     *
+     * The updates stream can be used to listen for modifications of accounts for post processing or synchronization, a continuously polling of the updates stream is a reasonable approach for generating a real-time log for most applications.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/de20e73c5f0e4df0bc5ab38e2717f494.html
+     */
+    'stream.create': (params: AccountsStreamCreateRequest) => Promise<AccountsStreamCreateResponse>;
+
+    /**
+     * This API retrieves a list of the latest actions performed in your site.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/cbf4b101bc1d427da0e257e364da1c36.html
+     */
+    'stream.read': (params: AccountsStreamReadRequest) => Promise<AccountsStreamReadResponse>;
 
     /**
      * This method retrieves the two-factor authentication (TFA) providers for a site and user.

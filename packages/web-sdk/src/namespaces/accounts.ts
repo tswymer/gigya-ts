@@ -152,6 +152,23 @@ export type AccountsSetAccountInfoRequestJS<
 export type AccountsSetAccountInfoResponseJS = AccountsSetAccountInfoResponse;
 
 /**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a359670b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsSetSSOTokenRequest = GigyaRequest<{
+    /**
+     * A URL to redirect to after the process is complete. By default, the method will redirect to the page that initiated the call.
+     *
+     * @note The URL must be within the same domain that performed the login and the page it refers to must contain the gigya.js script.
+     */
+    redirectURL?: string;
+}>;
+
+/**
+ * @note This is not officially documented.
+ */
+export type AccountsSetSSOTokenResponse = GigyaResponse<{}>;
+
+/**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a5b7170b21014bbc5a10ce4041860.html#parameters
  */
 export type AccountsShowScreenSetRequestJS = GigyaRequest<{
@@ -472,6 +489,13 @@ export type GigyaAccountsNamespaceJS<
         AccountsSetAccountInfoRequestJS<DataSchema, PreferencesSchema, SubscriptionsSchema>,
         AccountsSetAccountInfoResponseJS
     >;
+
+    /**
+     * Creates a redirect through Gigya's SSO endpoint and sets an SSO token for the logged in user.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a359670b21014bbc5a10ce4041860.html
+     */
+    setSSOToken: (params: AccountsSetSSOTokenRequest) => Promise<AccountsSetSSOTokenResponse>;
 
     /**
      * This method loads a screen-set.

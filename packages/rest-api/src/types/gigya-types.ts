@@ -895,3 +895,74 @@ export type GigyaProviderGeneric = {
     name?: string;
     capabilities?: string[];
 };
+
+/**
+ * Used by the accounts.sms.templates.xxx methods.
+ */
+export type GigyaSMSTemplateSettings = {
+    /**
+     * Object containing the global templates.
+     */
+    globalTemplates: GigyaSMSTemplates;
+    /**
+     * Object containing the templates per country code.
+     */
+    templatesPerCountryCode: {
+        [countryCode: string]: GigyaSMSTemplates;
+    };
+};
+
+/**
+ * Used by the accounts.sms.templates.xxx methods.
+ */
+export type GigyaSMSTemplates = {
+    /**
+     * Object containing a JSON object that contains the mapping between language code and its corresponding template.
+     */
+    templates?: {
+        [language: string]: string;
+    };
+    /**
+     * Language code of the default language for the global template.
+     */
+    defaultLanguage?: string;
+};
+
+/**
+ * Used by the accounts.sms.config.xxx methods.
+ */
+export type GigyaSMSConfig = {
+    vendorName: 'twilio' | 'livelink' | 'sinch';
+    /**
+     * Only for twilio.
+     */
+    originPhoneNumber?: string;
+    /**
+     * Only for twilio.
+     */
+    senderType?: 'phoneNumber' | 'shortCode' | 'alphaSender' | 'messagingServiceId';
+    credentials: {
+        clientId?: string;
+        clientSecret?: string;
+    };
+    configOverride: boolean;
+    restrictions: {
+        allowList: string[];
+        denyList: string[];
+        /**
+         * This list is managed by SAP Customer Data Cloud and applies to the entire platform.
+         *
+         * You cannot change this list, only get it.
+         */
+        globalDenyList?: string[];
+    };
+};
+
+/**
+ * Used by the accounts.stream.read method.
+ */
+export type GigyaStreamEvent = {
+    uid: string;
+    operation: string;
+    details: string[];
+};
