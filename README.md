@@ -21,7 +21,7 @@ This repository contains multiple related projects, each of which provide their 
 
 ## [@gigya-ts/gigya](packages/gigya/README.md)
 
-A minimal type-safe client for interacting with the [Gigya REST API](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/416d906d70b21014bbc5a10ce4041860.html), for browsers and Node.js.
+A minimal type-safe client for interacting with the [Gigya REST API](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/416d906d70b21014bbc5a10ce4041860.html) for Node.js and the browser.
 
 ## [@gigya-ts/web-sdk](packages/web-sdk/README.md)
 
