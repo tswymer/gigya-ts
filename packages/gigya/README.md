@@ -1,6 +1,6 @@
 # @gigya-ts/gigya
 
-A tiny type-safe client for interacting with the [Gigya REST API](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/416d906d70b21014bbc5a10ce4041860.html)for Node.js and the browser.
+A tiny type-safe client for interacting with the [Gigya REST API](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/416d906d70b21014bbc5a10ce4041860.html) for Node.js and the browser.
 
 See [@gigya-ts/web-sdk](/packages/web-sdk/README.md) if you are using the [Gigya Web SDK](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/417f6b5e70b21014bbc5a10ce4041860.html) instead.
 
