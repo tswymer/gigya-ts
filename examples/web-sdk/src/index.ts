@@ -23,7 +23,7 @@ window.onGigyaServiceReady = async () => {
 
     // Make a call to the Gigya Web SDK using regular callbacks
     window.gigya.accounts.getSchema({
-        include: 'profileSchema',
+        include: 'profileSchema,dataSchema',
         callback(response) {
             // Make sure we have a successful response
             if (response.errorCode !== 0)

@@ -1,8 +1,8 @@
 # @gigya-ts/gigya
 
-A tiny type-safe wrapper client for interacting with the [Gigya REST API](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/416d906d70b21014bbc5a10ce4041860.html), for Node.js and browsers.
+A tiny type-safe client for interacting with the [Gigya REST API](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/416d906d70b21014bbc5a10ce4041860.html), for Node.js and browsers.
 
-See [@gigya-ts/web-sdk](/packages/web-sdk/README.md) if you want to use the [Gigya Web SDK](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/417f6b5e70b21014bbc5a10ce4041860.html) instead.
+See [@gigya-ts/web-sdk](/packages/web-sdk/README.md) if you are using the [Gigya Web SDK](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/417f6b5e70b21014bbc5a10ce4041860.html) instead.
 
 ## Installation
 
@@ -13,50 +13,17 @@ Install the `@gigya-ts/gigya` package from your package manager of choice:
 ```bash
 # npm
 npm add @gigya-ts/gigya
-# yarn
-yarn add @gigya-ts/gigya
 # pnpm
 pnpm add @gigya-ts/gigya
 ```
 
 ## Usage
 
-### 0. (Optional) Define your Gigya schemas
+### 0. (Optional) Define your Custom Gigya Schemas
 
-When defining your Gigya schemas, it is recommended to make all fields optional. Gigya will only return fields that have been set, and even required fields may not be there (e.g. if a user has not consented to a required consent yet).
+See [adding custom schemas](/docs/adding-custom-schemas.md) to define your custom schemas (data, preferences, etc.) so that response types from the REST API include your custom fields.
 
-Keeping all fields optional in type definitions force will you to handle cases where a field is not set in Gigya, which is a good practice to avoid runtime errors.
-
-```typescript
-import { type GigyaPreference } from '@gigya-ts/gigya';
-
-/**
- * Your data schema.
- */
-type MyDataSchema = {
-    myDataSchemaString?: string;
-    myDataSchemaObject?: {
-        myDataSchemaNumber?: number;
-    };
-};
-
-/**
- * Your preferences schema, use 'GigyaPreference' to type preferences.
- */
-type MyPreferencesSchema = {
-    terms?: {
-        myTermsSchema?: GigyaPreference;
-    };
-    myPreferencesSchema?: GigyaPreference;
-};
-
-/**
- * Your subscriptions schema.
- */
-type MySubscriptionsSchema = {};
-```
-
-### 1. Create a Gigya client and choose an authentication method
+### 1. Create a Gigya Client
 
 Create a new Gigya client instance with your API key and data center. Make sure to pass your own schemas as generics if you want the client to return your own types.
 
@@ -70,12 +37,16 @@ const gigya = Gigya<MyDataSchema, MyPreferencesSchema, MySubscriptionsSchema>({
 });
 ```
 
-Then add your authentication credentials. `@gigya-ts/gigya` supports multiple authentication methods:
+### 2. Choose an Authentication Method
+
+Add your credentials. `@gigya-ts/gigya` supports multiple authentication methods:
 
 #### (Recommended) User/Application key and private key
 
+Creates a short-lived bearer token for every request using admin or application users using an RSA key-pair. This is the recommended approach when accessing the REST API with server credentials, as the real privateKey is never sent accross the wire. See [Asymmetric Keys](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4eb8307555d24988a5a3c542b65ccf77.html) for more information.
+
 ```typescript
-const gigya = Gigya({
+export const gigya = Gigya({
     apiKey: '4_qd71...',
     dataCenter: 'eu1.gigya.com',
     credentials: {
@@ -86,10 +57,12 @@ const gigya = Gigya({
 });
 ```
 
-#### User/Application key and secret
+#### User/Application Key and Secret
+
+Uses a userKey and secret from an admin or application user, sending them as credentials for every request made. See [Application and User Keys](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/6d7bed554d8b4cf09a16faadd5519d1b.html) for more information.
 
 ```typescript
-const gigya = Gigya({
+export const gigya = Gigya({
     apiKey: '4_qd71...',
     dataCenter: 'eu1.gigya.com',
     credentials: {
@@ -100,21 +73,41 @@ const gigya = Gigya({
 });
 ```
 
-#### No authentication
+#### Bearer Token
+
+Uses an accessToken obtained from [socialize.getToken](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4175c2f570b21014bbc5a10ce4041860.html) to call the REST API using the authorizations of a single user (without passing their UID). Only supports the `grant_type=client_credentials` or `grant_type=none` flows.
 
 ```typescript
-const gigya = Gigya({
+export const gigya = Gigya({
+    apiKey: '4_qd71...',
+    dataCenter: 'eu1.gigya.com',
+    credentials: {
+        type: 'bearer-token',
+        // Obtained from socialize.getToken
+        token: 'st2.s.AtLtNX...',
+    },
+});
+```
+
+#### No Authentication
+
+Make requests to the REST API without credentials (e.g. fetch public schemas, policies, ...).
+
+```typescript
+export const gigya = Gigya({
     apiKey: '4_qd71...',
     dataCenter: 'eu1.gigya.com',
     credentials: { type: 'none' },
 });
 ```
 
-### 3. Make a request to the Gigya REST API
+### 3. Make a Request to the Gigya REST API
+
+Once `Gigya` has been configured, you can now make requests to the REST API using the returned client.
 
 ```typescript
 // Call the "accounts.setAccountInfo" API method from the Gigya API
-const getAccountInfoResponse = await gigya.accounts.setAccountInfo({
+const setAccountInfoResponse = await gigya.accounts.setAccountInfo({
     UID: 'YOUR_UID',
     profile: {
         lastName: 'Doe',
@@ -122,5 +115,9 @@ const getAccountInfoResponse = await gigya.accounts.setAccountInfo({
 });
 
 // Check we got a successful response
-if (getAccountInfoResponse.errorCode !== 0) throw new Error(getAccountInfoResponse.errorDetails);
+if (setAccountInfoResponse.errorCode !== 0) throw new Error(getAccountInfoResponse.errorMessage);
 ```
+
+## Examples
+
+See [examples/gigya](/examples/gigya/) for more examples.

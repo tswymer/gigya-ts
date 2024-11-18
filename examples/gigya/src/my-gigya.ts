@@ -3,9 +3,11 @@ import { Gigya, GigyaDataCenter } from '@gigya-ts/gigya';
 import { MyDataSchema, MyPreferencesSchema, MySubscriptionsSchema } from './my-gigya-schemas';
 
 /**
- * Setup your Gigya instance with your API key, data center, and credentials.
+ * Create a Gigya instance with your API key, data center, and credentials.
  *
- * Pass your custom data schema, preferences schema, and subscriptions schema to get type-safe responses.
+ * Pass your custom data schema, preferences schema, and subscriptions schemas as generics to get type-safe responses.
+ * 
+ * Export this and use it in your application to access the Gigya REST API.
  */
 export const gigya = Gigya<MyDataSchema, MyPreferencesSchema, MySubscriptionsSchema>({
     apiKey: process.env.GIGYA_API_KEY ?? '',

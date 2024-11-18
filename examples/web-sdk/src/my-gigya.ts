@@ -5,7 +5,9 @@ import { MyDataSchema, MyPreferencesSchema, MySubscriptionsSchema } from './my-g
 /**
  * The WebSDK ("gigya" object) is in the global scope, so you can access it from anywhere in your application.
  *
- * Here we extend the global scope to include the "gigya" object, passing your own schemas so that we get type-safe responses with you use the WebSDK.
+ * Here we extend the global scope to include the "gigya" object, which is added by the gigya.jsWebSDK.
+ * 
+ * Pass your own schemas to get type-safe responses from WebSDK.
  *
  * We also define a global "onGigyaServiceReady" function, which is called when the Gigya service is ready.
  */

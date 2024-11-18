@@ -1,6 +1,6 @@
 # @gigya-ts - Type-Safe Gigya / SAP Customer Data Cloud
 
-SAP Customer Data Cloud, formally known as Gigya, does not provide official TypeScript type definitions. This project aims to adds those missing definitions to your SAP Customer Data Cloud implementation, providing type-safety and code completion in your IDE for both the [Gigya REST API](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/416d906d70b21014bbc5a10ce4041860.html) and [Gigya Web SDK](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/417f6b5e70b21014bbc5a10ce4041860.html).
+SAP Customer Data Cloud, formally known as Gigya, does not provide official TypeScript type definitions. This project aims to adds those missing definitions to your SAP Customer Data Cloud implementation, providing type-safety and code completion in your IDE for both the [Gigya REST API](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/416d906d70b21014bbc5a10ce4041860.html) and [Gigya Web SDK](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/417f6b5e70b21014bbc5a10ce4041860.html). These definitions are taken from the official [APIs and SDKs documentation](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4143211270b21014bbc5a10ce4041860.html).
 
 As the SAP Customer Data Cloud APIs still use the `gigya` namespace, this project also adopts that name. This project is fully compatible with SAP Customer Data Cloud.
 

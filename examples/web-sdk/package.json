@@ -4,7 +4,7 @@
     "description": "Examples for the @gigya-ts/gigya project",
     "private": true,
     "scripts": {
-        "build": "tsc && cp src/index.html dist/index.html",
+        "build": "tsc && cp src/index.html dist/index.html && cp src/styles.css dist/styles.css",
         "dev": "pnpm build && npx http-server dist",
         "lint": "eslint \"**/*.ts*\""
     },
