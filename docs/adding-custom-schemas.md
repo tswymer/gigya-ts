@@ -1,6 +1,6 @@
 # Adding custom schemas
 
-Both the [@gigya-ts/rest-api](packages/rest-api/README.md) and the [@gigya-ts/web-sdk](packages/web-sdk/README.md) projects support adding custom schemas, allowing you to receive type-safe responses including your custom fields.
+Both the [@gigya-ts/rest-api](packages/rest-api/README.md) and [@gigya-ts/web-sdk](packages/web-sdk/README.md) projects support adding custom schemas allowing you to receive type-safe responses, including your custom fields.
 
 ## Creating type definitions from Gigya schemas
 

@@ -39,11 +39,11 @@ const gigya = Gigya<MyDataSchema, MyPreferencesSchema, MySubscriptionsSchema>({
 
 ### 2. Choose an Authentication Method
 
-Add your credentials. `@gigya-ts/gigya` supports multiple authentication methods:
+`@gigya-ts/gigya` supports multiple different authentication methods:
 
 #### (Recommended) User/Application key and private key
 
-Creates a short-lived bearer token for every request using admin or application users using an RSA key-pair. This is the recommended approach when accessing the REST API with server credentials, as the real privateKey is never sent accross the wire. See [Asymmetric Keys](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4eb8307555d24988a5a3c542b65ccf77.html) for more information.
+Creates a short-lived bearer token for every request using admin or application user's RSA key-pair. This is the recommended approach when accessing the REST API with server credentials as real privateKey is never actually sent accross the wire itself. See [Asymmetric Keys](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4eb8307555d24988a5a3c542b65ccf77.html) for more information.
 
 ```typescript
 export const gigya = Gigya({
@@ -59,7 +59,7 @@ export const gigya = Gigya({
 
 #### User/Application Key and Secret
 
-Uses a userKey and secret from an admin or application user, sending them as credentials for every request made. See [Application and User Keys](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/6d7bed554d8b4cf09a16faadd5519d1b.html) for more information.
+Attaches a userKey and secret from an admin or application user to every request made to the REST API. See [Application and User Keys](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/6d7bed554d8b4cf09a16faadd5519d1b.html) for more information.
 
 ```typescript
 export const gigya = Gigya({
@@ -75,7 +75,7 @@ export const gigya = Gigya({
 
 #### Bearer Token
 
-Uses an accessToken obtained from [socialize.getToken](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4175c2f570b21014bbc5a10ce4041860.html) to call the REST API using the authorizations of a single user (without passing their UID). Only supports the `grant_type=client_credentials` or `grant_type=none` flows.
+Uses an accessToken obtained from [socialize.getToken](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4175c2f570b21014bbc5a10ce4041860.html) to call the REST API using the authorizations of a single user (even without passing their UID). Only supports the `grant_type=client_credentials` or `grant_type=none` flows.
 
 ```typescript
 export const gigya = Gigya({
@@ -91,7 +91,7 @@ export const gigya = Gigya({
 
 #### No Authentication
 
-Make requests to the REST API without credentials (e.g. fetch public schemas, policies, ...).
+Make unauthenticated requests to the REST API without any credentials (e.g. to fetch public schemas, policies, ...).
 
 ```typescript
 export const gigya = Gigya({
@@ -103,7 +103,7 @@ export const gigya = Gigya({
 
 ### 3. Make a Request to the Gigya REST API
 
-Once `Gigya` has been configured, you can now make requests to the REST API using the returned client.
+Once `Gigya` has been configured, you can now make requests to the REST API using the created client.
 
 ```typescript
 // Call the "accounts.setAccountInfo" API method from the Gigya API
