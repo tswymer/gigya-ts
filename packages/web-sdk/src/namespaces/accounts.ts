@@ -9,8 +9,6 @@ import {
     AccountsGetSchemaResponse,
     AccountsInitRegistrationRequest,
     AccountsInitRegistrationResponse,
-    AccountsInitTFARequest,
-    AccountsInitTFAResponse,
     AccountsLoginRequest,
     AccountsLoginResponse,
     AccountsOTPSendCodeRequest,
@@ -21,6 +19,8 @@ import {
     AccountsResetPasswordResponse,
     AccountsSetAccountInfoRequest,
     AccountsSetAccountInfoResponse,
+    AccountsTFAInitTFARequest,
+    AccountsTFAInitTFAResponse,
     GigyaData,
     GigyaPreferences,
     GigyaRequest,
@@ -368,11 +368,11 @@ export type AccountsOTPSendCodeResponseJS = Omit<AccountsOTPSendCodeResponse, 'c
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b93e570b21014bbc5a10ce4041860.html#parameters
  */
-export type AccountsInitTFARequestJS = Omit<AccountsInitTFARequest, 'clientContext'>;
+export type AccountsTFAInitTFARequestJS = Omit<AccountsTFAInitTFARequest, 'clientContext'>;
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b93e570b21014bbc5a10ce4041860.html#response-data
  */
-export type AccountsInitTFAResponseJS = AccountsInitTFAResponse;
+export type AccountsTFAInitTFAResponseJS = AccountsTFAInitTFAResponse;
 
 export type GigyaAccountsNamespaceJS<
     DataSchema extends GigyaData,
@@ -511,5 +511,5 @@ export type GigyaAccountsNamespaceJS<
      *
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b93e570b21014bbc5a10ce4041860.html
      */
-    'tfa.initTFA': GigyaJSFunction<AccountsInitTFARequestJS, AccountsInitTFAResponseJS>;
+    'tfa.initTFA': GigyaJSFunction<AccountsTFAInitTFARequestJS, AccountsTFAInitTFAResponseJS>;
 };

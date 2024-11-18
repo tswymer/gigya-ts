@@ -1,6 +1,6 @@
-import { MyGigya } from './my-gigya';
+import { gigya as MyGigya } from '../my-gigya';
 
-export async function getAccountInfoExample(gigya: MyGigya, UID: string) {
+export async function getAccountInfoExample(gigya: typeof MyGigya, UID: string) {
     // Execute the "accounts.getAccountInfo" API method
     const getAccountInfoResponse = await gigya.accounts.getAccountInfo({
         UID,
@@ -9,12 +9,7 @@ export async function getAccountInfoExample(gigya: MyGigya, UID: string) {
     });
 
     // Check for a successful response
-    // prettier-ignore
-    if (getAccountInfoResponse.errorCode !== 0) throw new Error([
-        `Failed to getAccountInfo: ${getAccountInfoResponse.errorMessage}`,
-        `Error Code: ${getAccountInfoResponse.errorCode}`,
-        `Error Details: ${getAccountInfoResponse.errorDetails}`,
-    ].join('\n'));
+    if (getAccountInfoResponse.errorCode !== 0) throw new Error(getAccountInfoResponse.errorMessage);
 
     // Type-safe responses including your custom schemas
     console.log(getAccountInfoResponse.data?.myDataSchemaObject?.myDataSchemaNumber);

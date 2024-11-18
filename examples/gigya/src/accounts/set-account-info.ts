@@ -1,7 +1,7 @@
-import { MyGigya } from './my-gigya';
+import { gigya as MyGigya } from '../my-gigya';
 
 export async function setAccountInfoExample(
-    gigya: MyGigya,
+    gigya: typeof MyGigya,
     UID: string,
     lastName: string,
     myDataSchemaString: string,
@@ -28,12 +28,7 @@ export async function setAccountInfoExample(
     });
 
     // Check for a successful response
-    // prettier-ignore
-    if (setAccountInfoResponse.errorCode !== 0) throw new Error([
-        `Failed to setAccountInfo: ${setAccountInfoResponse.errorMessage}`,
-        `Error Code: ${setAccountInfoResponse.errorCode}`,
-        `Error Details: ${setAccountInfoResponse.errorDetails}`,
-    ].join('\n'));
+    if (setAccountInfoResponse.errorCode !== 0) throw new Error(setAccountInfoResponse.errorMessage);
 
     return setAccountInfoResponse;
 }

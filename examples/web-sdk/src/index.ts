@@ -1,5 +1,19 @@
 const startTimestamp = Date.now();
 
+/**
+ * Small helper function to update an element on the page with a new value.
+ */
+function updatePageElement(elementId: string, value: string) {
+    const element = document.getElementById(elementId);
+
+    if (element) element.innerText = value;
+}
+
+/**
+ * Define a global "onGigyaServiceReady" function, which is called by the Web SDK when the service is ready.
+ *
+ * Loads the "profileSchema" and prints them to the page.
+ */
 window.onGigyaServiceReady = async () => {
     // Assert that window.gigya is defined to that TypeScript is happy going forward
     if (!window.gigya) return alert('onGigyaServiceReady was called, but window.gigya is not defined!');
@@ -23,9 +37,3 @@ window.onGigyaServiceReady = async () => {
         },
     });
 };
-
-function updatePageElement(elementId: string, value: string) {
-    const element = document.getElementById(elementId);
-
-    if (element) element.innerText = value;
-}

@@ -1,6 +1,7 @@
-import { Gigya, GigyaDataCenter } from '@gigya-ts/gigya';
 import assert from 'assert/strict';
 import { describe, it } from 'node:test';
+
+import { Gigya, GigyaDataCenter } from '@gigya-ts/gigya';
 
 describe('gigya authentication: anonymous', async () => {
     const anoymousGigya = Gigya({

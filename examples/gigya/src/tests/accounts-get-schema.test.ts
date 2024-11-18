@@ -1,9 +1,10 @@
 import assert from 'assert/strict';
 import { describe, it } from 'node:test';
-import { myGigya } from './my-gigya';
+
+import { gigya } from '../my-gigya';
 
 describe('accounts.getSchema API', async () => {
-    const getSchemaResponse = await myGigya.accounts.getSchema({
+    const getSchemaResponse = await gigya.accounts.getSchema({
         include: 'profileSchema,dataSchema,subscriptionsSchema',
     });
 

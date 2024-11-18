@@ -65,7 +65,7 @@ type GigyaInitParams = {
 };
 
 /**
- * Wrapper client for the Gigya REST API.
+ * Client for the Gigya REST API.
  */
 export function Gigya<
     DataSchema extends GigyaData,
