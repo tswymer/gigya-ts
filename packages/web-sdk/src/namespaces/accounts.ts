@@ -19,6 +19,8 @@ import {
     AccountsResetPasswordResponse,
     AccountsSetAccountInfoRequest,
     AccountsSetAccountInfoResponse,
+    AccountsSetProfilePhotoRequest,
+    AccountsSetProfilePhotoResponse,
     AccountsTFAInitTFARequest,
     AccountsTFAInitTFAResponse,
     GigyaData,
@@ -374,6 +376,16 @@ export type AccountsTFAInitTFARequestJS = Omit<AccountsTFAInitTFARequest, 'clien
  */
 export type AccountsTFAInitTFAResponseJS = AccountsTFAInitTFAResponse;
 
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4139e96d70b21014bbc5a10ce4041860.html#parameters
+ */
+export type AccountsSetProfilePhotoRequestJS = AccountsSetProfilePhotoRequest;
+/**
+ * There's no response documentation for web SDK version of this call. Check out the REST API version for reference.
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4139fc6970b21014bbc5a10ce4041860.html#response-data
+ */
+export type AccountsSetProfilePhotoResponseJS = AccountsSetProfilePhotoResponse;
+
 export type GigyaAccountsNamespaceJS<
     DataSchema extends GigyaData,
     PreferencesSchema extends GigyaPreferences,
@@ -512,4 +524,11 @@ export type GigyaAccountsNamespaceJS<
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b93e570b21014bbc5a10ce4041860.html
      */
     'tfa.initTFA': GigyaJSFunction<AccountsTFAInitTFARequestJS, AccountsTFAInitTFAResponseJS>;
+
+    /**
+     * This method uploads the current user's profile photo to Gigya's server.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4139e96d70b21014bbc5a10ce4041860.html
+     */
+    setProfilePhoto: GigyaJSFunction<AccountsSetProfilePhotoRequestJS, AccountsSetProfilePhotoResponseJS>;
 };
