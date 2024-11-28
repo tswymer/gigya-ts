@@ -5,15 +5,13 @@
     "private": true,
     "scripts": {
         "build": "tsc",
-        "lint": "eslint \"**/*.ts*\"",
-        "test": "node --env-file .env --import tsx --test --test-reporter spec ./src/**/*.test.ts"
+        "lint": "eslint \"**/*.ts*\""
     },
     "dependencies": {
         "@gigya-ts/gigya": "workspace:*"
     },
     "devDependencies": {
         "eslint-config-custom": "workspace:*",
-        "tsconfig": "workspace:*",
-        "tsx": "4.16.0"
+        "tsconfig": "workspace:*"
     }
 }

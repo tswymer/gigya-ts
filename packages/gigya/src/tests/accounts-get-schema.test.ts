@@ -1,9 +1,16 @@
 import assert from 'assert/strict';
 import { describe, it } from 'node:test';
 
-import { gigya } from '../my-gigya';
+import { Gigya } from '../gigya';
+import { GigyaDataCenter } from '..';
 
 describe('accounts.getSchema API', async () => {
+    const gigya = Gigya({
+        apiKey: process.env.GIGYA_API_KEY as string,
+        dataCenter: process.env.GIGYA_DATA_CENTER as GigyaDataCenter,
+        credentials: { type: 'none' },
+    });
+
     const getSchemaResponse = await gigya.accounts.getSchema({
         include: 'profileSchema,dataSchema,subscriptionsSchema',
     });

@@ -12,13 +12,15 @@
     ],
     "scripts": {
         "build": "tsc",
-        "lint": "eslint \"**/*.ts*\""
+        "lint": "eslint \"**/*.ts*\"",
+        "test": "node --env-file .env --import tsx --test --test-reporter spec ./src/**/*.test.ts"
     },
     "dependencies": {
         "@gigya-ts/rest-api": "workspace:*"
     },
     "devDependencies": {
         "eslint-config-custom": "workspace:*",
-        "tsconfig": "workspace:*"
+        "tsconfig": "workspace:*",
+        "tsx": "4.19.2"
     }
 }

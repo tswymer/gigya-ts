@@ -3,7 +3,7 @@ on:
     - pull_request
 
 jobs:
-    cache-and-install:
+    lint-build-test:
         runs-on: ubuntu-latest
 
         steps:
@@ -50,5 +50,5 @@ jobs:
                   GIGYA_PRIVATE_KEY: ${{ secrets.GIGYA_PRIVATE_KEY }}
               # Create an empty .env file in the examples/gigya directory, node throws an error if it doesn't exist
               run: |
-                  touch ${{ github.workspace }}/examples/gigya/.env 
+                  touch ${{ github.workspace }}/packages/gigya/.env 
                   pnpm test
