@@ -103,7 +103,7 @@ export const gigya = Gigya({
 
 ### 3. Make a Request to the Gigya REST API
 
-Once `Gigya` has been configured, you can now make requests to the REST API using the created client.
+Once `Gigya` has been configured, make requests to the REST API using the created client:
 
 ```typescript
 // Call the "accounts.setAccountInfo" API method from the Gigya API
