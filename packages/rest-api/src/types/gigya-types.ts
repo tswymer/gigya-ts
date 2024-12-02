@@ -596,7 +596,7 @@ export type GigyaPreference = {
     /**
      * Whether or not the user granted their consent to this statement.
      */
-    isConsentGranted: boolean;
+    isConsentGranted?: boolean;
     /**
      * This holds the defined timestamp of an imported consent, when the date is historical.
      */
