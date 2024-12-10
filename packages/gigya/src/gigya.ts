@@ -8,6 +8,7 @@ import {
     GigyaIDXNamespace,
     GigyaPreferences,
     GigyaReportsNamespace,
+    GigyaResponse,
     GigyaSocializeNamespace,
     GigyaSubscriptions,
 } from '@gigya-ts/rest-api';
@@ -58,9 +59,12 @@ export type GigyaInitParams = {
     dataCenter: GigyaDataCenter;
     apiKey: string;
     credentials: GigyaCrendentials;
-    middleware?: {
+    hooks?: {
         onBeforeRequest?: Array<(request: GigyaFetchRequest) => Promise<GigyaFetchRequest>>;
-        onAfterResponse?: Array<(request: GigyaFetchRequest, response: Response) => Promise<Response>>;
+        onAfterResponse?: Array<
+            <T>(request: GigyaFetchRequest, response: GigyaResponse<T>) => Promise<GigyaResponse<T>>
+        >;
+        onFailedRequest?: (request: GigyaFetchRequest, response: Response) => Promise<never>;
     };
 };
 

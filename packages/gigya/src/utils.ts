@@ -7,6 +7,7 @@ export type GigyaFetchRequest = {
     method: 'GET' | 'POST';
     namespace: ParamsOf<typeof gigyaRequestHandler>[0]['namespace'];
     endpoint: string;
+    url: string;
     headers: { 'Content-Type': string; Authorization?: string };
     body: URLSearchParams;
 };
@@ -28,13 +29,7 @@ export async function gigyaRequestHandler(
         endpointParams: Record<string, unknown>;
     } & GigyaInitParams,
 ) {
-    // Create the URL for the request
-    const gigyaRequestURL = `https://accounts.${params.dataCenter}/${params.namespace}.${params.endpoint}`;
-
-    // Add all attributes to the request body
     const requestBody = new URLSearchParams();
-
-    // Append the API key to the request body
     requestBody.append('apiKey', params.apiKey);
 
     // Add each of the request parameters to the request body
@@ -62,6 +57,7 @@ export async function gigyaRequestHandler(
             method: 'POST',
             namespace: params.namespace,
             endpoint: params.endpoint,
+            url: `https://accounts.${params.dataCenter}/${params.namespace}.${params.endpoint}`,
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: requestBody,
         },
@@ -69,32 +65,37 @@ export async function gigyaRequestHandler(
     );
 
     // Run each onBeforeRequest middleware
-    for (const onBeforeRequestMiddleware of params.middleware?.onBeforeRequest ?? [])
-        request = await onBeforeRequestMiddleware(request);
+    for (const onBeforeRequestHook of params.hooks?.onBeforeRequest ?? []) request = await onBeforeRequestHook(request);
 
     // Execute the request
-    let response = await fetch(gigyaRequestURL, {
+    const response = await fetch(request.url, {
         method: request.method,
         headers: request.headers,
         body: request.body,
     });
 
-    // Run each onAfterResponse middleware
-    for (const onAfterResponseMiddleware of params.middleware?.onAfterResponse ?? [])
-        response = await onAfterResponseMiddleware(request, response);
-
-    // @TODO: Anyone using the "httpStatusCodes" param on a Gigya API will cause this to fail currently :)
+    // Check we received a successful response status
     if (!response.ok) {
-        let textResponse: string;
-        try {
-            textResponse = await response.text();
-        } catch {
-            textResponse = 'Unanble to parse gigya response as text.';
-        }
-        throw new Error(`Gigya request failed with status ${response.status}. Full response:\n${textResponse}`);
+        if (params.hooks?.onFailedRequest) await params.hooks.onFailedRequest(request, response);
+        throw new Error(`${request.namespace}.${request.endpoint} failed with status ${response.status}.`);
     }
 
-    return response.json();
+    // Parse the initial response from Gigya
+    let parsedResponse;
+    try {
+        parsedResponse = await response.json();
+    } catch (e) {
+        if (params.hooks?.onFailedRequest) await params.hooks.onFailedRequest(request, response);
+        throw new Error(
+            `${request.namespace}.${request.endpoint} succeded with status ${response.status}, but parsing the JSON response failed.`,
+        );
+    }
+
+    // Run each onAfterResponse middleware
+    for (const onAfterResponseHook of params.hooks?.onAfterResponse ?? [])
+        parsedResponse = await onAfterResponseHook(request, parsedResponse);
+
+    return parsedResponse;
 }
 
 /**
