@@ -1042,3 +1042,10 @@ export type GigyaWebhook = {
      */
     version: number;
 };
+
+export type GigyaAuditParams = {
+    /**
+     * The URL of the page where the user initiated the request.
+     */
+    pageURL: string | undefined;
+};

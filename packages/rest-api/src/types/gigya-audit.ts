@@ -1,3 +1,5 @@
+import { GigyaAuditParams } from './gigya-types';
+
 /**
  * This object represents a record in a site's Audit Log.
  *
@@ -39,7 +41,7 @@ export type AuditLogObject = {
     /**
      * A list of parameters sent along with the request.
      */
-    params: object;
+    params: GigyaAuditParams;
     /**
      * The uid of the user that submitted the request.
      */
