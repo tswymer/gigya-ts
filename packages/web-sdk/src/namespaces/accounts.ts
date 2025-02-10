@@ -470,12 +470,14 @@ export type GigyaAccountsNamespaceJS<
      */
     logout: GigyaJSFunction<AccountsLogoutRequestJS, AccountsLogoutResponseJS>;
 
-    /**
-     * This method is the first to call in a Phone Number Login flow, and is used in an email code verification flow.
-     *
-     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4137cecf70b21014bbc5a10ce4041860.html
-     */
-    'otp.sendCode': GigyaJSFunction<AccountsOTPSendCodeRequestJS, AccountsOTPSendCodeResponseJS>;
+    otp: {
+        /**
+         * This method is the first to call in a Phone Number Login flow, and is used in an email code verification flow.
+         *
+         * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4137cecf70b21014bbc5a10ce4041860.html
+         */
+        sendCode: GigyaJSFunction<AccountsOTPSendCodeRequestJS, AccountsOTPSendCodeResponseJS>;
+    };
 
     /**
      * This method registers a new user at your site.
@@ -518,12 +520,14 @@ export type GigyaAccountsNamespaceJS<
      */
     showScreenSet: GigyaJSFunction<AccountsShowScreenSetRequestJS, AccountsShowScreenSetResponseJS>;
 
-    /**
-     * This method initializes two-factor authentication (TFA).
-     *
-     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b93e570b21014bbc5a10ce4041860.html
-     */
-    'tfa.initTFA': GigyaJSFunction<AccountsTFAInitTFARequestJS, AccountsTFAInitTFAResponseJS>;
+    tfa: {
+        /**
+         * This method initializes two-factor authentication (TFA).
+         *
+         * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413b93e570b21014bbc5a10ce4041860.html
+         */
+        initTFA: GigyaJSFunction<AccountsTFAInitTFARequestJS, AccountsTFAInitTFAResponseJS>;
+    };
 
     /**
      * This method uploads the current user's profile photo to Gigya's server.
