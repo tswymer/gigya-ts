@@ -21,6 +21,7 @@ import {
     AccountsSetAccountInfoResponse,
     AccountsSetProfilePhotoRequest,
     AccountsSetProfilePhotoResponse,
+    AccountsSocialLoginResponse,
     AccountsTFAInitTFARequest,
     AccountsTFAInitTFAResponse,
     GigyaData,
@@ -300,6 +301,84 @@ export type AccountsShowScreenSetRequestJS = GigyaRequest<{
  */
 export type AccountsShowScreenSetResponseJS = GigyaResponse<{}>;
 
+export type AccountsSocialLoginRequestJS = GigyaRequest<{
+    /**
+     * The provider that is used for authenticating the user.
+     */
+    provider: string;
+    /**
+     * This paramater contains a JSON object comprised of a series of attribute keys (categories) with associated values.
+     *
+     * You can also use a generic "tags" key.
+     *
+     * No more than three values can be given, they can be with a single key or each have their own key.
+     */
+    actionAttributes?: Record<string, unknown>;
+    /**
+     * This parameter is intended only for developers who wish to implement the "Web Server Flow" of the OAuth 2.0 standard.
+     *
+     * If you set this parameter to 'true', you will not receive the user data in the response. Instead you will receive an authCode.
+     *
+     * The authCode contains a code that is intended to be used for invoking the OAuth 2.0 getToken end-point along with the grant_type parameter set to authorization_code.
+     */
+    authCodeOnly?: boolean;
+    /**
+     * This parameter dictates how the server handles a "login identifier exists" conflict on a new account:
+     * - **fail** - (default) returns a "login identifier exists" error.
+     * - **saveProfileAndFail** - profile data is saved, a regToken is returned for account linking, and an error is returned "OK with error login identifier exists".
+     */
+    conflictHandling?: 'fail' | 'saveProfileAndFail';
+    /**
+     * This parameter accepts a comma-separated list of additional data fields to retrieve.
+     *
+     * The current valid values are: languages, address, phones, education, honors, publications, patents, certifications, professionalHeadline, bio, industry, specialties, work, skills, religion, politicalView, interestedIn, relationshipStatus, hometown, favorites, likes, followersCount, followingCount, name, username, educationLevel, locale, verified, irank, timezone, and samlData.
+     */
+    extraFields?: string;
+    /**
+     * This parameter dictates if the user is forced to provide their social network credentials during login - even if the user is already connected to the social network.
+     *
+     * The default value of this parameter is 'false'.
+     */
+    forceAuthentication?: boolean;
+    /**
+     * The default value of this parameter is 'false'.
+     *
+     * If set to 'true', you will receive all the user's identities, including those with expired sessions.
+     *
+     * Each entry will have an attribute that will be 'true' when the session has expired for that provider (or is otherwise inactive) and 'false' if it is active.
+     */
+    includeAllIdentities?: boolean;
+    /**
+     * The type of login being performed:
+     * - **standard** - (default) the user is logging into an existing account.
+     * - **link** - the user is linking a social network account to an existing account. The account being used to log in will become the primary account. When passing loginMode='link', x_regToken must also be passed to identify the account being linked. This is obtained from the initial login call response.
+     * - **reAuth** - the user is proving ownership of an existing account by logging into it. The loginID will be ignored and the password verified.
+     */
+    loginMode?: 'standard' | 'link' | 'reAuth';
+    /**
+     * This parameter is only applicable when redirectURL is specified and it determines how the user info data is passed to the redirectURLs.
+     */
+    redirectMethod?: 'get' | 'post';
+    /**
+     * A URL to which to redirect the user when the login process has successfully completed.
+     *
+     * The following additional parameters are appended to the URL string: UID, UIDSignature, signatureTimestamp, loginProvider, loginProviderUID, nickname, photoURL, thumbnailURL, firstName, lastName, gender, birthDay, birthMonth, birthYear, email, country, state, city, zip, profileURL, provider.
+     */
+    redirectURL?: string;
+    /**
+     * This parameter is required for completing the link accounts flow.
+     *
+     * Once the initial login has failed, call the login method with loginMode=link and the regToken returned from the initial call to complete the linking.
+     */
+    regToken?: string;
+    /**
+     * The time in seconds until the login session ends for the user. Set the parameter to 0 to end the session when the browser closes.
+     */
+    sessionExpiration?: number;
+}>;
+
+export type AccountsSocialLoginResponseJS = AccountsSocialLoginResponse;
+
 /**
  * @TODO: This is not documented in the Gigya WebSDK docs.
  */
@@ -519,6 +598,13 @@ export type GigyaAccountsNamespaceJS<
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/413a5b7170b21014bbc5a10ce4041860.html
      */
     showScreenSet: GigyaJSFunction<AccountsShowScreenSetRequestJS, AccountsShowScreenSetResponseJS>;
+
+    /**
+     * This method logs-in/registers a user to your site via his social network / webmail account.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/6bc32b72ec7d4ba588d3197460814946.html
+     */
+    socialLogin: GigyaJSFunction<AccountsSocialLoginRequestJS, AccountsSocialLoginResponseJS>;
 
     tfa: {
         /**
