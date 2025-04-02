@@ -323,6 +323,12 @@ export type AccountsSocialLoginRequestJS = GigyaRequest<{
      */
     authCodeOnly?: boolean;
     /**
+     * Using this parameter you may specify that the login flow will use page redirects instead of using a popup.
+     *
+     * This gives a solution for environments where popups are unavailable (i.e., mobile web view controls).
+     */
+    authFlow?: 'popup' | 'redirect';
+    /**
      * This parameter dictates how the server handles a "login identifier exists" conflict on a new account:
      * - **fail** - (default) returns a "login identifier exists" error.
      * - **saveProfileAndFail** - profile data is saved, a regToken is returned for account linking, and an error is returned "OK with error login identifier exists".
