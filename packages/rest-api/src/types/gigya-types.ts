@@ -563,6 +563,14 @@ export type GigyaIdentity = {
      * @deprecated
      */
     proxiedEmail?: string;
+    /**
+     * The UTC time when the oldest data of the object was refreshed in ISO 8601 format, e.g., "1997-07-16T19:20:30Z".
+     */
+    oldestDataUpdated?: string;
+    /**
+     * The UTC time when the oldest data of the object was refreshed in Unix time format including milliseconds (i.e., the number of seconds since Jan. 1st 1970 * 1000).
+     */
+    oldestDataUpdatedTimestamp?: number;
 };
 
 export type GigyaData = {
