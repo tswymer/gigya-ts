@@ -47,8 +47,7 @@ Creates a short-lived bearer token for every request using admin or application 
 
 ```typescript
 export const gigya = Gigya({
-    apiKey: '4_qd71...',
-    dataCenter: 'eu1.gigya.com',
+    // ...
     credentials: {
         type: 'asymmetric-key',
         userKey: process.env.GIGYA_USER_KEY,
@@ -63,8 +62,7 @@ Attaches a userKey and secret from an admin or application user to every request
 
 ```typescript
 export const gigya = Gigya({
-    apiKey: '4_qd71...',
-    dataCenter: 'eu1.gigya.com',
+    // ...
     credentials: {
         type: 'key-secret',
         userKey: process.env.GIGYA_USER_KEY,
@@ -75,15 +73,13 @@ export const gigya = Gigya({
 
 #### Bearer Token
 
-Uses an accessToken obtained from [socialize.getToken](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4175c2f570b21014bbc5a10ce4041860.html) to call the REST API using the authorizations of a single user (even without passing their UID). Only supports the `grant_type=client_credentials` or `grant_type=none` flows.
+Uses an accessToken obtained from [socialize.getToken](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4175c2f570b21014bbc5a10ce4041860.html) to call the REST API using the authorizations of a single user (even without passing their UID).
 
 ```typescript
 export const gigya = Gigya({
-    apiKey: '4_qd71...',
-    dataCenter: 'eu1.gigya.com',
+    // ...
     credentials: {
         type: 'bearer-token',
-        // Obtained from socialize.getToken
         token: 'st2.s.AtLtNX...',
     },
 });
@@ -95,8 +91,7 @@ Make unauthenticated requests to the REST API without any credentials (e.g. to f
 
 ```typescript
 export const gigya = Gigya({
-    apiKey: '4_qd71...',
-    dataCenter: 'eu1.gigya.com',
+    // ...
     credentials: { type: 'none' },
 });
 ```
@@ -118,6 +113,4 @@ const setAccountInfoResponse = await gigya.accounts.setAccountInfo({
 if (setAccountInfoResponse.errorCode !== 0) throw new Error(getAccountInfoResponse.errorMessage);
 ```
 
-## Examples
-
-See [examples/gigya](/examples/gigya/) for more examples.
+See [examples/gigya](/examples/gigya/) for more usage examples.
