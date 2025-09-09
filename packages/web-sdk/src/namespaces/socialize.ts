@@ -87,7 +87,22 @@ export type SocializeLoginResponseJS = SocializeLoginResponse;
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/417729f470b21014bbc5a10ce4041860.html?locale=en-US#parameters
  */
-export type SocializeNotifyLoginRequestJS = SocializeNotifyLoginRequest;
+export type SocializeNotifyLoginRequestJS = SocializeNotifyLoginRequest &
+    GigyaRequest<{
+        /**
+         * An HMAC-SHA1 signature proving the authenticity of the data.
+         *
+         * This parameter is required if you pass the siteUID parameter (above) with this method.
+         */
+        UIDSig?: string;
+        /**
+         * The GMT time in which the request is made. The expected format is the Unix time format
+         * (e.g., the number of seconds since Jan. 1st 1970).
+         *
+         * This parameter is required if you pass the siteUID parameter (above) with this method.
+         */
+        UIDTimestamp?: string;
+    }>;
 
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41773d6170b21014bbc5a10ce4041860.html?locale=en-US#response-data
@@ -127,7 +142,7 @@ export type GigyaSocializeNamespaceJS = {
     /**
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/417729f470b21014bbc5a10ce4041860.html
      */
-    notifyLogin: GigyaJSFunction<SocializeLoginRequestJS, SocializeLoginResponseJS>;
+    notifyLogin: GigyaJSFunction<SocializeNotifyLoginRequestJS, SocializeNotifyLoginResponseJS>;
     /**
      * Manually triggers a refresh of Gigya's Add-ons. The refresh in only applied for the user's details, not the Add-on content.
      *
