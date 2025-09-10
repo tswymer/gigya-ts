@@ -87,7 +87,7 @@ export type SocializeLoginResponseJS = SocializeLoginResponse;
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/417729f470b21014bbc5a10ce4041860.html?locale=en-US#parameters
  */
-export type SocializeNotifyLoginRequestJS = SocializeNotifyLoginRequest;
+export type SocializeNotifyLoginRequestJS = SocializeNotifyLoginRequest & GigyaJSUIDSignature;
 
 /**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/41773d6170b21014bbc5a10ce4041860.html?locale=en-US#response-data
@@ -127,7 +127,7 @@ export type GigyaSocializeNamespaceJS = {
     /**
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/417729f470b21014bbc5a10ce4041860.html
      */
-    notifyLogin: GigyaJSFunction<SocializeLoginRequestJS, SocializeLoginResponseJS>;
+    notifyLogin: GigyaJSFunction<SocializeNotifyLoginRequestJS, SocializeNotifyLoginResponseJS>;
     /**
      * Manually triggers a refresh of Gigya's Add-ons. The refresh in only applied for the user's details, not the Add-on content.
      *
