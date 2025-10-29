@@ -1,6 +1,6 @@
 # @gigya-ts - Type-Safe Gigya / SAP Customer Data Cloud
 
-SAP Customer Data Cloud, formally known as Gigya, does not provide official TypeScript type definitions. This project aims to adds those missing definitions to your SAP Customer Data Cloud implementation, providing type-safety and code completion in your IDE for both the [Gigya REST API](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/416d906d70b21014bbc5a10ce4041860.html) and [Gigya Web SDK](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/417f6b5e70b21014bbc5a10ce4041860.html). These definitions are taken from the official [APIs and SDKs documentation](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4143211270b21014bbc5a10ce4041860.html).
+SAP Customer Data Cloud, formally known as Gigya, does not provide official TypeScript type definitions. This project aims to adds those missing definitions to your SAP Customer Data Cloud implementation, providing type-safety and code completion in your IDE for both the [Gigya REST API](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/416d906d70b21014bbc5a10ce4041860.html) and [Gigya Web SDK](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/417f6b5e70b21014bbc5a10ce4041860.html). Definitions are taken from the official [APIs and SDKs documentation](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4143211270b21014bbc5a10ce4041860.html).
 
 As the SAP Customer Data Cloud APIs still use the `gigya` namespace, this project also adopts that name. This project is fully compatible with SAP Customer Data Cloud.
 
@@ -8,25 +8,29 @@ As the SAP Customer Data Cloud APIs still use the `gigya` namespace, this projec
 
 # Motivation
 
--   Add strong typings SAP Customer Data Cloud projects, including support for custom schemas (data, preferences, subscriptions).
+-   Add strong typings to SAP Customer Data Cloud projects, including support for custom schemas (data, preferences, subscriptions).
 -   Expose a minimal, promise-based client to interface with the [Gigya REST API](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/416d906d70b21014bbc5a10ce4041860.html), supporting both Node.js and the browser (see [@gigya-ts/gigya](packages/gigya/README.md)).
 -   Add type-safety to projects using the [Gigya Web SDK](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/417f6b5e70b21014bbc5a10ce4041860.html) (see [@gigya-ts/web-sdk](packages/web-sdk/README.md)) in the browser.
 -   Share the same type definitions across all packages, ensuring full-stack consistency.
--   Tiny bundle sizes, almost everything is just type definitions (see [@gigya-ts/rest-api](packages/rest-api/README.md)).
+-   Tiny bundle sizes, everything is just type definitions (see [@gigya-ts/rest-api](packages/rest-api/README.md)).
 -   No external dependencies.
 
 # Repository Structure
 
-This repository contains multiple related projects, each of which provide their own features and documentation. Please refer to each of the projects for more information on installation and usage:
+This repository contains multiple related projects, each of which provide their own features and documentation. Refer to each project for more information on installation and usage:
 
 ## [@gigya-ts/gigya](packages/gigya/README.md)
 
-A minimal type-safe client for interacting with the [Gigya REST API](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/416d906d70b21014bbc5a10ce4041860.html) for Node.js and the browser.
+A minimal, promise-based type-safe client for interacting with the [Gigya REST API](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/416d906d70b21014bbc5a10ce4041860.html) for Node.js and the browser.
 
 ## [@gigya-ts/web-sdk](packages/web-sdk/README.md)
 
 Adds type-safety to [Gigya Web SDK](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/417f6b5e70b21014bbc5a10ce4041860.html) projects in the browser.
 
-## [@gigya-ts/rest-api](packages/rest-api/README.md)
+## [(@gigya-ts/rest-api)](packages/rest-api/README.md)
 
-Type definitions for the [Gigya REST API](https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/416d906d70b21014bbc5a10ce4041860.html), providing the base type definitions for all other packages in this repository. You probably don't need to use this package yourself in your project.
+Provides the base type definitions for the other packages in this repository. You can ignore this one and use the above packages instead, unless you want to extend the supported APIs.
+
+# Contributing
+
+Contributions are welcome! Please feel free to submit an issue or pull request.
