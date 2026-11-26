@@ -6409,7 +6409,7 @@ export type GigyaAccountsNamespace<
      *
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/71880e97f2d54fe596d506662818f0a1.html
      */
-    'accounts.auth.magiclink.getlink': (
+    'auth.magiclink.getlink': (
         params: AccountsAuthMagicLinkGetLinkRequest,
     ) => Promise<AccountsAuthMagicLinkGetLinkResponse>;
 

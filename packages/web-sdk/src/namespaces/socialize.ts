@@ -9,6 +9,83 @@ import {
 import { GigyaJSFunction, GigyaJSUIDSignature } from '../types/gigya-helpers';
 
 /**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/417376f070b21014bbc5a10ce4041860.html#parameters
+ */
+export type SocializeAddConnectionRequestJS = GigyaRequest<{
+    /**
+     * The provider to which to connect.
+     *
+     * The following providers currently support this operation: Amazon, Blogger, Facebook, Foursquare, GooglePlus, Kakao, LINE, LinkedIn, Livedoor, Messenger, mixi, Naver, Netlog, Odnoklassniki, PayPalOAuth, Tencent QQ, renren, Sina Weibo, Spiceworks, Twitter, WeChat, WordPress, Xing, Yahoo!, Yahoo! Japan.
+     * (Note: messenger has been replaced by microsoft, however, for backward compatibility, either can be used).
+     *
+     * SAML providers are also supported - the format of the provider name is `saml-<name>`.
+     */
+    provider: string;
+    /**
+     * Specifies whether the adding connection flow uses a popup (default) or page redirects.
+     *
+     * With "redirect", the user is redirected to `redirectURL` (or to the original page if not specified) when the process completes successfully.
+     *
+     * @note This option will only work if CNAME is configured. The context object will not be passed when `authFlow` is "redirect".
+     */
+    authFlow?: 'popup' | 'redirect';
+    /**
+     * This parameter accepts a comma-separated list of additional data fields to retrieve.
+     *
+     * The current valid values are: languages, address, phones, education, honors, publications, patents, certifications, professionalHeadline, bio, industry, specialties, work, skills, religion, politicalView, interestedIn, relationshipStatus, hometown, favorites, likes, followersCount, followingCount, name, username, educationLevel, locale, verified, irank, timezone, and samlData.
+     */
+    extraFields?: string;
+    /**
+     * A comma-delimited list of Facebook-extended permissions to request from the user, in addition to the permissions that Gigya already requests.
+     *
+     * For example: `facebookExtraPermissions: "rsvp_event,sms"`.
+     *
+     * @note This parameter overrides the value of the identical parameter in Global Conf.
+     */
+    facebookExtraPermissions?: string;
+    /**
+     * The default value of this parameter is 'false'. If set to 'true', the user is forced to provide their social network credentials during login - even if the user is already connected to the social network.
+     *
+     * This parameter is currently supported by Facebook, Twitter, and Renren.
+     */
+    forceAuthentication?: boolean;
+    /**
+     * Extended Google permissions to request in addition to the permissions that Gigya already requests. The supported values are: "wallet" - for Google wallet permissions.
+     */
+    googleExtraPermissions?: string;
+    /**
+     * This parameter is only applicable when `redirectURL` is specified and it determines how the user info data is passed to the `redirectURL`:
+     * - 'get' (default) - the user info values are passed as query string parameters.
+     * - 'post' - the user info is passed as POST fields.
+     */
+    redirectMethod?: 'get' | 'post';
+    /**
+     * Relevant only if `authFlow` is "redirect". The URL to which to redirect the user when the adding connection process has successfully completed.
+     *
+     * The following additional parameters are appended to the URL string: UID, UIDSig, timestamp, loginProvider, loginProviderUID, nickname, photoURL, thumbnailURL, firstName, lastName, gender, birthDay, birthMonth, birthYear, email, country, state, city, zip, profileURL, provider.
+     *
+     * @note We strongly recommend providing a secure HTTPS URL.
+     */
+    redirectURL?: string;
+    /**
+     * The time in seconds that Gigya should keep the social network session valid for the user. To end the session when the browser closes, assign the value '0'.
+     *
+     * If not specified, the session will be valid for the life of the cookie (approx. one year).
+     */
+    sessionExpiration?: number;
+}>;
+
+/**
+ * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/417376f070b21014bbc5a10ce4041860.html#response-object-data-members
+ */
+export type SocializeAddConnectionResponseJS = GigyaResponse<{
+    /**
+     * A User object with updated information for the current user.
+     */
+    user?: unknown;
+}>;
+
+/**
  * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4176b0ef70b21014bbc5a10ce4041860.html#parameters
  */
 export type SocializeLoginRequestJS = GigyaRequest<{
@@ -135,6 +212,14 @@ export type SocializeRefreshUIResponseJS = GigyaResponse<
 >;
 
 export type GigyaSocializeNamespaceJS = {
+    /**
+     * Connects the user to a specified social network. If the user is logged in, the connected social network account is linked to the user's site account.
+     *
+     * Triggers the global `onConnectionAdded` event.
+     *
+     * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/417376f070b21014bbc5a10ce4041860.html
+     */
+    addConnection: GigyaJSFunction<SocializeAddConnectionRequestJS, SocializeAddConnectionResponseJS>;
     /**
      * @see https://help.sap.com/docs/SAP_CUSTOMER_DATA_CLOUD/8b8d6fffe113457094a17701f63e3d6a/4176b0ef70b21014bbc5a10ce4041860.html
      */
