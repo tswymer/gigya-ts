@@ -196,20 +196,20 @@ describe('hooks', async () => {
     await it('should call onFailedRequest hook when gigya responds with non-200 status', async () => {
         await assert.rejects(
             Gigya({
-                apiKey: 'INVALID_API_KEY',
-                dataCenter: 'eu1.gigya.com',
+                apiKey: process.env.GIGYA_API_KEY as string,
+                dataCenter: process.env.GIGYA_DATA_CENTER as GigyaDataCenter,
                 credentials: { type: 'none' },
                 hooks: {
                     onFailedRequest: mockFailedResponseHook,
                 },
-            }).accounts.getPolicies({
-                sections: 'gigyaPlugins,passwordComplexity,registration,security',
+            }).accounts.getAccountInfo({
+                UID: 'MOCK_UID',
                 httpStatusCodes: true,
             }),
         );
 
         assert.equal(mockFailedResponseHook.mock.calls.length, 1);
-        assert.equal(mockFailedResponseHook.mock.calls.at(0)?.arguments[1].status, 400);
+        assert.equal(mockFailedResponseHook.mock.calls.at(0)?.arguments[1].status, 403);
     });
 
     await it('should call onFailedRequest hook when gigya responds with status 200, but an invalid JSON body', async () => {
