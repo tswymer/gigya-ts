@@ -3,6 +3,7 @@
     "author": "tobi.wymer@googlemail.com",
     "repository": "https://github.com/tswymer/gigya-ts",
     "license": "MIT",
+    "packageManager": "pnpm@10.12.1",
     "scripts": {
         "build": "pnpm -r lint && pnpm -r build",
         "test": "pnpm -r test",

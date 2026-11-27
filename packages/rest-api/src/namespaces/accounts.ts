@@ -1034,10 +1034,7 @@ export type AccountsExtensionsCreateRequest = GigyaRequest<{
      * - OnBeforeSocialLogin
      */
     extensionPoint:
-        | 'OnBeforeAccountsRegister'
-        | 'OnBeforeAccountsLogin'
-        | 'OnBeforeSetAccountInfo'
-        | 'OnBeforeSocialLogin';
+        'OnBeforeAccountsRegister' | 'OnBeforeAccountsLogin' | 'OnBeforeSetAccountInfo' | 'OnBeforeSocialLogin';
 }>;
 
 /**
@@ -1180,10 +1177,7 @@ export type AccountsExtensionsListResponse = GigyaResponse<{
          * The extension point this extension is connected to.
          */
         extensionPoint:
-            | 'OnBeforeAccountsRegister'
-            | 'OnBeforeAccountsLogin'
-            | 'OnBeforeSetAccountInfo'
-            | 'OnBeforeSocialLogin';
+            'OnBeforeAccountsRegister' | 'OnBeforeAccountsLogin' | 'OnBeforeSetAccountInfo' | 'OnBeforeSocialLogin';
         /**
          * The timeout configured for this extension.
          */
@@ -2447,11 +2441,13 @@ export type AccountsIdentifiersFindResponse = GigyaResponse<{
      * Returns a list of all of the available identifiers for the account.
      */
     identifiers?: {
-        [identifier in
-            | 'gigya.com/identifiers/UID'
-            | 'gigya.com/identifiers/email'
-            | 'gigya.com/identifiers/username'
-            | 'gigya.com/identifiers/phone']?: Array<string>;
+        [
+            identifier in
+                | 'gigya.com/identifiers/UID'
+                | 'gigya.com/identifiers/email'
+                | 'gigya.com/identifiers/username'
+                | 'gigya.com/identifiers/phone'
+        ]?: Array<string>;
     };
 }>;
 

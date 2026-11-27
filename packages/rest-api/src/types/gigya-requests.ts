@@ -1,10 +1,5 @@
 export type GigyaDataCenter =
-    | 'us1.gigya.com'
-    | 'eu1.gigya.com'
-    | 'au1.gigya.com'
-    | 'eu2.gigya.com'
-    | 'cn1.sapcdm.cn'
-    | 'global.gigya.com';
+    'us1.gigya.com' | 'eu1.gigya.com' | 'au1.gigya.com' | 'eu2.gigya.com' | 'cn1.sapcdm.cn' | 'global.gigya.com';
 
 export type GigyaRegion = 'us1' | 'eu1' | 'au1' | 'cn1';
 

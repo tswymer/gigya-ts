@@ -1,54 +1,53 @@
 on:
-    - push
-    - pull_request
+  - push
+  - pull_request
 
 jobs:
-    lint-build-test:
-        runs-on: ubuntu-latest
+  lint-build-test:
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-            - uses: pnpm/action-setup@v4
-              name: Install pnpm
-              with:
-                  version: 8
-                  run_install: false
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          run_install: false
 
-            - name: Install Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: 21
-                  cache: 'pnpm'
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 21
+          cache: "pnpm"
 
-            - name: Get pnpm store directory
-              shell: bash
-              run: |
-                  echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-            - uses: actions/cache@v4
-              name: Setup pnpm cache
-              with:
-                  path: ${{ env.STORE_PATH }}
-                  key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-                  restore-keys: |
-                      ${{ runner.os }}-pnpm-store-
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
-            - name: Install dependencies
-              run: pnpm install
+      - name: Install dependencies
+        run: pnpm install
 
-            - name: Lint and build
-              run: pnpm run build
+      - name: Lint and build
+        run: pnpm run build
 
-            - name: Test
-              env:
-                  GIGYA_DATA_CENTER: ${{ secrets.GIGYA_DATA_CENTER }}
-                  GIGYA_API_KEY: ${{ secrets.GIGYA_API_KEY }}
-                  GIGYA_USER_KEY: ${{ secrets.GIGYA_USER_KEY }}
-                  GIGYA_USER_SECRET: ${{ secrets.GIGYA_USER_SECRET }}
-                  GIGYA_PRIVATE_KEY: ${{ secrets.GIGYA_PRIVATE_KEY }}
-              # Create an empty .env file in the examples/gigya directory, node throws an error if it doesn't exist
-              run: |
-                  touch ${{ github.workspace }}/packages/gigya/.env 
-                  pnpm test
+      - name: Test
+        env:
+          GIGYA_DATA_CENTER: ${{ secrets.GIGYA_DATA_CENTER }}
+          GIGYA_API_KEY: ${{ secrets.GIGYA_API_KEY }}
+          GIGYA_USER_KEY: ${{ secrets.GIGYA_USER_KEY }}
+          GIGYA_USER_SECRET: ${{ secrets.GIGYA_USER_SECRET }}
+          GIGYA_PRIVATE_KEY: ${{ secrets.GIGYA_PRIVATE_KEY }}
+        # Create an empty .env file in the examples/gigya directory, node throws an error if it doesn't exist
+        run: |
+          touch ${{ github.workspace }}/packages/gigya/.env 
+          pnpm test
